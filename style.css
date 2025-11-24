@@ -24,3 +24,46 @@ body {
     color: var(--text-dark);
     line-height: 1.6;
 }
+
+/* ===== TEMPORARY LAYOUT STYLES ===== */
+/* These colors are just so we can see the sections - we'll remove them later */
+
+#header {
+    background-color: var(--yale-blue);
+    height: 80px;
+    color: white;
+    padding: 20px;
+}
+
+#hero {
+    background-color: var(--cerulean);
+    height: 400px;
+    color: white;
+    padding: 40px;
+}
+
+#featured-artists {
+    background-color: var(--muted-tea);
+    height: 300px;
+    padding: 40px;
+}
+
+#visit-info {
+    background-color: var(--ash-grey);
+    height: 200px;
+    padding: 40px;
+}
+
+#artwork-preview {
+    background-color: var(--dark-cyan);
+    height: 350px;
+    color: white;
+    padding: 40px;
+}
+
+#footer {
+    background-color: var(--text-dark);
+    height: 250px;
+    color: white;
+    padding: 40px;
+}
