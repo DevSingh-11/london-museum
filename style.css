@@ -29,40 +29,40 @@ body {
 /* These colors are just so we can see the sections - we'll remove them later */
 
 #header {
-    background-color: var(--yale-blue);
+    background-color: var(--lavender-blush); /* Changed to lavender blush */
     height: 80px;
-    color: white;
+    color: var(--text-dark); /* Changed text color for contrast */
     padding: 20px;
 }
 
 #hero {
-    background-color: var(--cerulean);
+    background-color: var(--cerulean); /* Changed to cerulean */
     height: 400px;
     color: white;
     padding: 40px;
 }
 
 #featured-artists {
-    background-color: var(--muted-tea);
+    background-color: var(--dark-cyan); /* Changed to dark cyan */
     height: 300px;
+    color: white;
     padding: 40px;
 }
 
 #visit-info {
-    background-color: var(--ash-grey);
+    background-color: var(--muted-tea); /* Changed to muted tea */
     height: 200px;
     padding: 40px;
 }
 
 #artwork-preview {
-    background-color: var(--dark-cyan);
+    background-color: var(--ash-grey); /* Changed to ash grey */
     height: 350px;
-    color: white;
     padding: 40px;
 }
 
 #footer {
-    background-color: var(--text-dark);
+    background-color: var(--yale-blue); /* Changed to yale blue */
     height: 250px;
     color: white;
     padding: 40px;
