@@ -1,1 +1,26 @@
+/* ===== CSS RESET & VARIABLES ===== */
+/* This code removes all default margins/paddings and sets up your color palette */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Your Color Palette - now available as variables */
+    --lavender-blush: #F3E8EE;
+    --ash-grey: #BACDB0;
+    --muted-tea: #729B79;
+    --dark-cyan: #468C8C;
+    --cerulean: #1A7D9E;
+    --yale-blue: #21506E;
+    --text-dark: #2A2A2A;
+}
+
+body {
+    font-family: 'Montserrat', Arial, sans-serif;
+    background-color: var(--lavender-blush);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
