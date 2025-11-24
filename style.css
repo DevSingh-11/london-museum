@@ -1,6 +1,4 @@
 /* ===== CSS RESET & VARIABLES ===== */
-/* This code removes all default margins/paddings and sets up your color palette */
-
 * {
     margin: 0;
     padding: 0;
@@ -8,7 +6,7 @@
 }
 
 :root {
-    /* Your Color Palette - now available as variables */
+    /* Your Color Palette */
     --lavender-blush: #F3E8EE;
     --ash-grey: #BACDB0;
     --muted-tea: #729B79;
@@ -93,7 +91,7 @@ body {
 }
 
 /* ===== TEMPORARY LAYOUT STYLES ===== */
-/* Updated with new gradient order and section purposes */
+/* Light to Dark Gradient Order */
 
 #header {
     background-color: var(--lavender-blush);
@@ -102,21 +100,18 @@ body {
     padding: 20px;
 }
 
-/* Section 1: Plan Your Visit */
 #visit-info {
     background-color: var(--ash-grey);
     height: 200px;
     padding: 40px;
 }
 
-/* Section 2: Featured Artists */
 #featured-artists {
     background-color: var(--muted-tea);
     height: 300px;
     padding: 40px;
 }
 
-/* Section 3: From the Collection */
 #artwork-preview {
     background-color: var(--dark-cyan);
     height: 350px;
@@ -124,7 +119,6 @@ body {
     padding: 40px;
 }
 
-/* Section 4: Hero Banner */
 #hero {
     background-color: var(--cerulean);
     height: 400px;
@@ -132,7 +126,6 @@ body {
     padding: 40px;
 }
 
-/* Footer */
 #footer {
     background-color: var(--yale-blue);
     height: 250px;
