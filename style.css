@@ -93,7 +93,7 @@ body {
 }
 
 /* ===== TEMPORARY LAYOUT STYLES ===== */
-/* These colors are just so we can see the sections - we'll remove them later */
+/* Updated with new gradient order and section purposes */
 
 #header {
     background-color: var(--lavender-blush);
@@ -102,6 +102,29 @@ body {
     padding: 20px;
 }
 
+/* Section 1: Plan Your Visit */
+#visit-info {
+    background-color: var(--ash-grey);
+    height: 200px;
+    padding: 40px;
+}
+
+/* Section 2: Featured Artists */
+#featured-artists {
+    background-color: var(--muted-tea);
+    height: 300px;
+    padding: 40px;
+}
+
+/* Section 3: From the Collection */
+#artwork-preview {
+    background-color: var(--dark-cyan);
+    height: 350px;
+    color: white;
+    padding: 40px;
+}
+
+/* Section 4: Hero Banner */
 #hero {
     background-color: var(--cerulean);
     height: 400px;
@@ -109,25 +132,7 @@ body {
     padding: 40px;
 }
 
-#featured-artists {
-    background-color: var(--dark-cyan);
-    height: 300px;
-    color: white;
-    padding: 40px;
-}
-
-#visit-info {
-    background-color: var(--muted-tea);
-    height: 200px;
-    padding: 40px;
-}
-
-#artwork-preview {
-    background-color: var(--ash-grey);
-    height: 350px;
-    padding: 40px;
-}
-
+/* Footer */
 #footer {
     background-color: var(--yale-blue);
     height: 250px;
