@@ -93,12 +93,30 @@ body {
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1rem;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
     white-space: nowrap;
+    position: relative;
+    padding: 5px 0;
 }
 
 .main-nav a:hover {
     color: var(--cerulean);
+    transform: translateY(-2px);
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--cerulean);
+    transition: width 0.3s ease;
+}
+
+.main-nav a:hover::after {
+    width: 100%;
 }
 
 /* ===== TEMPORARY LAYOUT STYLES ===== */
