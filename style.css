@@ -173,7 +173,7 @@ body {
 /* ===== ABOUT MUSEUM STYLES ===== */
 #about-museum {
     background-color: var(--ash-grey);
-    padding: 60px 40px;
+    padding: 60px 0;       /* ← Change to 0 side padding */
     min-height: 500px;
     display: flex;
     align-items: center;
