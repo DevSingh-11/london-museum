@@ -89,6 +89,9 @@
                 <img src="images/museum2.png" alt="Gallery space" class="slideshow-image">
                 <img src="images/museum3.png" alt="Visitor experience" class="slideshow-image">
                 <img src="images/museum4.png" alt="Art display" class="slideshow-image">
+                
+                <!-- Pause Button -->
+                <button class="slideshow-pause" aria-label="Pause slideshow">⏸️</button>
             </div>
         </div>
     </section>
@@ -112,5 +115,41 @@
     <footer id="footer">
         [FOOTER WILL GO HERE]
     </footer>
+
+    <script>
+        // Museum Slideshow
+        let currentSlide = 0;
+        let slideInterval;
+        const slides = document.querySelectorAll('.slideshow-image');
+        const pauseButton = document.querySelector('.slideshow-pause');
+        let isPlaying = true;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[n].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function toggleSlideshow() {
+            if (isPlaying) {
+                clearInterval(slideInterval);
+                pauseButton.textContent = '▶️';
+            } else {
+                slideInterval = setInterval(nextSlide, 4000); // Change every 4 seconds
+                pauseButton.textContent = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Start the slideshow
+        slideInterval = setInterval(nextSlide, 4000);
+        
+        // Pause/Play button
+        pauseButton.addEventListener('click', toggleSlideshow);
+    </script>
 </body>
 </html>
