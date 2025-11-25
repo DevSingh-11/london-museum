@@ -36,12 +36,12 @@ body {
 .header-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;     /* This should already be here - it vertically centers items within the container */
-    max-width: 1400px;
+    align-items: center;
+    max-width: 94%;     /* ← Percentage instead of fixed pixels */
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 3%;      /* ← Percentage padding too */
     gap: 40px;
-    width: 100%;             /* Add this to make sure it takes full width */
+    width: 100%;
 }
 
 .logo img {
