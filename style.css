@@ -100,7 +100,7 @@ body {
 
 #header {
     background-color: var(--lavender-blush);
-    height: 80px;
+    height: 120px;
     color: var(--text-dark);
     padding: 20px;
 }
