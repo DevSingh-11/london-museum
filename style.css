@@ -83,42 +83,64 @@ body {
     background-color: var(--cerulean);
 }
 
+/* ===== DROPDOWN MENU STYLES ===== */
 .main-nav {
     display: flex;
     gap: 40px;
 }
 
-.main-nav a {
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-title {
     color: var(--yale-blue);
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1rem;
     transition: all 0.3s ease;
     white-space: nowrap;
-    position: relative;
     padding: 5px 0;
+    display: block;
 }
 
-.main-nav a:hover {
-    color: var(--cerulean);
-    transform: translateY(-2px);
-}
-
-.main-nav a::after {
-    content: '';
+.dropdown-content {
+    display: none;
     position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
+    top: 100%;
     left: 0;
-    background-color: var(--cerulean);
-    transition: width 0.3s ease;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    z-index: 1000;
+    padding: 10px 0;
 }
 
-.main-nav a:hover::after {
-    width: 100%;
+.dropdown-content a {
+    color: var(--text-dark);
+    padding: 8px 20px;
+    text-decoration: none;
+    display: block;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
 }
 
+.dropdown-content a:hover {
+    background-color: var(--lavender-blush);
+    color: var(--yale-blue);
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropdown-title {
+    color: var(--cerulean);
+}
 /* ===== TEMPORARY LAYOUT STYLES ===== */
 /* Light to Dark Gradient Order */
 
