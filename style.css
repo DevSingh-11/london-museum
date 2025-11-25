@@ -28,18 +28,18 @@ body {
     background-color: var(--lavender-blush);
     height: 100px;
     color: var(--text-dark);
-    display: flex;           /* Add this */
-    align-items: center;     /* Add this - this vertically centers everything */
-    padding: 0;              /* Change from 20px to 0 since .header-container has padding */
+    display: flex;
+    align-items: center;
+    padding: 0;
 }
 
 .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 94%;     /* ← Percentage instead of fixed pixels */
+    max-width: 94%;
     margin: 0 auto;
-    padding: 0 3%;      /* ← Percentage padding too */
+    padding: 0 3%;
     gap: 40px;
     width: 100%;
 }
@@ -51,11 +51,10 @@ body {
 
 .search-container {
     display: flex;
-    flex: 1;           /* This makes it grow */
-    min-width: 250px;  /* Keep it usable on small screens */
+    flex: 1;
+    min-width: 250px;
     gap: 10px;
-    margin: 0 3%;      /* This creates the consistent spacing */
-    /* REMOVE max-width entirely */
+    margin: 0 3%;
 }
 
 .search-container input {
@@ -91,7 +90,6 @@ body {
 
 .dropdown {
     position: relative;
-    display: inline-block;
 }
 
 .dropdown-title {
@@ -101,8 +99,29 @@ body {
     font-size: 1.1rem;
     transition: all 0.3s ease;
     white-space: nowrap;
-    padding: 5px 0;
+    padding: 8px 0;
     display: block;
+    position: relative;
+}
+
+.dropdown-title:hover {
+    color: var(--cerulean);
+}
+
+/* Animated underline for dropdown titles */
+.dropdown-title::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--cerulean);
+    transition: width 0.3s ease;
+}
+
+.dropdown:hover .dropdown-title::after {
+    width: 100%;
 }
 
 .dropdown-content {
@@ -111,26 +130,33 @@ body {
     top: 100%;
     left: 0;
     background-color: white;
-    min-width: 200px;
+    min-width: 220px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     border-radius: 4px;
     z-index: 1000;
-    padding: 10px 0;
+    padding: 8px 0;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .dropdown-content a {
     color: var(--text-dark);
-    padding: 8px 20px;
+    padding: 10px 20px;
     text-decoration: none;
     display: block;
     font-weight: 500;
     font-size: 1rem;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .dropdown-content a:hover {
     background-color: var(--lavender-blush);
     color: var(--yale-blue);
+    padding-left: 25px;
 }
 
 /* Show dropdown on hover */
@@ -138,12 +164,7 @@ body {
     display: block;
 }
 
-.dropdown:hover .dropdown-title {
-    color: var(--cerulean);
-}
 /* ===== TEMPORARY LAYOUT STYLES ===== */
-/* Light to Dark Gradient Order */
-
 #about-museum {
     background-color: var(--ash-grey);
     height: 200px;
