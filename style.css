@@ -21,6 +21,7 @@ body {
     background-color: var(--lavender-blush);
     color: var(--text-dark);
     line-height: 1.6;
+    padding-top: 100px;  /* ← Add this line - matches header height */
 }
 
 /* ===== HEADER STYLES ===== */
@@ -31,6 +32,9 @@ body {
     display: flex;
     align-items: center;
     padding: 0;
+    position: sticky;  /* ← Add this line */
+    top: 0;            /* ← Add this line */
+    z-index: 1000;     /* ← Add this line */
 }
 
 .header-container {
