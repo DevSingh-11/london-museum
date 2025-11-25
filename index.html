@@ -91,7 +91,15 @@
                 <img src="images/museum4.png" alt="Art display" class="slideshow-image">
                 
                 <!-- Pause Button -->
-                <button class="slideshow-pause" aria-label="Pause slideshow">⏸️</button>
+                <button class="slideshow-pause" aria-label="Pause slideshow">
+                    <svg class="pause-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                    <svg class="play-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+                        <polygon points="5,4 19,12 5,20"></polygon>
+                    </svg>
+                </button>
             </div>
         </div>
     </section>
@@ -122,6 +130,8 @@
         let slideInterval;
         const slides = document.querySelectorAll('.slideshow-image');
         const pauseButton = document.querySelector('.slideshow-pause');
+        const pauseIcon = document.querySelector('.pause-icon');
+        const playIcon = document.querySelector('.play-icon');
         let isPlaying = true;
 
         function showSlide(n) {
@@ -137,16 +147,18 @@
         function toggleSlideshow() {
             if (isPlaying) {
                 clearInterval(slideInterval);
-                pauseButton.textContent = '▶️';
+                pauseIcon.style.display = 'none';
+                playIcon.style.display = 'block';
             } else {
-                slideInterval = setInterval(nextSlide, 5000); // Change every 4 seconds
-                pauseButton.textContent = '⏸️';
+                slideInterval = setInterval(nextSlide, 5000); // 5 seconds
+                pauseIcon.style.display = 'block';
+                playIcon.style.display = 'none';
             }
             isPlaying = !isPlaying;
         }
 
         // Start the slideshow
-        slideInterval = setInterval(nextSlide, 4000);
+        slideInterval = setInterval(nextSlide, 5000); // 5 seconds
         
         // Pause/Play button
         pauseButton.addEventListener('click', toggleSlideshow);
