@@ -133,17 +133,29 @@
         const pauseIcon = document.querySelector('.pause-icon');
         const playIcon = document.querySelector('.play-icon');
         let isPlaying = true;
-
+        
         function showSlide(n) {
-            slides.forEach(slide => slide.classList.remove('active'));
+            // Remove active class from current slide and mark it as leaving
+            slides.forEach((slide, index) => {
+                if (slide.classList.contains('active')) {
+                    slide.classList.remove('active');
+                    slide.classList.add('leaving');
+                    // Remove leaving class after animation completes
+                    setTimeout(() => {
+                        slide.classList.remove('leaving');
+                    }, 800);
+                }
+            });
+            
+            // Add active class to new slide (starts off-screen right, slides in)
             slides[n].classList.add('active');
         }
-
+        
         function nextSlide() {
             currentSlide = (currentSlide + 1) % slides.length;
             showSlide(currentSlide);
         }
-
+        
         function toggleSlideshow() {
             if (isPlaying) {
                 clearInterval(slideInterval);
@@ -156,7 +168,7 @@
             }
             isPlaying = !isPlaying;
         }
-
+        
         // Start the slideshow
         slideInterval = setInterval(nextSlide, 5000); // 5 seconds
         
