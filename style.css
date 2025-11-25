@@ -180,8 +180,9 @@ body {
 }
 
 .about-container {
-    max-width: 1200px;
+    max-width: 94%;        /* ← Changed from 1200px to 94% */
     margin: 0 auto;
+    padding: 0 3%;         /* ← Added 3% side padding */
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 60px;
