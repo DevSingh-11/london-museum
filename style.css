@@ -225,12 +225,6 @@ body {
 }
 
 /* ===== TEMPORARY LAYOUT STYLES ===== */
-#about-museum {
-    background-color: var(--ash-grey);
-    height: 200px;
-    padding: 40px;
-}
-
 #featured-artists {
     background-color: var(--muted-tea);
     height: 300px;
