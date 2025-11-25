@@ -104,13 +104,6 @@ body {
 /* ===== TEMPORARY LAYOUT STYLES ===== */
 /* Light to Dark Gradient Order */
 
-#header {
-    background-color: var(--lavender-blush);
-    height: 120px;
-    color: var(--text-dark);
-    padding: 20px;
-}
-
 #visit-info {
     background-color: var(--ash-grey);
     height: 200px;
