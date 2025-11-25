@@ -26,7 +26,7 @@ body {
 /* ===== HEADER STYLES ===== */
 #header {
     background-color: var(--lavender-blush);
-    height: 80px;
+    height: 100px;
     color: var(--text-dark);
     display: flex;           /* Add this */
     align-items: center;     /* Add this - this vertically centers everything */
