@@ -36,11 +36,12 @@ body {
 .header-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center;     /* This should already be here - it vertically centers items within the container */
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 40px;
-    gap: 40px; /* Space between logo, search, and nav */
+    gap: 40px;
+    width: 100%;             /* Add this to make sure it takes full width */
 }
 
 .logo img {
