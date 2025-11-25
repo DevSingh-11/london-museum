@@ -128,20 +128,23 @@ body {
     display: none;
     position: absolute;
     top: 100%;
-    left: 50%;                    /* ← Change from 0 to 50% */
-    transform: translateX(-50%);  /* ← Add this to center it */
+    left: 50%;
+    transform: translateX(-50%);
     background-color: white;
     min-width: 220px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     border-radius: 4px;
     z-index: 1000;
     padding: 8px 0;
-    animation: fadeIn 0.2s ease;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.dropdown-content {
+    animation: fadeIn 0.15s ease;
 }
 
 .dropdown-content a {
