@@ -106,6 +106,7 @@ body {
     padding: 8px 0;
     display: block;
     position: relative;
+    cursor: pointer; /* Makes it clear it's interactive */
 }
 
 .dropdown-title:hover {
