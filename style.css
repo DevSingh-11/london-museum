@@ -247,6 +247,34 @@ body {
     background: rgba(0, 0, 0, 0.9);
 }
 
+/* Slideshow animation styles */
+.about-slideshow {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.slideshow-image {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 100%; /* Start off-screen to the right */
+    opacity: 0;
+    transition: all 0.8s ease-in-out;
+}
+
+.slideshow-image.active {
+    left: 0; /* Slide in to normal position */
+    opacity: 1;
+}
+
+.slideshow-image.leaving {
+    left: -100%; /* Slide out to the left */
+    opacity: 0;
+}
+
 /* ===== TEMPORARY LAYOUT STYLES ===== */
 #featured-artists {
     background-color: var(--muted-tea);
