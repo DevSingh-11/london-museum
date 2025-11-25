@@ -208,23 +208,6 @@ body {
     line-height: 1.7;
 }
 
-.about-slideshow {
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-}
-
-.slideshow-image {
-    width: 100%;
-    height: auto;
-    display: none;
-}
-
-.slideshow-image.active {
-    display: block;
-}
-
 .slideshow-pause {
     position: absolute;
     bottom: 15px;
