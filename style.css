@@ -51,11 +51,11 @@ body {
 
 .search-container {
     display: flex;
-    flex: 1;
-    max-width: 700px;
-    min-width: 300px;   /* ← Prevents it from getting too small */
+    flex: 1;           /* This makes it grow */
+    min-width: 250px;  /* Keep it usable on small screens */
     gap: 10px;
-    margin: 0 30px;     /* ← Adjust this number to control logo/header spacing */
+    margin: 0 3%;      /* This creates the consistent spacing */
+    /* REMOVE max-width entirely */
 }
 
 .search-container input {
