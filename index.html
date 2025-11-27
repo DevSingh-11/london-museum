@@ -90,6 +90,18 @@
                 <img src="images/museum3.png" alt="Visitor experience" class="slideshow-image">
                 <img src="images/museum4.png" alt="Art display" class="slideshow-image">
                 
+                <!-- Navigation Arrows -->
+                <button class="slideshow-nav slideshow-prev" aria-label="Previous image">‹</button>
+                <button class="slideshow-nav slideshow-next" aria-label="Next image">›</button>
+                
+                <!-- Dot Indicators -->
+                <div class="slideshow-dots">
+                    <button class="dot active" data-slide="0" aria-label="Show image 1"></button>
+                    <button class="dot" data-slide="1" aria-label="Show image 2"></button>
+                    <button class="dot" data-slide="2" aria-label="Show image 3"></button>
+                    <button class="dot" data-slide="3" aria-label="Show image 4"></button>
+                </div>
+                
                 <!-- Pause Button -->
                 <button class="slideshow-pause" aria-label="Pause slideshow">
                     <svg class="pause-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -129,51 +141,91 @@
         let currentSlide = 0;
         let slideInterval;
         const slides = document.querySelectorAll('.slideshow-image');
+        const dots = document.querySelectorAll('.dot');
         const pauseButton = document.querySelector('.slideshow-pause');
         const pauseIcon = document.querySelector('.pause-icon');
         const playIcon = document.querySelector('.play-icon');
+        const prevButton = document.querySelector('.slideshow-prev');
+        const nextButton = document.querySelector('.slideshow-next');
         let isPlaying = true;
-        
+
         function showSlide(n) {
             // Remove active class from current slide and mark it as leaving
             slides.forEach((slide, index) => {
                 if (slide.classList.contains('active')) {
                     slide.classList.remove('active');
                     slide.classList.add('leaving');
-                    // Remove leaving class after animation completes
                     setTimeout(() => {
                         slide.classList.remove('leaving');
                     }, 800);
                 }
             });
             
-            // Add active class to new slide (starts off-screen right, slides in)
+            // Update dots
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[n].classList.add('active');
+            
+            // Add active class to new slide
             slides[n].classList.add('active');
+            currentSlide = n;
         }
-        
+
         function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
+            let next = (currentSlide + 1) % slides.length;
+            showSlide(next);
         }
-        
+
+        function prevSlide() {
+            let prev = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(prev);
+        }
+
+        function goToSlide(n) {
+            showSlide(n);
+            // Reset auto-advance timer when manually navigating
+            if (isPlaying) {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000);
+            }
+        }
+
         function toggleSlideshow() {
             if (isPlaying) {
                 clearInterval(slideInterval);
                 pauseIcon.style.display = 'none';
                 playIcon.style.display = 'block';
             } else {
-                slideInterval = setInterval(nextSlide, 5000); // 5 seconds
+                slideInterval = setInterval(nextSlide, 5000);
                 pauseIcon.style.display = 'block';
                 playIcon.style.display = 'none';
             }
             isPlaying = !isPlaying;
         }
-        
+
         // Start the slideshow
-        slideInterval = setInterval(nextSlide, 5000); // 5 seconds
-        
-        // Pause/Play button
+        slideInterval = setInterval(nextSlide, 5000);
+
+        // Event Listeners
         pauseButton.addEventListener('click', toggleSlideshow);
+        nextButton.addEventListener('click', () => {
+            nextSlide();
+            if (isPlaying) {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000);
+            }
+        });
+        prevButton.addEventListener('click', () => {
+            prevSlide();
+            if (isPlaying) {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000);
+            }
+        });
+
+        // Dot navigation
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => goToSlide(index));
+        });
     </script>
 </body>
 </html>
