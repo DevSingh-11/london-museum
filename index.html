@@ -262,11 +262,12 @@
             { src: 'images/artworks/the-treachery-of-objects-3.png', title: 'The Treachery of Objects III' },
             { src: 'images/artworks/the-treachery-of-objects-4.png', title: 'The Treachery of Objects IV' }
         ];
-
+        
         const carousel = document.getElementById('artworkCarousel');
         const centeredTitle = document.getElementById('centered-artwork-title');
         const centeredInfo = document.querySelector('.centered-artwork-info');
-
+        const wrapper = document.querySelector('.artwork-carousel-wrapper');
+        
         // Randomize order on page load
         const shuffledArtworks = [...artworkImages].sort(() => Math.random() - 0.5);
         
@@ -284,18 +285,14 @@
             artworkItem.appendChild(img);
             carousel.appendChild(artworkItem);
         });
-
+        
         const artworkItems = document.querySelectorAll('.artwork-item');
         let scrollPosition = 0;
         let isPaused = false;
         let pauseTimeout;
-        let currentCenteredIndex = 0;
-        const carouselWidth = carousel.scrollWidth;
-        const wrapperWidth = document.querySelector('.artwork-carousel-wrapper').offsetWidth;
-
-        // Store original artworks for title matching
-        const originalArtworks = artworkImages;
-
+        let currentCenteredIndex = -1;
+        const scrollSpeed = 0.5;
+        
         // Duplicate items for seamless loop
         function duplicateForLoop() {
             const itemsToDuplicate = Array.from(artworkItems).slice(0, 5);
@@ -305,47 +302,59 @@
             });
         }
         duplicateForLoop();
-
+        
+        // Get all items including duplicates
+        const allCarouselItems = document.querySelectorAll('.artwork-item');
+        
         function updateCarousel() {
             if (!isPaused) {
-                scrollPosition -= 0.5; // Slow scroll speed
+                scrollPosition -= scrollSpeed;
                 carousel.style.transform = `translateX(${scrollPosition}px)`;
                 
-                // Reset position when scrolled far enough
-                if (scrollPosition < -carouselWidth) {
-                    scrollPosition += carouselWidth;
+                // Reset position when scrolled through one full set
+                const singleSetWidth = carousel.scrollWidth / 2; // Half because we duplicated
+                if (Math.abs(scrollPosition) >= singleSetWidth) {
+                    scrollPosition += singleSetWidth;
                 }
                 
-                // Check if an artwork is centered
                 checkCenteredArtwork();
             }
             
             requestAnimationFrame(updateCarousel);
         }
-
+        
         function checkCenteredArtwork() {
-            const wrapperCenter = wrapperWidth / 2;
+            const wrapperRect = wrapper.getBoundingClientRect();
+            const wrapperCenterX = wrapperRect.left + wrapperRect.width / 2;
             
-            artworkItems.forEach((item, index) => {
-                const rect = item.getBoundingClientRect();
-                const itemCenter = rect.left + rect.width / 2;
-                const distanceFromCenter = Math.abs(itemCenter - wrapperCenter);
+            allCarouselItems.forEach((item, index) => {
+                const itemRect = item.getBoundingClientRect();
+                const itemCenterX = itemRect.left + itemRect.width / 2;
+                const distanceFromCenter = Math.abs(itemCenterX - wrapperCenterX);
                 
+                // If item is within 50px of center and not currently centered
                 if (distanceFromCenter < 50 && index !== currentCenteredIndex) {
-                    pauseAtArtwork(index);
+                    pauseAtArtwork(index % shuffledArtworks.length); // Use modulo for original artworks
                 }
             });
         }
-
+        
         function pauseAtArtwork(index) {
             isPaused = true;
             currentCenteredIndex = index;
             
             // Highlight centered artwork
-            artworkItems.forEach(item => item.classList.remove('centered'));
-            artworkItems[index].classList.add('centered');
+            allCarouselItems.forEach(item => item.classList.remove('centered'));
             
-            // Show correct title from original array
+            // Find and highlight the matching item in the carousel
+            const originalIndex = index;
+            allCarouselItems.forEach((item, carouselIndex) => {
+                if (carouselIndex % shuffledArtworks.length === originalIndex) {
+                    item.classList.add('centered');
+                }
+            });
+            
+            // Show info
             centeredTitle.textContent = shuffledArtworks[index].title;
             centeredInfo.classList.add('visible');
             
@@ -354,10 +363,11 @@
             pauseTimeout = setTimeout(() => {
                 isPaused = false;
                 centeredInfo.classList.remove('visible');
-                artworkItems[index].classList.remove('centered');
+                allCarouselItems.forEach(item => item.classList.remove('centered'));
+                currentCenteredIndex = -1;
             }, 5000);
         }
-
+        
         // Start the carousel
         updateCarousel();
     </script>
