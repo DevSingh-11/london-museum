@@ -154,7 +154,7 @@
     </footer>
 
     <script>
-        // Museum Slideshow
+        // Museum Slideshow (keep this part the same)
         let currentSlide = 0;
         let slideInterval;
         const slides = document.querySelectorAll('.slideshow-image');
@@ -165,7 +165,7 @@
         const prevButton = document.querySelector('.slideshow-prev');
         const nextButton = document.querySelector('.slideshow-next');
         let isPlaying = true;
-
+    
         function showSlide(n) {
             // Remove active class from current slide and mark it as leaving
             slides.forEach((slide, index) => {
@@ -186,17 +186,17 @@
             slides[n].classList.add('active');
             currentSlide = n;
         }
-
+    
         function nextSlide() {
             let next = (currentSlide + 1) % slides.length;
             showSlide(next);
         }
-
+    
         function prevSlide() {
             let prev = (currentSlide - 1 + slides.length) % slides.length;
             showSlide(prev);
         }
-
+    
         function goToSlide(n) {
             showSlide(n);
             // Reset auto-advance timer when manually navigating
@@ -205,7 +205,7 @@
                 slideInterval = setInterval(nextSlide, 5000);
             }
         }
-
+    
         function toggleSlideshow() {
             if (isPlaying) {
                 clearInterval(slideInterval);
@@ -218,10 +218,10 @@
             }
             isPlaying = !isPlaying;
         }
-
+    
         // Start the slideshow
         slideInterval = setInterval(nextSlide, 5000);
-
+    
         // Event Listeners
         pauseButton.addEventListener('click', toggleSlideshow);
         nextButton.addEventListener('click', () => {
@@ -238,13 +238,13 @@
                 slideInterval = setInterval(nextSlide, 5000);
             }
         });
-
+    
         // Dot navigation
         dots.forEach((dot, index) => {
             dot.addEventListener('click', () => goToSlide(index));
         });
-
-        // Artwork Carousel - Array Rotation Concept
+    
+        // Artwork Carousel - Array Rotation Concept WITH SMOOTH ANIMATIONS
         const artworkImages = [
             { name: "images/artworks/a-cry-for-nature.png", title: "A Cry for Nature" },
             { name: "images/artworks/bond-of-self.png", title: "Bond of Self" },
@@ -288,9 +288,6 @@
         function createCarouselItems() {
             carousel.innerHTML = '';
             
-            // Clear any existing image load handlers
-            carousel.dataset.imagesLoading = '0';
-            
             artworkArray.forEach((artwork, index) => {
                 const item = document.createElement('div');
                 item.className = 'carousel-item';
@@ -301,8 +298,6 @@
                 const img = document.createElement('img');
                 img.src = artwork.name;
                 img.alt = artwork.title;
-                
-                // Add loading attribute for better performance
                 img.loading = 'eager';
                 
                 item.appendChild(img);
@@ -336,24 +331,94 @@
             }, 50);
         }
         
-        // Rotate array forward (move first to last)
+        // Rotate array forward with smooth animation
         function rotateArrayForward() {
-            // Remove first item and add it to the end
+            // Fade out title slightly
+            artworkTitle.style.opacity = '0.7';
+            
+            // Remove active class from current active item with animation
+            const currentActive = carousel.children[ACTIVE_POSITION];
+            if (currentActive) {
+                currentActive.classList.remove('active');
+            }
+            
+            // Rotate the array
             const firstItem = artworkArray.shift();
             artworkArray.push(firstItem);
             
-            // Re-render carousel
-            createCarouselItems();
+            // Update title
+            artworkTitle.textContent = artworkArray[ACTIVE_POSITION].title;
+            
+            // Update images in existing DOM elements (instead of recreating)
+            updateCarouselImages();
+            
+            // Add active class to new active item
+            setTimeout(() => {
+                const newActive = carousel.children[ACTIVE_POSITION];
+                if (newActive) {
+                    newActive.classList.add('active');
+                }
+                
+                // Fade title back in
+                artworkTitle.style.opacity = '1';
+                
+                // Re-center with smooth scroll
+                centerActiveItem();
+            }, 10);
         }
         
-        // Rotate array backward (move last to first)
+        // Rotate array backward with smooth animation
         function rotateArrayBackward() {
-            // Remove last item and add it to the beginning
+            // Fade out title slightly
+            artworkTitle.style.opacity = '0.7';
+            
+            // Remove active class from current active item
+            const currentActive = carousel.children[ACTIVE_POSITION];
+            if (currentActive) {
+                currentActive.classList.remove('active');
+            }
+            
+            // Rotate the array
             const lastItem = artworkArray.pop();
             artworkArray.unshift(lastItem);
             
-            // Re-render carousel
-            createCarouselItems();
+            // Update title
+            artworkTitle.textContent = artworkArray[ACTIVE_POSITION].title;
+            
+            // Update images in existing DOM elements
+            updateCarouselImages();
+            
+            // Add active class to new active item
+            setTimeout(() => {
+                const newActive = carousel.children[ACTIVE_POSITION];
+                if (newActive) {
+                    newActive.classList.add('active');
+                }
+                
+                // Fade title back in
+                artworkTitle.style.opacity = '1';
+                
+                // Re-center with smooth scroll
+                centerActiveItem();
+            }, 10);
+        }
+        
+        // Update carousel images without recreating DOM
+        function updateCarouselImages() {
+            const items = carousel.querySelectorAll('.carousel-item');
+            
+            items.forEach((item, index) => {
+                const img = item.querySelector('img');
+                const artwork = artworkArray[index];
+                
+                if (img && artwork) {
+                    // Only update if source is different
+                    if (img.src !== window.location.origin + '/' + artwork.name) {
+                        img.src = artwork.name;
+                        img.alt = artwork.title;
+                    }
+                }
+            });
         }
         
         // Start auto-advance
