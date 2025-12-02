@@ -332,17 +332,17 @@ body {
 .section-title {
     font-size: 2.5rem;
     text-align: center;
-    margin-bottom: 20px; /* Further reduced from 30px */
+    margin-bottom: 20px;
     color: white;
 }
 
 .artwork-carousel-wrapper {
     position: relative;
-    height: 350px; /* Reduced from 400px to make everything tighter */
+    height: 320px; /* Just enough for the artworks */
     display: flex;
     align-items: center;
     overflow: hidden;
-    margin-bottom: 40px; /* Added space below for the info */
+    margin-bottom: 0; /* No bottom margin - info will be separate */
 }
 
 .artwork-carousel {
@@ -357,7 +357,7 @@ body {
 
 .artwork-item {
     flex: 0 0 auto;
-    height: 280px; /* Slightly reduced from 300px */
+    height: 280px;
     position: relative;
     opacity: 0.7;
     transition: all 0.5s ease;
@@ -376,23 +376,21 @@ body {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* CHANGED: Position the info BELOW the carousel wrapper, not inside it */
+/* Info is now a separate element below the carousel */
 .centered-artwork-info {
-    position: relative; /* Changed from absolute */
     text-align: center;
     width: 100%;
     opacity: 0;
-    transition: opacity 0.5s ease;
-    z-index: 10;
-    height: auto; /* Let it take natural height */
-    margin-top: 20px; /* Space between carousel and info */
-    transform: none; /* Removed translateX */
-    left: auto; /* Removed left positioning */
-    padding: 0; /* Removed padding-top */
+    height: 0; /* Start collapsed */
+    overflow: hidden;
+    transition: all 0.5s ease;
+    margin-top: 10px; /* Small gap between carousel and info */
 }
 
 .centered-artwork-info.visible {
     opacity: 1;
+    height: auto; /* Expand to show content */
+    min-height: 100px; /* Enough space for title and button */
 }
 
 .artwork-title {
