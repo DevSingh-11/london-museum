@@ -321,6 +321,7 @@ body {
     padding: 60px 0;
     color: white;
     overflow: hidden;
+    position: relative;
 }
 
 .artwork-container {
@@ -338,21 +339,51 @@ body {
 
 .artwork-carousel-wrapper {
     position: relative;
-    height: 320px; /* Just enough for the artworks */
+    height: 320px;
     display: flex;
     align-items: center;
     overflow: hidden;
-    margin-bottom: 0; /* No bottom margin - info will be separate */
+    margin-bottom: 0;
+}
+
+/* Carousel Navigation Arrows */
+.carousel-nav {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 80px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.3s ease;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-prev {
+    left: 0;
+}
+
+.carousel-next {
+    right: 0;
+}
+
+.carousel-nav:hover {
+    color: white;
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .artwork-carousel {
     display: flex;
     gap: 40px;
     align-items: center;
-    position: absolute;
-    left: 0;
-    will-change: transform;
-    transition: transform 0.1s linear;
+    width: 100%;
+    height: 100%;
+    transition: transform 1s ease-in-out;
 }
 
 .artwork-item {
@@ -361,9 +392,12 @@ body {
     position: relative;
     opacity: 0.7;
     transition: all 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.artwork-item.centered {
+.artwork-item.active {
     opacity: 1;
     transform: scale(1.05);
 }
@@ -371,6 +405,7 @@ body {
 .artwork-image {
     height: 100%;
     width: auto;
+    max-width: 100%;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
@@ -381,16 +416,16 @@ body {
     text-align: center;
     width: 100%;
     opacity: 0;
-    height: 0; /* Start collapsed */
+    height: 0;
     overflow: hidden;
     transition: all 0.5s ease;
-    margin-top: 10px; /* Small gap between carousel and info */
+    margin-top: 20px;
 }
 
 .centered-artwork-info.visible {
     opacity: 1;
-    height: auto; /* Expand to show content */
-    min-height: 100px; /* Enough space for title and button */
+    height: auto;
+    min-height: 100px;
 }
 
 .artwork-title {
