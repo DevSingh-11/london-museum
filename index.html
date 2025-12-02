@@ -268,9 +268,6 @@
         const centeredInfo = document.querySelector('.centered-artwork-info');
         const wrapper = document.querySelector('.artwork-carousel-wrapper');
         
-        // Store original widths of each artwork
-        let artworkWidths = [];
-        
         // Randomize order on page load
         const shuffledArtworks = [...artworkImages].sort(() => Math.random() - 0.5);
         
@@ -279,41 +276,11 @@
             const artworkItem = document.createElement('div');
             artworkItem.className = 'artwork-item';
             artworkItem.dataset.index = index;
-            artworkItem.dataset.width = '0'; // Will be set after image loads
             
             const img = document.createElement('img');
             img.src = artwork.src;
             img.alt = artwork.title;
             img.className = 'artwork-image';
-            
-            // Store width after image loads
-            img.onload = function() {
-                const width = this.naturalWidth;
-                const aspectRatio = width / this.naturalHeight;
-                const displayHeight = 280; // Same as CSS height
-                const displayWidth = displayHeight * aspectRatio;
-                
-                artworkItem.dataset.width = displayWidth;
-                artworkItem.style.width = displayWidth + 'px';
-                
-                // Store in array
-                artworkWidths[index] = displayWidth;
-                
-                // Initialize carousel after all images load
-                if (Object.keys(artworkWidths).length === shuffledArtworks.length) {
-                    initializeCarousel();
-                }
-            };
-            
-            // Set a default width in case image fails to load
-            img.onerror = function() {
-                artworkItem.style.width = '280px';
-                artworkWidths[index] = 280;
-                
-                if (Object.keys(artworkWidths).length === shuffledArtworks.length) {
-                    initializeCarousel();
-                }
-            };
             
             artworkItem.appendChild(img);
             carousel.appendChild(artworkItem);
@@ -325,179 +292,223 @@
         let pauseTimeout;
         let currentCenteredIndex = -1;
         const scrollSpeed = 0.5;
-        let totalCarouselWidth = 0;
-        let isInitialized = false;
         let animationId = null;
+        
+        // Store item widths as they load
+        const itemWidths = new Array(artworkItems.length).fill(280); // Default width
+        
+        // Track loaded images
+        let loadedImages = 0;
+        const totalImages = artworkItems.length;
+        
+        artworkItems.forEach((item, index) => {
+            const img = item.querySelector('img');
+            img.onload = function() {
+                // Calculate display width based on aspect ratio
+                const aspectRatio = this.naturalWidth / this.naturalHeight;
+                const displayHeight = 280; // CSS height
+                const displayWidth = displayHeight * aspectRatio;
+                
+                itemWidths[index] = displayWidth;
+                item.style.width = displayWidth + 'px';
+                item.dataset.width = displayWidth;
+                
+                loadedImages++;
+                if (loadedImages === totalImages) {
+                    initializeCarousel();
+                }
+            };
+            
+            img.onerror = function() {
+                // Use default width if image fails to load
+                item.style.width = '280px';
+                item.dataset.width = 280;
+                
+                loadedImages++;
+                if (loadedImages === totalImages) {
+                    initializeCarousel();
+                }
+            };
+        });
         
         // Initialize carousel after images load
         function initializeCarousel() {
-            if (isInitialized) return;
-            
             // Calculate total width of first set
-            totalCarouselWidth = 0;
-            artworkItems.forEach(item => {
-                const width = parseFloat(item.dataset.width) || 280;
-                totalCarouselWidth += width + 40; // 40px gap from CSS
+            let totalWidth = 0;
+            artworkItems.forEach((item, index) => {
+                totalWidth += itemWidths[index] + 40; // 40px gap
             });
             
-            // Duplicate items for seamless loop
-            function duplicateForLoop() {
+            // Duplicate items for seamless loop - duplicate entire set
+            const itemsToDuplicate = Array.from(artworkItems);
+            itemsToDuplicate.forEach(item => {
+                const clone = item.cloneNode(true);
+                clone.style.width = item.style.width;
+                carousel.appendChild(clone);
+            });
+            
+            // Get all items including duplicates
+            const allCarouselItems = document.querySelectorAll('.artwork-item');
+            
+            // Start the animation
+            startCarousel(allCarouselItems, totalWidth);
+        }
+        
+        function startCarousel(allCarouselItems, totalWidth) {
+            let scrollPosition = 0;
+            let isPaused = false;
+            let pauseTimeout;
+            let currentCenteredIndex = -1;
+            
+            function updateCarousel() {
+                if (!isPaused) {
+                    scrollPosition -= scrollSpeed;
+                    carousel.style.transform = `translateX(${scrollPosition}px)`;
+                    
+                    // Reset position when scrolled through one full set
+                    if (Math.abs(scrollPosition) >= totalWidth) {
+                        scrollPosition += totalWidth;
+                    }
+                    
+                    checkCenteredArtwork();
+                }
+                
+                animationId = requestAnimationFrame(updateCarousel);
+            }
+            
+            function checkCenteredArtwork() {
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const wrapperCenterX = wrapperRect.left + wrapperRect.width / 2;
+                
+                // Find which original artwork should be centered
+                let accumulatedWidth = 0;
+                let foundIndex = -1;
+                let closestDistance = Infinity;
+                
+                // Check only the first set (non-duplicated items)
+                for (let i = 0; i < artworkItems.length; i++) {
+                    const itemWidth = itemWidths[i] || 280;
+                    const itemLeft = -scrollPosition + accumulatedWidth;
+                    const itemCenterX = wrapperRect.left + itemLeft + itemWidth / 2;
+                    const distance = Math.abs(itemCenterX - wrapperCenterX);
+                    
+                    if (distance < closestDistance && distance < 150) { // Increased threshold to 150px
+                        closestDistance = distance;
+                        foundIndex = i;
+                    }
+                    
+                    accumulatedWidth += itemWidth + 40; // Add gap
+                }
+                
+                // If an artwork is close to center and not currently centered
+                if (foundIndex !== -1 && foundIndex !== currentCenteredIndex) {
+                    pauseAtArtwork(foundIndex);
+                }
+            }
+            
+            function pauseAtArtwork(index) {
+                if (isPaused) return;
+                
+                isPaused = true;
+                currentCenteredIndex = index;
+                
+                // Calculate exact position to center this artwork
+                const wrapperRect = wrapper.getBoundingClientRect();
+                
+                let accumulatedWidth = 0;
+                for (let i = 0; i < index; i++) {
+                    const itemWidth = itemWidths[i] || 280;
+                    accumulatedWidth += itemWidth + 40; // Add gap
+                }
+                
+                const targetWidth = itemWidths[index] || 280;
+                const itemCenterOffset = accumulatedWidth + targetWidth / 2;
+                const targetScroll = itemCenterOffset - wrapperRect.width / 2;
+                
+                // Smoothly scroll to center the artwork
+                const startScroll = scrollPosition;
+                const endScroll = -targetScroll;
+                const duration = 300; // Reduced from 500ms for faster centering
+                const startTime = performance.now();
+                
+                function smoothScroll(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Easing function for smooth animation
+                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                    scrollPosition = startScroll + (endScroll - startScroll) * easeOutQuart;
+                    carousel.style.transform = `translateX(${scrollPosition}px)`;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(smoothScroll);
+                    } else {
+                        // After centering, highlight and show info
+                        highlightCenteredArtwork(index);
+                    }
+                }
+                
+                requestAnimationFrame(smoothScroll);
+            }
+            
+            function highlightCenteredArtwork(index) {
+                // Remove highlight from all items
+                allCarouselItems.forEach(item => item.classList.remove('centered'));
+                
+                // Highlight the centered artwork in both original and duplicated sets
+                allCarouselItems.forEach((item, carouselIndex) => {
+                    if (carouselIndex % shuffledArtworks.length === index) {
+                        item.classList.add('centered');
+                    }
+                });
+                
+                // Show info
+                centeredTitle.textContent = shuffledArtworks[index].title;
+                centeredInfo.classList.add('visible');
+                
+                // Resume after 5 seconds
+                clearTimeout(pauseTimeout);
+                pauseTimeout = setTimeout(() => {
+                    isPaused = false;
+                    centeredInfo.classList.remove('visible');
+                    allCarouselItems.forEach(item => item.classList.remove('centered'));
+                    currentCenteredIndex = -1;
+                }, 5000);
+            }
+            
+            // Start the carousel animation
+            updateCarousel();
+            
+            // Fallback if initialization takes too long
+            setTimeout(() => {
+                if (animationId === null) {
+                    initializeCarousel();
+                }
+            }, 2000);
+        }
+        
+        // Start with a simple version if images take too long
+        setTimeout(() => {
+            if (animationId === null) {
+                // Create a simplified version without width calculations
+                const artworkItems = document.querySelectorAll('.artwork-item');
+                artworkItems.forEach(item => {
+                    item.style.width = '280px';
+                });
+                
+                let totalWidth = artworkItems.length * (280 + 40);
+                
+                // Duplicate items
                 const itemsToDuplicate = Array.from(artworkItems).slice(0, 5);
                 itemsToDuplicate.forEach(item => {
                     const clone = item.cloneNode(true);
-                    // Copy the width data
-                    clone.dataset.width = item.dataset.width;
-                    clone.style.width = item.style.width;
                     carousel.appendChild(clone);
                 });
-            }
-            duplicateForLoop();
-            
-            isInitialized = true;
-            startCarousel();
-        }
-        
-        // Get all items including duplicates
-        const allCarouselItems = document.querySelectorAll('.artwork-item');
-        
-        function updateCarousel() {
-            if (!isPaused) {
-                scrollPosition -= scrollSpeed;
-                carousel.style.transform = `translateX(${scrollPosition}px)`;
                 
-                // Reset position when scrolled through one full set
-                if (totalCarouselWidth > 0 && Math.abs(scrollPosition) >= totalCarouselWidth) {
-                    scrollPosition += totalCarouselWidth;
-                }
-                
-                checkCenteredArtwork();
+                const allCarouselItems = document.querySelectorAll('.artwork-item');
+                startCarousel(allCarouselItems, totalWidth);
             }
-            
-            animationId = requestAnimationFrame(updateCarousel);
-        }
-        
-        function startCarousel() {
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-            }
-            updateCarousel();
-        }
-        
-        function checkCenteredArtwork() {
-            if (!isInitialized || artworkWidths.length === 0) return;
-            
-            const wrapperRect = wrapper.getBoundingClientRect();
-            const wrapperCenterX = wrapperRect.left + wrapperRect.width / 2;
-            
-            // Find which original artwork (not duplicate) should be centered
-            let accumulatedWidth = 0;
-            let foundIndex = -1;
-            let closestDistance = Infinity;
-            
-            // Check only the first set (non-duplicated items)
-            for (let i = 0; i < artworkItems.length; i++) {
-                const itemWidth = artworkWidths[i] || 280;
-                const itemLeft = -scrollPosition + accumulatedWidth;
-                const itemCenterX = wrapperRect.left + itemLeft + itemWidth / 2;
-                const distance = Math.abs(itemCenterX - wrapperCenterX);
-                
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    foundIndex = i;
-                }
-                
-                accumulatedWidth += itemWidth + 40; // Add gap
-            }
-            
-            // If an artwork is close to center and not currently centered
-            if (foundIndex !== -1 && foundIndex !== currentCenteredIndex && closestDistance < 100) {
-                pauseAtArtwork(foundIndex);
-            }
-        }
-        
-        function pauseAtArtwork(index) {
-            if (isPaused || !isInitialized) return;
-            
-            isPaused = true;
-            currentCenteredIndex = index;
-            
-            // Calculate exact position to center this artwork
-            const wrapperRect = wrapper.getBoundingClientRect();
-            const wrapperCenterX = wrapperRect.left + wrapperRect.width / 2;
-            
-            let accumulatedWidth = 0;
-            for (let i = 0; i < index; i++) {
-                const itemWidth = artworkWidths[i] || 280;
-                accumulatedWidth += itemWidth + 40; // Add gap
-            }
-            
-            const targetWidth = artworkWidths[index] || 280;
-            const itemCenterOffset = accumulatedWidth + targetWidth / 2;
-            const targetScroll = itemCenterOffset - wrapperRect.width / 2;
-            
-            // Smoothly scroll to center the artwork
-            const startScroll = scrollPosition;
-            const endScroll = -targetScroll;
-            const duration = 500; // ms
-            const startTime = performance.now();
-            
-            function smoothScroll(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                // Easing function for smooth animation
-                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-                scrollPosition = startScroll + (endScroll - startScroll) * easeOutQuart;
-                carousel.style.transform = `translateX(${scrollPosition}px)`;
-                
-                if (progress < 1) {
-                    requestAnimationFrame(smoothScroll);
-                } else {
-                    // After centering, highlight and show info
-                    highlightCenteredArtwork(index);
-                }
-            }
-            
-            requestAnimationFrame(smoothScroll);
-        }
-        
-        function highlightCenteredArtwork(index) {
-            // Remove highlight from all items
-            allCarouselItems.forEach(item => item.classList.remove('centered'));
-            
-            // Highlight the centered artwork in both original and duplicated sets
-            allCarouselItems.forEach((item, carouselIndex) => {
-                if (carouselIndex % shuffledArtworks.length === index) {
-                    item.classList.add('centered');
-                }
-            });
-            
-            // Show info
-            centeredTitle.textContent = shuffledArtworks[index].title;
-            centeredInfo.classList.add('visible');
-            
-            // Resume after 5 seconds
-            clearTimeout(pauseTimeout);
-            pauseTimeout = setTimeout(() => {
-                isPaused = false;
-                centeredInfo.classList.remove('visible');
-                allCarouselItems.forEach(item => item.classList.remove('centered'));
-                currentCenteredIndex = -1;
-            }, 5000);
-        }
-        
-        // Fallback initialization in case images take too long
-        setTimeout(() => {
-            if (!isInitialized) {
-                // Fill with default widths if images haven't loaded
-                for (let i = 0; i < shuffledArtworks.length; i++) {
-                    if (!artworkWidths[i]) {
-                        artworkWidths[i] = 280;
-                    }
-                }
-                initializeCarousel();
-            }
-        }, 2000);
+        }, 3000);
         
         // Also initialize if all images load before timeout
         window.addEventListener('load', () => {
