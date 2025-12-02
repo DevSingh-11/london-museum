@@ -246,24 +246,24 @@
 
         // Artwork Carousel
         const artworkImages = [
-            { name: "a-cry-for-nature.png", title: "A Cry for Nature" },
-            { name: "bond-of-self.png", title: "Bond of Self" },
-            { name: "eye.png", title: "The Seeing Eye" },
-            { name: "graphite-tears.png", title: "Graphite Tears" },
-            { name: "grey-and-white.png", title: "Grey and White" },
-            { name: "hand-with-refracting-sphere.png", title: "Hand with Refracting Sphere" },
-            { name: "memory-orb-1.png", title: "Memory Orb I" },
-            { name: "memory-orb-2.png", title: "Memory Orb II" },
-            { name: "memory-orb-3.png", title: "Memory Orb III" },
-            { name: "rayograph.png", title: "Rayograph" },
-            { name: "self-creation.png", title: "Self Creation" },
-            { name: "tears-of-the-past.png", title: "Tears of the Past" },
-            { name: "the-persistence-of-time.png", title: "The Persistence of Time" },
-            { name: "the-rhinos.png", title: "The Rhinos" },
-            { name: "the-treachery-of-objects-1.png", title: "The Treachery of Objects I" },
-            { name: "the-treachery-of-objects-2.png", title: "The Treachery of Objects II" },
-            { name: "the-treachery-of-objects-3.png", title: "The Treachery of Objects III" },
-            { name: "the-treachery-of-objects-4.png", title: "The Treachery of Objects IV" }
+            { name: "images/artworks/a-cry-for-nature.png", title: "A Cry for Nature" },
+            { name: "images/artworks/bond-of-self.png", title: "Bond of Self" },
+            { name: "images/artworks/eye.png", title: "The Seeing Eye" },
+            { name: "images/artworks/graphite-tears.png", title: "Graphite Tears" },
+            { name: "images/artworks/grey-and-white.png", title: "Grey and White" },
+            { name: "images/artworks/hand-with-refracting-sphere.png", title: "Hand with Refracting Sphere" },
+            { name: "images/artworks/memory-orb-1.png", title: "Memory Orb I" },
+            { name: "images/artworks/memory-orb-2.png", title: "Memory Orb II" },
+            { name: "images/artworks/memory-orb-3.png", title: "Memory Orb III" },
+            { name: "images/artworks/rayograph.png", title: "Rayograph" },
+            { name: "images/artworks/self-creation.png", title: "Self Creation" },
+            { name: "images/artworks/tears-of-the-past.png", title: "Tears of the Past" },
+            { name: "images/artworks/the-persistence-of-time.png", title: "The Persistence of Time" },
+            { name: "images/artworks/the-rhinos.png", title: "The Rhinos" },
+            { name: "images/artworks/the-treachery-of-objects-1.png", title: "The Treachery of Objects I" },
+            { name: "images/artworks/the-treachery-of-objects-2.png", title: "The Treachery of Objects II" },
+            { name: "images/artworks/the-treachery-of-objects-3.png", title: "The Treachery of Objects III" },
+            { name: "images/artworks/the-treachery-of-objects-4.png", title: "The Treachery of Objects IV" }
         ];
 
         // Shuffle array function
@@ -295,7 +295,7 @@
                 }
                 
                 const img = document.createElement('img');
-                img.src = `images/${artwork.name}`;
+                img.src = artwork.name;
                 img.alt = artwork.title;
                 
                 item.appendChild(img);
