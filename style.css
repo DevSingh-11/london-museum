@@ -322,7 +322,7 @@ body {
     color: white;
     overflow: hidden;
     position: relative;
-    min-height: 600px;
+    min-height: 600px; /* Fixed height to prevent jumping */
     display: flex;
     align-items: center;
 }
@@ -332,16 +332,15 @@ body {
     margin: 0 auto;
     padding: 0 3%;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .section-title {
     font-size: 2.5rem;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 40px; /* Increased margin */
     color: white;
+    position: relative;
+    z-index: 2;
 }
 
 .artwork-carousel-wrapper {
@@ -350,9 +349,8 @@ body {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
     overflow: hidden;
-    margin-bottom: 40px;
+    margin-bottom: 40px; /* Fixed margin for info space */
 }
 
 /* Carousel Navigation Arrows */
@@ -392,35 +390,27 @@ body {
 .artwork-carousel {
     display: flex;
     align-items: center;
-    justify-content: center;
+    width: 100%;
     height: 100%;
+    gap: 100px; /* INCREASED GAP from 40px to 100px */
     transition: transform 0.8s ease-in-out;
-    position: relative;
+    padding: 0 90px; /* Increased padding for arrows */
 }
 
 .artwork-item {
-    position: absolute;
+    flex: 0 0 auto;
     height: 280px;
     opacity: 0.7;
     transition: all 0.8s ease-in-out;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 200px; /* Minimum width to prevent squishing */
 }
-
-/* Position artworks based on their index relative to active */
-.artwork-item:nth-child(1 of .artwork-item) { left: -400px; }
-.artwork-item:nth-child(2 of .artwork-item) { left: -200px; }
-.artwork-item:nth-child(3 of .artwork-item) { left: 0; }
-.artwork-item:nth-child(4 of .artwork-item) { left: 200px; }
-.artwork-item:nth-child(5 of .artwork-item) { left: 400px; }
-/* Continue for more items if needed */
 
 .artwork-item.active {
     opacity: 1;
-    transform: scale(1.1);
-    z-index: 2;
-    left: 0 !important; /* Force centered position */
+    transform: scale(1.1); /* Slightly increased scale */
 }
 
 .artwork-image {
@@ -432,15 +422,17 @@ body {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* Info section */
+/* Info section - ALWAYS VISIBLE with fixed height */
 .centered-artwork-info {
     text-align: center;
     width: 100%;
-    height: 120px;
+    height: 120px; /* Fixed height */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    opacity: 1; /* Always visible */
+    overflow: visible;
     margin-top: 20px;
 }
 
@@ -449,7 +441,7 @@ body {
     margin-bottom: 15px;
     font-weight: 600;
     color: white;
-    min-height: 2.2rem;
+    min-height: 2.2rem; /* Fixed height for title */
     transition: opacity 0.5s ease;
 }
 
@@ -463,6 +455,7 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    opacity: 1; /* Always visible */
 }
 
 .view-collection-btn:hover {
