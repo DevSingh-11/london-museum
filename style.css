@@ -320,6 +320,7 @@ body {
     background-color: var(--dark-cyan);
     padding: 80px 0;
     color: white;
+    overflow: hidden;
 }
 
 .artwork-container {
@@ -335,48 +336,64 @@ body {
     color: white;
 }
 
-.artwork-slideshow {
-    max-width: 900px;
-    margin: 0 auto;
+.artwork-carousel-wrapper {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
 }
 
-.artwork-display {
+.artwork-carousel {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    position: absolute;
+    left: 100%;
+    will-change: transform;
+    transition: transform 0.1s linear;
+}
+
+.artwork-item {
+    flex: 0 0 auto;
+    height: 300px;
     position: relative;
-    height: 500px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-    margin-bottom: 30px;
-    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 0.7;
+    transition: all 0.5s ease;
+}
+
+.artwork-item.centered {
+    opacity: 1;
+    transform: scale(1.05);
 }
 
 .artwork-image {
-    width: 100%;
     height: 100%;
+    width: auto;
     object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.centered-artwork-info {
     position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    transition: opacity 1.2s ease-in-out;
-}
-
-.artwork-image.active {
-    opacity: 1;
-}
-
-.artwork-info {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 100px);
     text-align: center;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.centered-artwork-info.visible {
+    opacity: 1;
 }
 
 .artwork-title {
     font-size: 1.8rem;
     margin-bottom: 20px;
     font-weight: 600;
-    min-height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .view-collection-btn {
@@ -395,7 +412,6 @@ body {
     background-color: white;
     color: var(--dark-cyan);
 }
-
 
 /* ===== TEMPORARY LAYOUT STYLES ===== */
 #featured-artists {
