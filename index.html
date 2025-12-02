@@ -269,14 +269,13 @@
         
         const carousel = document.getElementById('artworkCarousel');
         const centeredTitle = document.getElementById('centered-artwork-title');
-        const centeredInfo = document.querySelector('.centered-artwork-info');
         const carouselPrevBtn = document.querySelector('.carousel-prev');
         const carouselNextBtn = document.querySelector('.carousel-next');
         
         // Randomize order on page load
         const shuffledArtworks = [...artworkImages].sort(() => Math.random() - 0.5);
         
-        // Create artwork items in random order
+        // Create artwork items
         shuffledArtworks.forEach((artwork, index) => {
             const artworkItem = document.createElement('div');
             artworkItem.className = 'artwork-item';
@@ -287,11 +286,6 @@
             img.alt = artwork.title;
             img.className = 'artwork-image';
             
-            // Set active class for first item
-            if (index === 0) {
-                artworkItem.classList.add('active');
-            }
-            
             artworkItem.appendChild(img);
             carousel.appendChild(artworkItem);
         });
@@ -299,21 +293,64 @@
         const artworkItems = document.querySelectorAll('.artwork-item');
         let currentIndex = 0;
         let autoSlideInterval;
-        const slideDuration = 5000; // 5 seconds between slides
+        const slideDuration = 5000;
         let isAnimating = false;
         let isInitialized = false;
+        
+        // Store item widths for centering calculations
+        let itemWidths = [];
+        
+        // Function to calculate and store item widths
+        function calculateItemWidths() {
+            itemWidths = Array.from(artworkItems).map(item => {
+                return item.getBoundingClientRect().width;
+            });
+        }
+        
+        // Function to center the active artwork
+        function centerActiveArtwork() {
+            if (!artworkItems.length) return;
+            
+            const activeItem = artworkItems[currentIndex];
+            const carouselRect = document.querySelector('.artwork-carousel-wrapper').getBoundingClientRect();
+            const activeRect = activeItem.getBoundingClientRect();
+            
+            // Calculate how much to shift the carousel to center the active item
+            const carouselCenter = carouselRect.width / 2;
+            const activeCenter = activeRect.left - carouselRect.left + activeRect.width / 2;
+            const offset = carouselCenter - activeCenter;
+            
+            // Calculate total shift needed for the carousel
+            let totalOffset = 0;
+            for (let i = 0; i < currentIndex; i++) {
+                totalOffset += itemWidths[i] + 100; // 100px is the gap between items
+            }
+            
+            // Add half of the active item's width minus half of the viewport center
+            const activeItemOffset = itemWidths[currentIndex] / 2;
+            const finalOffset = totalOffset + activeItemOffset - carouselCenter;
+            
+            // Apply the transformation
+            carousel.style.transform = `translateX(${finalOffset}px)`;
+        }
         
         // Initialize the carousel
         function initializeCarousel() {
             if (isInitialized) return;
             
-            // Show first artwork info
-            updateArtworkTitle(currentIndex);
+            // Calculate widths after images load
+            setTimeout(() => {
+                calculateItemWidths();
+                // Set first item as active
+                artworkItems[0].classList.add('active');
+                updateArtworkTitle(0);
+                centerActiveArtwork();
+            }, 100);
             
             // Start auto-sliding
             startAutoSlide();
             
-            // Add event listeners for navigation
+            // Add event listeners
             carouselPrevBtn.addEventListener('click', goToPrevArtwork);
             carouselNextBtn.addEventListener('click', goToNextArtwork);
             
@@ -321,17 +358,21 @@
             carousel.addEventListener('mouseenter', pauseAutoSlide);
             carousel.addEventListener('mouseleave', resumeAutoSlide);
             
-            // Also pause when user interacts with arrows
             carouselPrevBtn.addEventListener('mouseenter', pauseAutoSlide);
             carouselNextBtn.addEventListener('mouseenter', pauseAutoSlide);
             carouselPrevBtn.addEventListener('mouseleave', resumeAutoSlide);
             carouselNextBtn.addEventListener('mouseleave', resumeAutoSlide);
             
+            // Recalculate on window resize
+            window.addEventListener('resize', () => {
+                calculateItemWidths();
+                centerActiveArtwork();
+            });
+            
             isInitialized = true;
         }
         
         function updateArtworkTitle(index) {
-            // Smooth transition for title change
             centeredTitle.style.opacity = '0';
             setTimeout(() => {
                 centeredTitle.textContent = shuffledArtworks[index].title;
@@ -353,13 +394,16 @@
             // Add active class to new item
             artworkItems[currentIndex].classList.add('active');
             
-            // Update title with smooth transition
+            // Update title
             updateArtworkTitle(currentIndex);
+            
+            // Center the new active artwork
+            centerActiveArtwork();
             
             // Reset animation flag
             setTimeout(() => {
                 isAnimating = false;
-            }, 500);
+            }, 800);
             
             // Reset auto-slide timer
             resetAutoSlide();
@@ -379,13 +423,16 @@
             // Add active class to new item
             artworkItems[currentIndex].classList.add('active');
             
-            // Update title with smooth transition
+            // Update title
             updateArtworkTitle(currentIndex);
+            
+            // Center the new active artwork
+            centerActiveArtwork();
             
             // Reset animation flag
             setTimeout(() => {
                 isAnimating = false;
-            }, 500);
+            }, 800);
             
             // Reset auto-slide timer
             resetAutoSlide();
@@ -409,10 +456,8 @@
             resumeAutoSlide();
         }
         
-        // Initialize carousel after images load
+        // Initialize carousel
         window.addEventListener('load', initializeCarousel);
-        
-        // Fallback initialization
         setTimeout(initializeCarousel, 1000);
     </script>
 </body>
