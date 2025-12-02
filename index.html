@@ -244,7 +244,7 @@
             dot.addEventListener('click', () => goToSlide(index));
         });
 
-        // Artwork Carousel
+        // Artwork Carousel - Array Rotation Concept
         const artworkImages = [
             { name: "images/artworks/a-cry-for-nature.png", title: "A Cry for Nature" },
             { name: "images/artworks/bond-of-self.png", title: "Bond of Self" },
@@ -275,26 +275,26 @@
             return array;
         }
         
-        // Initialize carousel with THREE sets for seamless infinite scrolling
-        let oneSet = shuffleArray([...artworkImages]);
-        let threeSets = [...oneSet, ...oneSet, ...oneSet]; // Create 3 identical sets
-        let totalItems = threeSets.length; // 54 items (3 × 18)
-        
-        // Start in the middle set (index 18 to 35)
-        let currentArtworkIndex = 18; // Start at first item of middle set
+        // Initialize carousel with array rotation concept
+        let artworkArray = shuffleArray([...artworkImages]);
         let artworkInterval;
         const carousel = document.querySelector('.artwork-carousel');
         const artworkTitle = document.querySelector('.artwork-title');
         const prevArrow = document.querySelector('.carousel-prev');
         const nextArrow = document.querySelector('.carousel-next');
+        const ACTIVE_POSITION = 3; // 4th item (0-indexed)
         
         // Create carousel items
         function createCarouselItems() {
             carousel.innerHTML = '';
-            threeSets.forEach((artwork, index) => {
+            
+            // Clear any existing image load handlers
+            carousel.dataset.imagesLoading = '0';
+            
+            artworkArray.forEach((artwork, index) => {
                 const item = document.createElement('div');
                 item.className = 'carousel-item';
-                if (index === currentArtworkIndex) {
+                if (index === ACTIVE_POSITION) {
                     item.classList.add('active');
                 }
                 
@@ -302,123 +302,63 @@
                 img.src = artwork.name;
                 img.alt = artwork.title;
                 
+                // Add loading attribute for better performance
+                img.loading = 'eager';
+                
                 item.appendChild(img);
                 carousel.appendChild(item);
             });
             
-            // Update title (using modulo to get correct title from original set)
-            artworkTitle.textContent = threeSets[currentArtworkIndex].title;
+            // Update title for active artwork (4th item)
+            artworkTitle.textContent = artworkArray[ACTIVE_POSITION].title;
             
-            // Center the active item
+            // Center the active item after images load
             centerActiveItem();
         }
         
         // Center the active item
         function centerActiveItem() {
             const items = document.querySelectorAll('.carousel-item');
-            const activeItem = items[currentArtworkIndex];
-            const carouselWidth = carousel.offsetWidth;
-            const itemWidth = activeItem.offsetWidth;
+            const activeItem = items[ACTIVE_POSITION];
             
-            // Calculate the scroll position to center the active item
-            const scrollLeft = activeItem.offsetLeft - (carouselWidth / 2) + (itemWidth / 2);
-            carousel.scrollLeft = scrollLeft;
+            if (!activeItem) return;
+            
+            // Wait a moment for images to render
+            setTimeout(() => {
+                const carouselWidth = carousel.offsetWidth;
+                const itemWidth = activeItem.offsetWidth;
+                
+                if (carouselWidth > 0 && itemWidth > 0) {
+                    // Calculate the scroll position to center the active item
+                    const scrollLeft = activeItem.offsetLeft - (carouselWidth / 2) + (itemWidth / 2);
+                    carousel.scrollLeft = scrollLeft;
+                }
+            }, 50);
         }
         
-        // Check if we need to jump to maintain illusion of infinity
-        function checkForJump() {
-            const itemsPerSet = 18; // 18 artworks per set
+        // Rotate array forward (move first to last)
+        function rotateArrayForward() {
+            // Remove first item and add it to the end
+            const firstItem = artworkArray.shift();
+            artworkArray.push(firstItem);
             
-            // If we reach the first item of third set (index 36), jump to first item of second set (index 18)
-            if (currentArtworkIndex === 36) {
-                const items = document.querySelectorAll('.carousel-item');
-                
-                // Remove active class from current
-                items[currentArtworkIndex].classList.remove('active');
-                
-                // Jump to corresponding item in middle set
-                currentArtworkIndex = 18;
-                
-                // Add active class to new
-                items[currentArtworkIndex].classList.add('active');
-                
-                // Update title
-                artworkTitle.textContent = threeSets[currentArtworkIndex].title;
-                
-                // Center without animation for seamless transition
-                centerActiveItem();
-                return true;
-            }
-            
-            // If we reach the last item of first set (index 17), jump to last item of second set (index 35)
-            if (currentArtworkIndex === 17) {
-                const items = document.querySelectorAll('.carousel-item');
-                
-                // Remove active class from current
-                items[currentArtworkIndex].classList.remove('active');
-                
-                // Jump to corresponding item in middle set
-                currentArtworkIndex = 35;
-                
-                // Add active class to new
-                items[currentArtworkIndex].classList.add('active');
-                
-                // Update title
-                artworkTitle.textContent = threeSets[currentArtworkIndex].title;
-                
-                // Center without animation for seamless transition
-                centerActiveItem();
-                return true;
-            }
-            
-            return false;
+            // Re-render carousel
+            createCarouselItems();
         }
         
-        // Go to next artwork
-        function nextArtwork() {
-            const items = document.querySelectorAll('.carousel-item');
+        // Rotate array backward (move last to first)
+        function rotateArrayBackward() {
+            // Remove last item and add it to the beginning
+            const lastItem = artworkArray.pop();
+            artworkArray.unshift(lastItem);
             
-            // Remove active class from current
-            items[currentArtworkIndex].classList.remove('active');
-            
-            // Move to next item
-            currentArtworkIndex++;
-            
-            // Check if we need to jump to maintain seamless experience
-            const jumped = checkForJump();
-            
-            // If we didn't jump, update normally
-            if (!jumped) {
-                items[currentArtworkIndex].classList.add('active');
-                artworkTitle.textContent = threeSets[currentArtworkIndex].title;
-                centerActiveItem();
-            }
-        }
-        
-        // Go to previous artwork
-        function prevArtwork() {
-            const items = document.querySelectorAll('.carousel-item');
-            
-            // Remove active class from current
-            items[currentArtworkIndex].classList.remove('active');
-            
-            // Move to previous item
-            currentArtworkIndex--;
-            
-            // Check if we need to jump to maintain seamless experience
-            const jumped = checkForJump();
-            
-            // If we didn't jump, update normally
-            if (!jumped) {
-                items[currentArtworkIndex].classList.add('active');
-                artworkTitle.textContent = threeSets[currentArtworkIndex].title;
-                centerActiveItem();
-            }
+            // Re-render carousel
+            createCarouselItems();
         }
         
         // Start auto-advance
         function startArtworkInterval() {
-            artworkInterval = setInterval(nextArtwork, 5000);
+            artworkInterval = setInterval(rotateArrayForward, 5000);
         }
         
         // Stop auto-advance (when user interacts)
@@ -439,28 +379,50 @@
             
             // Add event listeners for arrows
             prevArrow.addEventListener('click', () => {
-                prevArtwork();
+                rotateArrayBackward();
                 resetArtworkInterval();
             });
             
             nextArrow.addEventListener('click', () => {
-                nextArtwork();
+                rotateArrayForward();
                 resetArtworkInterval();
             });
             
             // Keyboard navigation
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') {
-                    prevArtwork();
+                    rotateArrayBackward();
                     resetArtworkInterval();
                 } else if (e.key === 'ArrowRight') {
-                    nextArtwork();
+                    rotateArrayForward();
                     resetArtworkInterval();
                 }
             });
             
             // Re-center on window resize
             window.addEventListener('resize', centerActiveItem);
+            
+            // Ensure images are loaded before centering
+            const images = carousel.querySelectorAll('img');
+            let imagesLoaded = 0;
+            
+            images.forEach(img => {
+                if (img.complete) {
+                    imagesLoaded++;
+                } else {
+                    img.addEventListener('load', () => {
+                        imagesLoaded++;
+                        if (imagesLoaded === images.length) {
+                            centerActiveItem();
+                        }
+                    });
+                }
+            });
+            
+            // Fallback in case all images are already loaded
+            if (imagesLoaded === images.length) {
+                setTimeout(centerActiveItem, 100);
+            }
         });
     </script>
 </body>
