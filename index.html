@@ -270,8 +270,8 @@
         const carousel = document.getElementById('artworkCarousel');
         const centeredTitle = document.getElementById('centered-artwork-title');
         const centeredInfo = document.querySelector('.centered-artwork-info');
-        const prevButton = document.querySelector('.carousel-prev');
-        const nextButton = document.querySelector('.carousel-next');
+        const carouselPrevBtn = document.querySelector('.carousel-prev'); // Renamed
+        const carouselNextBtn = document.querySelector('.carousel-next'); // Renamed
         
         // Randomize order on page load
         const shuffledArtworks = [...artworkImages].sort(() => Math.random() - 0.5);
@@ -301,9 +301,12 @@
         let autoSlideInterval;
         const slideDuration = 5000; // 5 seconds between slides
         let isAnimating = false;
+        let isInitialized = false; // Added this variable
         
         // Initialize the carousel
         function initializeCarousel() {
+            if (isInitialized) return;
+            
             // Show first artwork info
             showArtworkInfo(currentIndex);
             
@@ -311,18 +314,20 @@
             startAutoSlide();
             
             // Add event listeners for navigation
-            prevButton.addEventListener('click', goToPrevArtwork);
-            nextButton.addEventListener('click', goToNextArtwork);
+            carouselPrevBtn.addEventListener('click', goToPrevArtwork);
+            carouselNextBtn.addEventListener('click', goToNextArtwork);
             
             // Pause auto-slide on hover
             carousel.addEventListener('mouseenter', pauseAutoSlide);
             carousel.addEventListener('mouseleave', resumeAutoSlide);
             
             // Also pause when user interacts with arrows
-            prevButton.addEventListener('mouseenter', pauseAutoSlide);
-            nextButton.addEventListener('mouseenter', pauseAutoSlide);
-            prevButton.addEventListener('mouseleave', resumeAutoSlide);
-            nextButton.addEventListener('mouseleave', resumeAutoSlide);
+            carouselPrevBtn.addEventListener('mouseenter', pauseAutoSlide);
+            carouselNextBtn.addEventListener('mouseenter', pauseAutoSlide);
+            carouselPrevBtn.addEventListener('mouseleave', resumeAutoSlide);
+            carouselNextBtn.addEventListener('mouseleave', resumeAutoSlide);
+            
+            isInitialized = true;
         }
         
         function showArtworkInfo(index) {
@@ -373,29 +378,6 @@
             
             // Update current index
             currentIndex = prevIndex;
-            
-            // Show new artwork info after a short delay for animation
-            setTimeout(() => {
-                showArtworkInfo(currentIndex);
-                isAnimating = false;
-            }, 500);
-            
-            // Reset auto-slide timer
-            resetAutoSlide();
-        }
-        
-        function goToArtwork(index) {
-            if (isAnimating || index === currentIndex) return;
-            
-            isAnimating = true;
-            hideArtworkInfo();
-            
-            // Update active classes
-            artworkItems[currentIndex].classList.remove('active');
-            artworkItems[index].classList.add('active');
-            
-            // Update current index
-            currentIndex = index;
             
             // Show new artwork info after a short delay for animation
             setTimeout(() => {
