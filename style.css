@@ -437,19 +437,19 @@ body {
 
 .view-collection-btn {
     display: inline-block;
-    background-color: var(--yale-blue);
+    background-color: transparent; /* Changed from var(--yale-blue) */
     color: white;
     text-decoration: none;
     padding: 12px 32px;
-    border-radius: 4px;
+    border-radius: 100px; /* Changed from 4px to 100px for stadium shape */
     font-weight: 600;
     font-size: 1.1rem;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
+    border: 2px solid white; /* Added white border instead of transparent */
 }
 
 .view-collection-btn:hover {
-    background-color: var(--cerulean);
+    background-color: rgba(255, 255, 255, 0.1); /* Changed from var(--cerulean) */
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
