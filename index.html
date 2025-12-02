@@ -154,7 +154,7 @@
     </footer>
 
     <script>
-        // Museum Slideshow (keep this part the same)
+        // Museum Slideshow
         let currentSlide = 0;
         let slideInterval;
         const slides = document.querySelectorAll('.slideshow-image');
@@ -165,7 +165,7 @@
         const prevButton = document.querySelector('.slideshow-prev');
         const nextButton = document.querySelector('.slideshow-next');
         let isPlaying = true;
-    
+
         function showSlide(n) {
             // Remove active class from current slide and mark it as leaving
             slides.forEach((slide, index) => {
@@ -186,17 +186,17 @@
             slides[n].classList.add('active');
             currentSlide = n;
         }
-    
+
         function nextSlide() {
             let next = (currentSlide + 1) % slides.length;
             showSlide(next);
         }
-    
+
         function prevSlide() {
             let prev = (currentSlide - 1 + slides.length) % slides.length;
             showSlide(prev);
         }
-    
+
         function goToSlide(n) {
             showSlide(n);
             // Reset auto-advance timer when manually navigating
@@ -205,7 +205,7 @@
                 slideInterval = setInterval(nextSlide, 5000);
             }
         }
-    
+
         function toggleSlideshow() {
             if (isPlaying) {
                 clearInterval(slideInterval);
@@ -218,10 +218,10 @@
             }
             isPlaying = !isPlaying;
         }
-    
+
         // Start the slideshow
         slideInterval = setInterval(nextSlide, 5000);
-    
+
         // Event Listeners
         pauseButton.addEventListener('click', toggleSlideshow);
         nextButton.addEventListener('click', () => {
@@ -238,13 +238,13 @@
                 slideInterval = setInterval(nextSlide, 5000);
             }
         });
-    
+
         // Dot navigation
         dots.forEach((dot, index) => {
             dot.addEventListener('click', () => goToSlide(index));
         });
-    
-        // Artwork Carousel - Array Rotation Concept WITH SMOOTH ANIMATIONS
+
+        // Artwork Carousel - Array Rotation Concept
         const artworkImages = [
             { name: "images/artworks/a-cry-for-nature.png", title: "A Cry for Nature" },
             { name: "images/artworks/bond-of-self.png", title: "Bond of Self" },
@@ -288,6 +288,9 @@
         function createCarouselItems() {
             carousel.innerHTML = '';
             
+            // Clear any existing image load handlers
+            carousel.dataset.imagesLoading = '0';
+            
             artworkArray.forEach((artwork, index) => {
                 const item = document.createElement('div');
                 item.className = 'carousel-item';
@@ -298,6 +301,8 @@
                 const img = document.createElement('img');
                 img.src = artwork.name;
                 img.alt = artwork.title;
+                
+                // Add loading attribute for better performance
                 img.loading = 'eager';
                 
                 item.appendChild(img);
@@ -331,94 +336,24 @@
             }, 50);
         }
         
-        // Rotate array forward with smooth animation
+        // Rotate array forward (move first to last)
         function rotateArrayForward() {
-            // Fade out title slightly
-            artworkTitle.style.opacity = '0.7';
-            
-            // Remove active class from current active item with animation
-            const currentActive = carousel.children[ACTIVE_POSITION];
-            if (currentActive) {
-                currentActive.classList.remove('active');
-            }
-            
-            // Rotate the array
+            // Remove first item and add it to the end
             const firstItem = artworkArray.shift();
             artworkArray.push(firstItem);
             
-            // Update title
-            artworkTitle.textContent = artworkArray[ACTIVE_POSITION].title;
-            
-            // Update images in existing DOM elements (instead of recreating)
-            updateCarouselImages();
-            
-            // Add active class to new active item
-            setTimeout(() => {
-                const newActive = carousel.children[ACTIVE_POSITION];
-                if (newActive) {
-                    newActive.classList.add('active');
-                }
-                
-                // Fade title back in
-                artworkTitle.style.opacity = '1';
-                
-                // Re-center with smooth scroll
-                centerActiveItem();
-            }, 10);
+            // Re-render carousel
+            createCarouselItems();
         }
         
-        // Rotate array backward with smooth animation
+        // Rotate array backward (move last to first)
         function rotateArrayBackward() {
-            // Fade out title slightly
-            artworkTitle.style.opacity = '0.7';
-            
-            // Remove active class from current active item
-            const currentActive = carousel.children[ACTIVE_POSITION];
-            if (currentActive) {
-                currentActive.classList.remove('active');
-            }
-            
-            // Rotate the array
+            // Remove last item and add it to the beginning
             const lastItem = artworkArray.pop();
             artworkArray.unshift(lastItem);
             
-            // Update title
-            artworkTitle.textContent = artworkArray[ACTIVE_POSITION].title;
-            
-            // Update images in existing DOM elements
-            updateCarouselImages();
-            
-            // Add active class to new active item
-            setTimeout(() => {
-                const newActive = carousel.children[ACTIVE_POSITION];
-                if (newActive) {
-                    newActive.classList.add('active');
-                }
-                
-                // Fade title back in
-                artworkTitle.style.opacity = '1';
-                
-                // Re-center with smooth scroll
-                centerActiveItem();
-            }, 10);
-        }
-        
-        // Update carousel images without recreating DOM
-        function updateCarouselImages() {
-            const items = carousel.querySelectorAll('.carousel-item');
-            
-            items.forEach((item, index) => {
-                const img = item.querySelector('img');
-                const artwork = artworkArray[index];
-                
-                if (img && artwork) {
-                    // Only update if source is different
-                    if (img.src !== window.location.origin + '/' + artwork.name) {
-                        img.src = artwork.name;
-                        img.alt = artwork.title;
-                    }
-                }
-            });
+            // Re-render carousel
+            createCarouselItems();
         }
         
         // Start auto-advance
