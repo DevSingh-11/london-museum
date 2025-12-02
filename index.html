@@ -269,6 +269,7 @@
         
         const carousel = document.getElementById('artworkCarousel');
         const centeredTitle = document.getElementById('centered-artwork-title');
+        const centeredInfo = document.querySelector('.centered-artwork-info');
         const carouselPrevBtn = document.querySelector('.carousel-prev');
         const carouselNextBtn = document.querySelector('.carousel-next');
         
@@ -280,7 +281,6 @@
             const artworkItem = document.createElement('div');
             artworkItem.className = 'artwork-item';
             artworkItem.dataset.index = index;
-            artworkItem.dataset.artworkIndex = index;
             
             const img = document.createElement('img');
             img.src = artwork.src;
@@ -299,24 +299,39 @@
         const artworkItems = document.querySelectorAll('.artwork-item');
         let currentIndex = 0;
         let autoSlideInterval;
-        const slideDuration = 5000;
+        const slideDuration = 5000; // 5 seconds between slides
         let isAnimating = false;
+        let isInitialized = false;
         
-        // Position artworks
-        function positionArtworks() {
-            artworkItems.forEach((item, index) => {
-                const position = (index - currentIndex) * 400; // 400px spacing
-                item.style.left = position + 'px';
-                
-                // Update classes
-                item.classList.remove('active');
-                if (index === currentIndex) {
-                    item.classList.add('active');
-                }
-            });
+        // Initialize the carousel
+        function initializeCarousel() {
+            if (isInitialized) return;
+            
+            // Show first artwork info
+            updateArtworkTitle(currentIndex);
+            
+            // Start auto-sliding
+            startAutoSlide();
+            
+            // Add event listeners for navigation
+            carouselPrevBtn.addEventListener('click', goToPrevArtwork);
+            carouselNextBtn.addEventListener('click', goToNextArtwork);
+            
+            // Pause auto-slide on hover
+            carousel.addEventListener('mouseenter', pauseAutoSlide);
+            carousel.addEventListener('mouseleave', resumeAutoSlide);
+            
+            // Also pause when user interacts with arrows
+            carouselPrevBtn.addEventListener('mouseenter', pauseAutoSlide);
+            carouselNextBtn.addEventListener('mouseenter', pauseAutoSlide);
+            carouselPrevBtn.addEventListener('mouseleave', resumeAutoSlide);
+            carouselNextBtn.addEventListener('mouseleave', resumeAutoSlide);
+            
+            isInitialized = true;
         }
         
         function updateArtworkTitle(index) {
+            // Smooth transition for title change
             centeredTitle.style.opacity = '0';
             setTimeout(() => {
                 centeredTitle.textContent = shuffledArtworks[index].title;
@@ -329,19 +344,24 @@
             
             isAnimating = true;
             
+            // Remove active class from current item
+            artworkItems[currentIndex].classList.remove('active');
+            
             // Update current index
             currentIndex = (currentIndex + 1) % artworkItems.length;
             
-            // Position artworks with new active
-            positionArtworks();
+            // Add active class to new item
+            artworkItems[currentIndex].classList.add('active');
             
-            // Update title
+            // Update title with smooth transition
             updateArtworkTitle(currentIndex);
             
+            // Reset animation flag
             setTimeout(() => {
                 isAnimating = false;
-            }, 800);
+            }, 500);
             
+            // Reset auto-slide timer
             resetAutoSlide();
         }
         
@@ -350,19 +370,24 @@
             
             isAnimating = true;
             
+            // Remove active class from current item
+            artworkItems[currentIndex].classList.remove('active');
+            
             // Update current index
             currentIndex = (currentIndex - 1 + artworkItems.length) % artworkItems.length;
             
-            // Position artworks with new active
-            positionArtworks();
+            // Add active class to new item
+            artworkItems[currentIndex].classList.add('active');
             
-            // Update title
+            // Update title with smooth transition
             updateArtworkTitle(currentIndex);
             
+            // Reset animation flag
             setTimeout(() => {
                 isAnimating = false;
-            }, 800);
+            }, 500);
             
+            // Reset auto-slide timer
             resetAutoSlide();
         }
         
@@ -384,20 +409,10 @@
             resumeAutoSlide();
         }
         
-        // Initialize
-        function initializeCarousel() {
-            positionArtworks();
-            updateArtworkTitle(currentIndex);
-            startAutoSlide();
-            
-            carouselPrevBtn.addEventListener('click', goToPrevArtwork);
-            carouselNextBtn.addEventListener('click', goToNextArtwork);
-            
-            carousel.addEventListener('mouseenter', pauseAutoSlide);
-            carousel.addEventListener('mouseleave', resumeAutoSlide);
-        }
-        
+        // Initialize carousel after images load
         window.addEventListener('load', initializeCarousel);
+        
+        // Fallback initialization
         setTimeout(initializeCarousel, 1000);
     </script>
 </body>
