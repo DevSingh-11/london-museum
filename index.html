@@ -241,7 +241,7 @@
             dot.addEventListener('click', () => goToSlide(index));
         });
 
-        // ===== ARTWORK CAROUSEL - FIXED CENTERING =====
+        // ===== ARTWORK CAROUSEL =====
         const artworkImages = [
             { src: 'images/artworks/a-cry-for-nature.png', title: 'A Cry for Nature' },
             { src: 'images/artworks/bond-of-self.png', title: 'Bond of Self' },
@@ -267,7 +267,6 @@
         const centeredTitle = document.getElementById('centered-artwork-title');
         const centeredInfo = document.querySelector('.centered-artwork-info');
         const wrapper = document.querySelector('.artwork-carousel-wrapper');
-        const container = document.querySelector('.artwork-container');
         
         // Randomize order on page load
         const shuffledArtworks = [...artworkImages].sort(() => Math.random() - 0.5);
@@ -294,20 +293,9 @@
         let currentCenteredIndex = -1;
         const scrollSpeed = 0.5;
         
-        // Get the exact center position of the wrapper
-        function getWrapperCenter() {
-            const wrapperRect = wrapper.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            // Calculate center relative to the container
-            return {
-                x: wrapperRect.width / 2,
-                absoluteX: wrapperRect.left + (wrapperRect.width / 2)
-            };
-        }
-        
         // Duplicate items for seamless loop
         function duplicateForLoop() {
-            const itemsToDuplicate = Array.from(artworkItems).slice(0, Math.ceil(artworkItems.length / 2));
+            const itemsToDuplicate = Array.from(artworkItems).slice(0, 5);
             itemsToDuplicate.forEach(item => {
                 const clone = item.cloneNode(true);
                 carousel.appendChild(clone);
@@ -324,7 +312,7 @@
                 carousel.style.transform = `translateX(${scrollPosition}px)`;
                 
                 // Reset position when scrolled through one full set
-                const singleSetWidth = artworkItems.length * (220 + 40); // (width + gap) * number of items
+                const singleSetWidth = carousel.scrollWidth / 2; // Half because we duplicated
                 if (Math.abs(scrollPosition) >= singleSetWidth) {
                     scrollPosition += singleSetWidth;
                 }
@@ -336,17 +324,17 @@
         }
         
         function checkCenteredArtwork() {
-            const wrapperCenter = getWrapperCenter();
-            const tolerance = 30; // How close to center needed to trigger pause
+            const wrapperRect = wrapper.getBoundingClientRect();
+            const wrapperCenterX = wrapperRect.left + wrapperRect.width / 2;
             
             allCarouselItems.forEach((item, index) => {
                 const itemRect = item.getBoundingClientRect();
-                const itemCenterX = itemRect.left + (itemRect.width / 2);
-                const distanceFromCenter = Math.abs(itemCenterX - wrapperCenter.absoluteX);
+                const itemCenterX = itemRect.left + itemRect.width / 2;
+                const distanceFromCenter = Math.abs(itemCenterX - wrapperCenterX);
                 
-                // If item is within tolerance of center and not currently centered
-                if (distanceFromCenter < tolerance && (index % shuffledArtworks.length) !== currentCenteredIndex) {
-                    pauseAtArtwork(index % shuffledArtworks.length);
+                // If item is within 50px of center and not currently centered
+                if (distanceFromCenter < 50 && index !== currentCenteredIndex) {
+                    pauseAtArtwork(index % shuffledArtworks.length); // Use modulo for original artworks
                 }
             });
         }
@@ -355,30 +343,29 @@
             isPaused = true;
             currentCenteredIndex = index;
             
-            // Clear any existing timeout
-            clearTimeout(pauseTimeout);
-            
-            // Remove centered class from all items
+            // Highlight centered artwork
             allCarouselItems.forEach(item => item.classList.remove('centered'));
             
-            // Find and highlight ALL matching items (including duplicates)
+            // Find and highlight the matching item in the carousel
+            const originalIndex = index;
             allCarouselItems.forEach((item, carouselIndex) => {
-                if (carouselIndex % shuffledArtworks.length === index) {
+                if (carouselIndex % shuffledArtworks.length === originalIndex) {
                     item.classList.add('centered');
                 }
             });
             
-            // Update and show the centered artwork info
+            // Show info
             centeredTitle.textContent = shuffledArtworks[index].title;
             centeredInfo.classList.add('visible');
             
-            // Resume after 4 seconds
+            // Resume after 5 seconds
+            clearTimeout(pauseTimeout);
             pauseTimeout = setTimeout(() => {
                 isPaused = false;
                 centeredInfo.classList.remove('visible');
                 allCarouselItems.forEach(item => item.classList.remove('centered'));
                 currentCenteredIndex = -1;
-            }, 4000);
+            }, 5000);
         }
         
         // Start the carousel
