@@ -366,6 +366,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 100px; /* Ensures items have some width before images load */
 }
 
 .carousel-item img {
@@ -375,6 +376,7 @@ body {
     border-radius: 4px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     transition: all 0.4s ease;
+    max-width: 100%;
 }
 
 .carousel-item:not(.active) img {
@@ -493,6 +495,7 @@ body {
     
     .carousel-item {
         height: 250px;
+        min-width: 80px; /* Adjusted for mobile */
     }
     
     .carousel-arrow {
