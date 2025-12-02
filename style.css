@@ -377,13 +377,14 @@ body {
 
 .centered-artwork-info {
     position: absolute;
-    top: 50%;
+    top: calc(50% + 180px); /* Position below the artwork */
     left: 50%;
-    transform: translate(-50%, 100px);
+    transform: translateX(-50%);
     text-align: center;
     width: 100%;
     opacity: 0;
     transition: opacity 0.5s ease;
+    z-index: 10;
 }
 
 .centered-artwork-info.visible {
