@@ -287,6 +287,11 @@
             img.alt = artwork.title;
             img.className = 'artwork-image';
             
+            // Set active class for first item
+            if (index === 0) {
+                artworkItem.classList.add('active');
+            }
+            
             artworkItem.appendChild(img);
             carousel.appendChild(artworkItem);
         });
@@ -302,11 +307,8 @@
         function initializeCarousel() {
             if (isInitialized) return;
             
-            // Set initial positions for all items
-            updateArtworkPositions();
-            
             // Show first artwork info
-            showArtworkInfo(currentIndex);
+            updateArtworkTitle(currentIndex);
             
             // Start auto-sliding
             startAutoSlide();
@@ -328,45 +330,34 @@
             isInitialized = true;
         }
         
-        function updateArtworkPositions() {
-            artworkItems.forEach((item, index) => {
-                // Remove all position classes
-                item.classList.remove('active', 'previous', 'next');
-                
-                if (index === currentIndex) {
-                    item.classList.add('active');
-                } else if (index === (currentIndex - 1 + artworkItems.length) % artworkItems.length) {
-                    item.classList.add('previous');
-                } else if (index === (currentIndex + 1) % artworkItems.length) {
-                    item.classList.add('next');
-                }
-            });
-        }
-        
-        function showArtworkInfo(index) {
-            centeredTitle.textContent = shuffledArtworks[index].title;
-            centeredInfo.classList.add('visible');
-        }
-        
-        function hideArtworkInfo() {
-            centeredInfo.classList.remove('visible');
+        function updateArtworkTitle(index) {
+            // Smooth transition for title change
+            centeredTitle.style.opacity = '0';
+            setTimeout(() => {
+                centeredTitle.textContent = shuffledArtworks[index].title;
+                centeredTitle.style.opacity = '1';
+            }, 150);
         }
         
         function goToNextArtwork() {
             if (isAnimating) return;
             
             isAnimating = true;
-            hideArtworkInfo();
+            
+            // Remove active class from current item
+            artworkItems[currentIndex].classList.remove('active');
             
             // Update current index
             currentIndex = (currentIndex + 1) % artworkItems.length;
             
-            // Update positions
-            updateArtworkPositions();
+            // Add active class to new item
+            artworkItems[currentIndex].classList.add('active');
             
-            // Show new artwork info after a short delay for animation
+            // Update title with smooth transition
+            updateArtworkTitle(currentIndex);
+            
+            // Reset animation flag
             setTimeout(() => {
-                showArtworkInfo(currentIndex);
                 isAnimating = false;
             }, 500);
             
@@ -378,17 +369,21 @@
             if (isAnimating) return;
             
             isAnimating = true;
-            hideArtworkInfo();
+            
+            // Remove active class from current item
+            artworkItems[currentIndex].classList.remove('active');
             
             // Update current index
             currentIndex = (currentIndex - 1 + artworkItems.length) % artworkItems.length;
             
-            // Update positions
-            updateArtworkPositions();
+            // Add active class to new item
+            artworkItems[currentIndex].classList.add('active');
             
-            // Show new artwork info after a short delay for animation
+            // Update title with smooth transition
+            updateArtworkTitle(currentIndex);
+            
+            // Reset animation flag
             setTimeout(() => {
-                showArtworkInfo(currentIndex);
                 isAnimating = false;
             }, 500);
             
