@@ -270,8 +270,8 @@
         const carousel = document.getElementById('artworkCarousel');
         const centeredTitle = document.getElementById('centered-artwork-title');
         const centeredInfo = document.querySelector('.centered-artwork-info');
-        const carouselPrevBtn = document.querySelector('.carousel-prev'); // Renamed
-        const carouselNextBtn = document.querySelector('.carousel-next'); // Renamed
+        const carouselPrevBtn = document.querySelector('.carousel-prev');
+        const carouselNextBtn = document.querySelector('.carousel-next');
         
         // Randomize order on page load
         const shuffledArtworks = [...artworkImages].sort(() => Math.random() - 0.5);
@@ -287,11 +287,6 @@
             img.alt = artwork.title;
             img.className = 'artwork-image';
             
-            // Set active class for first item
-            if (index === 0) {
-                artworkItem.classList.add('active');
-            }
-            
             artworkItem.appendChild(img);
             carousel.appendChild(artworkItem);
         });
@@ -301,11 +296,14 @@
         let autoSlideInterval;
         const slideDuration = 5000; // 5 seconds between slides
         let isAnimating = false;
-        let isInitialized = false; // Added this variable
+        let isInitialized = false;
         
         // Initialize the carousel
         function initializeCarousel() {
             if (isInitialized) return;
+            
+            // Set initial positions for all items
+            updateArtworkPositions();
             
             // Show first artwork info
             showArtworkInfo(currentIndex);
@@ -330,6 +328,21 @@
             isInitialized = true;
         }
         
+        function updateArtworkPositions() {
+            artworkItems.forEach((item, index) => {
+                // Remove all position classes
+                item.classList.remove('active', 'previous', 'next');
+                
+                if (index === currentIndex) {
+                    item.classList.add('active');
+                } else if (index === (currentIndex - 1 + artworkItems.length) % artworkItems.length) {
+                    item.classList.add('previous');
+                } else if (index === (currentIndex + 1) % artworkItems.length) {
+                    item.classList.add('next');
+                }
+            });
+        }
+        
         function showArtworkInfo(index) {
             centeredTitle.textContent = shuffledArtworks[index].title;
             centeredInfo.classList.add('visible');
@@ -345,14 +358,11 @@
             isAnimating = true;
             hideArtworkInfo();
             
-            const nextIndex = (currentIndex + 1) % artworkItems.length;
-            
-            // Update active classes
-            artworkItems[currentIndex].classList.remove('active');
-            artworkItems[nextIndex].classList.add('active');
-            
             // Update current index
-            currentIndex = nextIndex;
+            currentIndex = (currentIndex + 1) % artworkItems.length;
+            
+            // Update positions
+            updateArtworkPositions();
             
             // Show new artwork info after a short delay for animation
             setTimeout(() => {
@@ -370,14 +380,11 @@
             isAnimating = true;
             hideArtworkInfo();
             
-            const prevIndex = (currentIndex - 1 + artworkItems.length) % artworkItems.length;
-            
-            // Update active classes
-            artworkItems[currentIndex].classList.remove('active');
-            artworkItems[prevIndex].classList.add('active');
-            
             // Update current index
-            currentIndex = prevIndex;
+            currentIndex = (currentIndex - 1 + artworkItems.length) % artworkItems.length;
+            
+            // Update positions
+            updateArtworkPositions();
             
             // Show new artwork info after a short delay for animation
             setTimeout(() => {
@@ -398,9 +405,7 @@
         }
         
         function resumeAutoSlide() {
-            // Clear any existing interval first
             clearInterval(autoSlideInterval);
-            // Start new interval
             autoSlideInterval = setInterval(goToNextArtwork, slideDuration);
         }
         
