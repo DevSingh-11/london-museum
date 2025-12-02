@@ -126,16 +126,14 @@
         <div class="artwork-container">
             <h2 class="section-title">From the Collection</h2>
             
-            <div class="artwork-slideshow">
-                <!-- Artwork Display -->
-                <div class="artwork-display">
-                    <img src="images/artworks/the-persistence-of-time.png" alt="The Persistence of Time" class="artwork-image active">
-                    <!-- More images will be added by JavaScript -->
+            <div class="artwork-carousel-wrapper">
+                <div class="artwork-carousel" id="artworkCarousel">
+                    <!-- Artworks will be inserted by JavaScript -->
                 </div>
                 
-                <!-- Artwork Info -->
-                <div class="artwork-info">
-                    <h3 class="artwork-title" id="current-artwork-title">The Persistence of Time</h3>
+                <!-- Centered Artwork Info -->
+                <div class="centered-artwork-info">
+                    <h3 class="artwork-title" id="centered-artwork-title"></h3>
                     <button class="view-collection-btn">View in Collection</button>
                 </div>
             </div>
@@ -243,7 +241,7 @@
             dot.addEventListener('click', () => goToSlide(index));
         });
 
-        // ===== ARTWORK PREVIEW SLIDESHOW =====
+        // ===== ARTWORK CAROUSEL =====
         const artworkImages = [
             { src: 'images/artworks/the-persistence-of-time.png', title: 'The Persistence of Time' },
             { src: 'images/artworks/the-rhinos.png', title: 'The Rhinos' },
@@ -265,55 +263,103 @@
             { src: 'images/artworks/a-cry-for-nature.png', title: 'A Cry for Nature' }
         ];
 
-        let currentArtworkIndex = 0;
-        let artworkInterval;
-        const artworkDisplay = document.querySelector('.artwork-display');
-        const artworkTitle = document.getElementById('current-artwork-title');
+        const carousel = document.getElementById('artworkCarousel');
+        const centeredTitle = document.getElementById('centered-artwork-title');
+        const centeredInfo = document.querySelector('.centered-artwork-info');
 
-        // Create image elements for all artworks
-        artworkImages.forEach((artwork, index) => {
+        // Randomize order on page load
+        const shuffledArtworks = [...artworkImages].sort(() => Math.random() - 0.5);
+        
+        // Create artwork items in random order
+        shuffledArtworks.forEach((artwork, index) => {
+            const artworkItem = document.createElement('div');
+            artworkItem.className = 'artwork-item';
+            artworkItem.dataset.index = index;
+            
             const img = document.createElement('img');
             img.src = artwork.src;
             img.alt = artwork.title;
             img.className = 'artwork-image';
-            if (index === 0) img.classList.add('active');
-            artworkDisplay.appendChild(img);
-        });
-
-        const allArtworkImages = document.querySelectorAll('.artwork-image');
-
-        function showArtwork(index) {
-            // Fade out current image
-            allArtworkImages.forEach(img => {
-                img.classList.remove('active');
-            });
             
-            // Fade in new image
-            allArtworkImages[index].classList.add('active');
-            artworkTitle.textContent = artworkImages[index].title;
-            currentArtworkIndex = index;
+            artworkItem.appendChild(img);
+            carousel.appendChild(artworkItem);
+        });
+
+        const artworkItems = document.querySelectorAll('.artwork-item');
+        let scrollPosition = 0;
+        let isPaused = false;
+        let pauseTimeout;
+        let currentCenteredIndex = 0;
+        const carouselWidth = carousel.scrollWidth;
+        const wrapperWidth = document.querySelector('.artwork-carousel-wrapper').offsetWidth;
+
+        // Store original artworks for title matching
+        const originalArtworks = artworkImages;
+
+        // Duplicate items for seamless loop
+        function duplicateForLoop() {
+            const itemsToDuplicate = Array.from(artworkItems).slice(0, 5);
+            itemsToDuplicate.forEach(item => {
+                const clone = item.cloneNode(true);
+                carousel.appendChild(clone);
+            });
+        }
+        duplicateForLoop();
+
+        function updateCarousel() {
+            if (!isPaused) {
+                scrollPosition -= 0.5; // Slow scroll speed
+                carousel.style.transform = `translateX(${scrollPosition}px)`;
+                
+                // Reset position when scrolled far enough
+                if (scrollPosition < -carouselWidth) {
+                    scrollPosition += carouselWidth;
+                }
+                
+                // Check if an artwork is centered
+                checkCenteredArtwork();
+            }
+            
+            requestAnimationFrame(updateCarousel);
         }
 
-        function nextArtwork() {
-            // Random selection without repeats in a cycle
-            let nextIndex;
-            const availableIndices = artworkImages.map((_, i) => i).filter(i => i !== currentArtworkIndex);
-            nextIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
-            showArtwork(nextIndex);
+        function checkCenteredArtwork() {
+            const wrapperCenter = wrapperWidth / 2;
+            
+            artworkItems.forEach((item, index) => {
+                const rect = item.getBoundingClientRect();
+                const itemCenter = rect.left + rect.width / 2;
+                const distanceFromCenter = Math.abs(itemCenter - wrapperCenter);
+                
+                if (distanceFromCenter < 50 && index !== currentCenteredIndex) {
+                    pauseAtArtwork(index);
+                }
+            });
         }
 
-        // Start artwork slideshow (10 seconds)
-        artworkInterval = setInterval(nextArtwork, 10000);
+        function pauseAtArtwork(index) {
+            isPaused = true;
+            currentCenteredIndex = index;
+            
+            // Highlight centered artwork
+            artworkItems.forEach(item => item.classList.remove('centered'));
+            artworkItems[index].classList.add('centered');
+            
+            // Show correct title from original array
+            centeredTitle.textContent = shuffledArtworks[index].title;
+            centeredInfo.classList.add('visible');
+            
+            // Resume after 5 seconds
+            clearTimeout(pauseTimeout);
+            pauseTimeout = setTimeout(() => {
+                isPaused = false;
+                centeredInfo.classList.remove('visible');
+                artworkItems[index].classList.remove('centered');
+            }, 5000);
+        }
 
-        // Pause artwork slideshow on hover
-        const artworkSlideshow = document.querySelector('.artwork-slideshow');
-        artworkSlideshow.addEventListener('mouseenter', () => {
-            clearInterval(artworkInterval);
-        });
-        
-        artworkSlideshow.addEventListener('mouseleave', () => {
-            artworkInterval = setInterval(nextArtwork, 10000);
-        });
+        // Start the carousel
+        updateCarousel();
     </script>
 </body>
 </html>
