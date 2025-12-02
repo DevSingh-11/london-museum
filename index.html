@@ -298,11 +298,22 @@
                 
                 // Store in array
                 artworkWidths[index] = displayWidth;
+                
+                // Initialize carousel after all images load
+                if (Object.keys(artworkWidths).length === shuffledArtworks.length) {
+                    initializeCarousel();
+                }
             };
             
             // Set a default width in case image fails to load
-            artworkItem.style.width = '280px'; // Default square aspect ratio
-            artworkWidths[index] = 280;
+            img.onerror = function() {
+                artworkItem.style.width = '280px';
+                artworkWidths[index] = 280;
+                
+                if (Object.keys(artworkWidths).length === shuffledArtworks.length) {
+                    initializeCarousel();
+                }
+            };
             
             artworkItem.appendChild(img);
             carousel.appendChild(artworkItem);
@@ -316,6 +327,7 @@
         const scrollSpeed = 0.5;
         let totalCarouselWidth = 0;
         let isInitialized = false;
+        let animationId = null;
         
         // Initialize carousel after images load
         function initializeCarousel() {
@@ -342,7 +354,7 @@
             duplicateForLoop();
             
             isInitialized = true;
-            updateCarousel();
+            startCarousel();
         }
         
         // Get all items including duplicates
@@ -361,7 +373,14 @@
                 checkCenteredArtwork();
             }
             
-            requestAnimationFrame(updateCarousel);
+            animationId = requestAnimationFrame(updateCarousel);
+        }
+        
+        function startCarousel() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            updateCarousel();
         }
         
         function checkCenteredArtwork() {
@@ -467,10 +486,18 @@
             }, 5000);
         }
         
-        // Start the carousel after images have time to load
+        // Fallback initialization in case images take too long
         setTimeout(() => {
-            initializeCarousel();
-        }, 1000);
+            if (!isInitialized) {
+                // Fill with default widths if images haven't loaded
+                for (let i = 0; i < shuffledArtworks.length; i++) {
+                    if (!artworkWidths[i]) {
+                        artworkWidths[i] = 280;
+                    }
+                }
+                initializeCarousel();
+            }
+        }, 2000);
         
         // Also initialize if all images load before timeout
         window.addEventListener('load', () => {
