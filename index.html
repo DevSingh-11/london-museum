@@ -414,13 +414,6 @@
         
         // Fallback initialization
         setTimeout(initializeCarousel, 1000);
-        
-        // Also initialize if all images load before timeout
-        window.addEventListener('load', () => {
-            if (!isInitialized) {
-                initializeCarousel();
-            }
-        });
     </script>
 </body>
 </html>
