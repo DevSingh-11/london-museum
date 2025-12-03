@@ -461,21 +461,28 @@
             const infoRect = heroInfo.getBoundingClientRect();
             
             // Calculate grid midpoint (between left margin and left side of right box)
-            // Since we have a 50/50 grid, the midpoint is at 50% of content width
             const gridMidpoint = contentRect.width / 2;
             
-            // Use info box height for orb size
-            const orbSize = Math.min(infoRect.height, contentRect.height);
+            // Get border width from CSS (4px border on each side = 8px total)
+            const computedStyle = window.getComputedStyle(memoryOrb);
+            const borderWidth = parseInt(computedStyle.borderWidth) || 0;
+            const totalBorder = borderWidth * 2; // Both sides
             
-            // Calculate left position so orb center aligns with grid midpoint
-            // Orb center = left position + (orbSize / 2)
-            // We want: left + (orbSize / 2) = gridMidpoint
-            // Therefore: left = gridMidpoint - (orbSize / 2)
-            const orbLeft = gridMidpoint - (orbSize / 2);
+            // Orb image size should be: info box height - total border
+            const imageSize = infoRect.height - totalBorder;
+            
+            // Total orb size (image + border) = info box height
+            const totalOrbSize = infoRect.height;
+            
+            // Calculate left position so TOTAL orb center aligns with grid midpoint
+            // Orb center = left position + (totalOrbSize / 2)
+            // We want: left + (totalOrbSize / 2) = gridMidpoint
+            // Therefore: left = gridMidpoint - (totalOrbSize / 2)
+            const orbLeft = gridMidpoint - (totalOrbSize / 2);
             
             // Apply styles
-            memoryOrb.style.width = `${orbSize}px`;
-            memoryOrb.style.height = `${orbSize}px`;
+            memoryOrb.style.width = `${imageSize}px`;  // Image size (without border)
+            memoryOrb.style.height = `${imageSize}px`; // Image size (without border)
             memoryOrb.style.left = `${orbLeft}px`;
             memoryOrb.style.top = '0';
             
@@ -487,9 +494,11 @@
             
             console.log('Memory Orb positioned:', {
                 infoHeight: infoRect.height,
+                borderWidth: borderWidth,
+                imageSize: imageSize,
+                totalOrbSize: totalOrbSize,
                 contentWidth: contentRect.width,
                 midpoint: gridMidpoint,
-                orbSize: orbSize,
                 orbLeft: orbLeft
             });
         }
