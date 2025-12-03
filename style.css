@@ -458,7 +458,7 @@ body {
 #hero {
     background-color: var(--cerulean);
     color: white;
-    padding: 80px 0;
+    padding: 60px 0; /* Reduced from 80px */
     position: relative;
     overflow: hidden;
 }
@@ -471,72 +471,94 @@ body {
 
 .hero-content {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1.2fr; /* Changed ratio: 1:1.2 instead of 2:1 */
     gap: 60px;
     align-items: center;
+    min-height: 400px; /* Reduced height */
 }
 
-/* Left: Artworks Section */
+/* Left: 3D Orb Carousel */
 .hero-artworks {
-    position: relative;
-}
-
-.artwork-trio {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-    gap: 40px;
+    height: 100%;
+}
+
+.orb-carousel-container {
     position: relative;
+    width: 400px;
+    height: 300px;
+    perspective: 1000px;
 }
 
-.orb-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    transition: transform 0.3s ease;
+.orb-carousel {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
 }
 
-.orb-container:hover {
-    transform: translateY(-10px);
+.orb-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.hero-orb {
-    width: 200px;
-    height: 200px;
+.orb-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 180px; /* Base size */
+    height: 180px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    transform-origin: center center;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.hero-orb:hover {
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-    transform: scale(1.05);
+/* Center orb (active) */
+.orb-item[data-index="0"] {
+    transform: translate(-50%, -50%) translateZ(0px) scale(1);
+    opacity: 1;
+    z-index: 3;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
-.orb-label {
-    font-size: 1rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    text-align: center;
-    max-width: 200px;
+/* Left orb */
+.orb-item[data-index="1"] {
+    transform: translate(-50%, -50%) translateX(-150px) translateZ(-100px) scale(0.8);
+    opacity: 0.7;
+    z-index: 2;
+}
+
+/* Right orb */
+.orb-item[data-index="2"] {
+    transform: translate(-50%, -50%) translateX(150px) translateZ(-100px) scale(0.8);
+    opacity: 0.7;
+    z-index: 2;
 }
 
 /* Right: Exhibition Info */
 .hero-info {
-    padding: 30px;
+    padding: 30px 40px; /* Increased horizontal padding */
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .exhibition-badge {
     display: inline-block;
-    background-color: var(--cerulean);
+    background-color: transparent;
     color: white;
     padding: 6px 16px;
     border-radius: 20px;
@@ -545,26 +567,28 @@ body {
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    border: 2px solid white; /* White outline to match button */
+    width: fit-content;
 }
 
 .exhibition-title {
-    font-size: 2.8rem;
+    font-size: 2.5rem; /* Slightly smaller */
     font-weight: 700;
     margin-bottom: 10px;
     line-height: 1.1;
 }
 
 .exhibition-subtitle {
-    font-size: 1.4rem;
+    font-size: 1.3rem; /* Slightly smaller */
     font-weight: 500;
     color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 25px;
+    margin-bottom: 20px; /* Reduced */
 }
 
 .exhibition-description {
     font-size: 1.1rem;
     line-height: 1.7;
-    margin-bottom: 30px;
+    margin-bottom: 25px; /* Reduced */
     color: rgba(255, 255, 255, 0.9);
 }
 
@@ -572,7 +596,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 25px; /* Reduced */
 }
 
 .view-exhibition-btn {
@@ -647,13 +671,26 @@ body {
         gap: 40px;
     }
     
-    .hero-orb {
-        width: 160px;
-        height: 160px;
+    .orb-carousel-container {
+        width: 350px;
+        height: 250px;
+    }
+    
+    .orb-item {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .orb-item[data-index="1"] {
+        transform: translate(-50%, -50%) translateX(-120px) translateZ(-80px) scale(0.8);
+    }
+    
+    .orb-item[data-index="2"] {
+        transform: translate(-50%, -50%) translateX(120px) translateZ(-80px) scale(0.8);
     }
     
     .exhibition-title {
-        font-size: 2.3rem;
+        font-size: 2.2rem;
     }
 }
 
@@ -661,15 +698,26 @@ body {
     .hero-content {
         grid-template-columns: 1fr;
         gap: 40px;
+        min-height: auto;
     }
     
-    .artwork-trio {
-        gap: 20px;
+    .orb-carousel-container {
+        width: 300px;
+        height: 220px;
+        margin: 0 auto;
     }
     
-    .hero-orb {
-        width: 120px;
-        height: 120px;
+    .orb-item {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .orb-item[data-index="1"] {
+        transform: translate(-50%, -50%) translateX(-100px) translateZ(-70px) scale(0.8);
+    }
+    
+    .orb-item[data-index="2"] {
+        transform: translate(-50%, -50%) translateX(100px) translateZ(-70px) scale(0.8);
     }
     
     .exhibition-title {
@@ -680,30 +728,44 @@ body {
         font-size: 1.2rem;
     }
     
-    .hero-actions {
-        flex-direction: column;
-    }
-    
-    .view-exhibition-btn,
-    .secondary-btn {
-        width: 100%;
-        text-align: center;
+    .hero-info {
+        padding: 25px 30px;
     }
 }
 
 @media (max-width: 480px) {
-    .artwork-trio {
-        flex-direction: column;
-        gap: 30px;
+    #hero {
+        padding: 40px 0;
     }
     
-    .hero-orb {
-        width: 150px;
-        height: 150px;
+    .orb-carousel-container {
+        width: 250px;
+        height: 180px;
     }
     
-    .orb-label {
+    .orb-item {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .orb-item[data-index="1"] {
+        transform: translate(-50%, -50%) translateX(-80px) translateZ(-60px) scale(0.8);
+    }
+    
+    .orb-item[data-index="2"] {
+        transform: translate(-50%, -50%) translateX(80px) translateZ(-60px) scale(0.8);
+    }
+    
+    .exhibition-title {
+        font-size: 1.8rem;
+    }
+    
+    .exhibition-subtitle {
         font-size: 1.1rem;
+    }
+    
+    .hero-info {
+        padding: 20px;
     }
 }
 
