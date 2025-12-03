@@ -466,23 +466,24 @@ body {
 .hero-container {
     max-width: 94%;
     margin: 0 auto;
-    padding: 0 3%;
+    padding: 0; /* ← Remove side padding here */
 }
 
 .hero-content {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 60px;
+    grid-template-columns: 400px 1fr; /* ← Left column fixed at orb width, right takes remaining space */
+    gap: 0; /* ← Remove gap between columns */
     align-items: center;
-    min-height: 400px; /* KEEP SAME */
+    min-height: 400px;
 }
 
 /* Left: 3D Orb Carousel */
 .hero-artworks {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* ← Align left instead of center */
     align-items: center;
     height: 100%;
+    padding-left: 3%; /* ← Add left padding to match other sections */
 }
 
 .orb-carousel-container {
@@ -531,30 +532,32 @@ body {
 
 /* Left orb - POSITION THEM OUTSIDE THE CONTAINER */
 .orb-item[data-index="1"] {
-    transform: translate(-50%, -50%) translateX(-200px) translateZ(-150px) scale(0.6);
+    transform: translate(-50%, -50%) translateX(-240px) translateZ(-150px) scale(0.6);
     opacity: 0.4;
     z-index: 2;
 }
 
 /* Right orb - POSITION THEM OUTSIDE THE CONTAINER */
 .orb-item[data-index="2"] {
-    transform: translate(-50%, -50%) translateX(200px) translateZ(-150px) scale(0.6);
+    transform: translate(-50%, -50%) translateX(240px) translateZ(-150px) scale(0.6);
     opacity: 0.4;
     z-index: 2;
 }
 
 /* Right: Exhibition Info */
 .hero-info {
-    padding: 30px 40px;
+    padding: 30px 50px 30px 40px; /* ← More right padding, keep left padding */
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border-radius: 0 12px 12px 0; /* ← Round only right corners */
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: none; /* ← Remove left border since it touches the left column */
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-height: 340px; /* Exhibition box height */
+    margin-left: -1px; /* ← Overlap slightly to hide the gap */
 }
 
 .exhibition-badge {
@@ -665,116 +668,6 @@ body {
     font-weight: 600;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .hero-content {
-        grid-template-columns: 1fr 1fr;
-        gap: 40px;
-    }
-    
-    .orb-carousel-container {
-        width: 500px;
-        height: 350px;
-    }
-    
-    .orb-item {
-        width: 220px;
-        height: 220px;
-    }
-    
-    .orb-item[data-index="1"] {
-        transform: translate(-50%, -50%) translateX(-170px) translateZ(-120px) scale(0.7);
-    }
-    
-    .orb-item[data-index="2"] {
-        transform: translate(-50%, -50%) translateX(170px) translateZ(-120px) scale(0.7);
-    }
-    
-    .exhibition-title {
-        font-size: 2.2rem;
-    }
-    
-    .hero-info {
-        min-height: 380px;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        min-height: auto;
-    }
-    
-    .orb-carousel-container {
-        width: 450px;
-        height: 300px;
-        margin: 0 auto;
-    }
-    
-    .orb-item {
-        width: 200px;
-        height: 200px;
-    }
-    
-    .orb-item[data-index="1"] {
-        transform: translate(-50%, -50%) translateX(-150px) translateZ(-100px) scale(0.7);
-    }
-    
-    .orb-item[data-index="2"] {
-        transform: translate(-50%, -50%) translateX(150px) translateZ(-100px) scale(0.7);
-    }
-    
-    .exhibition-title {
-        font-size: 2rem;
-    }
-    
-    .exhibition-subtitle {
-        font-size: 1.2rem;
-    }
-    
-    .hero-info {
-        padding: 25px 30px;
-        min-height: auto;
-    }
-}
-
-@media (max-width: 480px) {
-    #hero {
-        padding: 40px 0;
-    }
-    
-    .orb-carousel-container {
-        width: 350px;
-        height: 250px;
-    }
-    
-    .orb-item {
-        width: 160px;
-        height: 160px;
-    }
-    
-    .orb-item[data-index="1"] {
-        transform: translate(-50%, -50%) translateX(-120px) translateZ(-80px) scale(0.7);
-    }
-    
-    .orb-item[data-index="2"] {
-        transform: translate(-50%, -50%) translateX(120px) translateZ(-80px) scale(0.7);
-    }
-    
-    .exhibition-title {
-        font-size: 1.8rem;
-    }
-    
-    .exhibition-subtitle {
-        font-size: 1.1rem;
-    }
-    
-    .hero-info {
-        padding: 20px;
-    }
-}
-
 /* ===== TEMPORARY LAYOUT STYLES ===== */
 #featured-artists {
     background-color: var(--muted-tea);
@@ -795,38 +688,4 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .artwork-carousel-wrapper {
-        margin: 0 -3%;
-    }
-    
-    .carousel-item {
-        height: 250px;
-        min-width: 80px; /* Adjusted for mobile */
-    }
-    
-    .carousel-arrow {
-        width: 40px;
-        height: 40px;
-        font-size: 1.5rem;
-    }
-    
-    .carousel-prev {
-        left: 5px;
-    }
-    
-    .carousel-next {
-        right: 5px;
-    }
-    
-    .section-title {
-        font-size: 2rem;
-    }
-    
-    .artwork-title {
-        font-size: 1.5rem;
-    }
 }
