@@ -466,30 +466,29 @@ body {
 .hero-container {
     max-width: 94%;
     margin: 0 auto;
-    padding: 0 3%; /* ← ADDED: Same padding as other sections */
+    padding: 0 3%; /* ← Same padding as other sections */
 }
 
 .hero-content {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* ← CHANGED: Equal columns */
+    grid-template-columns: 1fr 1fr; /* Equal columns */
     gap: 0;
-    align-items: center;
+    align-items: stretch; /* ← Makes both columns same height */
     min-height: 400px;
 }
 
 /* Left: Orb Container */
 .hero-artworks {
     height: 100%;
-    padding-right: 20px; /* ← Space between orbs and info box */
+    display: flex;
+    align-items: center;
 }
 
 .orb-container {
     width: 100%;
-    height: 340px; /* ← MATCHES right box min-height exactly */
+    height: 340px; /* ← EXACTLY matches right box height */
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow: visible; /* ← Allows orbs to extend beyond container */
 }
 
 .orb-carousel-container {
@@ -514,44 +513,44 @@ body {
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ALL ORBS: Same size, same vertical center */
 .orb-item {
     position: absolute;
-    width: 280px;
-    height: 280px;
+    width: 220px; /* ← All same size */
+    height: 220px; /* ← All same size */
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
     transform-origin: center center;
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    top: 50%; /* ← All same vertical center */
+    transform: translateY(-50%); /* ← Centers vertically */
 }
 
-/* Center orb - TOP ALIGNED */
+/* Center orb - CENTERED */
 .orb-item[data-index="0"] {
-    top: 0; /* ← Aligns with container top */
     left: 50%;
-    transform: translateX(-50%) translateZ(0px) scale(1);
+    transform: translateY(-50%) translateX(-50%) translateZ(0px);
     opacity: 1;
     z-index: 3;
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
 }
 
-/* Left orb - LEFT ALIGNED */
+/* Left orb - LEFT EDGE of container */
 .orb-item[data-index="1"] {
-    top: 50%;
-    left: 0; /* ← Aligns with container left */
-    transform: translateY(-50%) translateX(0) translateZ(-120px) scale(0.6);
-    opacity: 0.4;
+    left: 0;
+    transform: translateY(-50%) translateX(-40px) translateZ(-100px) scale(0.85); /* ← "Tucked in" */
+    opacity: 0.6;
     z-index: 2;
 }
 
-/* Right orb - RIGHT ALIGNED */
+/* Right orb - RIGHT EDGE of container */
 .orb-item[data-index="2"] {
-    top: 50%;
-    right: 0; /* ← Aligns with container right */
-    left: auto; /* ← Override the left: 50% from .orb-item */
-    transform: translateY(-50%) translateX(0) translateZ(-120px) scale(0.6);
-    opacity: 0.4;
+    right: 0;
+    left: auto; /* Override left: 50% */
+    transform: translateY(-50%) translateX(40px) translateZ(-100px) scale(0.85); /* ← "Tucked in" */
+    opacity: 0.6;
     z-index: 2;
 }
 
@@ -559,14 +558,14 @@ body {
 .hero-info {
     padding: 30px 40px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px; /* ← CHANGED: All corners rounded */
+    border-radius: 12px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 340px; /* Exhibition box height */
+    min-height: 340px; /* ← EXACTLY matches orb container height */
 }
 
 .exhibition-badge {
