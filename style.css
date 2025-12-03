@@ -507,18 +507,18 @@ body {
 }
 
 .circle-2 {
-    /* Bottom left circle - moved further left */
-    bottom: 20%;
-    left: 10%; /* Changed from 20% to 10% (further left) */
-    transform: translateY(50%);
+    /* Bottom left circle - touching left content edge */
+    bottom: 25%;
+    left: 0; /* ← This is 0% of the container, which already has 3% padding */
+    transform: translateX(-25%) translateY(50%);
     z-index: 2;
 }
 
 .circle-3 {
-    /* Bottom right circle - moved further right */
-    bottom: 20%;
-    right: 10%; /* Changed from 20% to 10% (further right) */
-    transform: translateY(50%);
+    /* Bottom right circle - touching right content edge */
+    bottom: 25%;
+    right: 0; /* ← This is 0% of the container, which already has 3% padding */
+    transform: translateX(25%) translateY(50%);
     z-index: 1;
 }
 
