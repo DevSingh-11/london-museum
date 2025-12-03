@@ -147,8 +147,11 @@
     <section id="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <!-- Left: Orb Container -->
+                <!-- Left: Memory Orb Container -->
                 <div class="hero-artworks">
+                    <div class="memory-orb-container">
+                        <img src="images/artworks/memory-orb-1.png" alt="Memory Orb I" class="memory-orb-1">
+                    </div>
                 </div>
                 
                 <!-- Right: Exhibition Info -->
@@ -442,6 +445,64 @@
             // Fallback in case all images are already loaded
             if (imagesLoaded === images.length) {
                 setTimeout(centerActiveItem, 100);
+            }
+        });
+
+        // ===== MEMORY ORB POSITIONING =====
+        function positionMemoryOrb() {
+            const heroContent = document.querySelector('.hero-content');
+            const heroInfo = document.querySelector('.hero-info');
+            const memoryOrb = document.querySelector('.memory-orb-1');
+            
+            if (!heroContent || !heroInfo || !memoryOrb) return;
+            
+            // Get the actual rendered dimensions
+            const contentRect = heroContent.getBoundingClientRect();
+            const infoRect = heroInfo.getBoundingClientRect();
+            
+            // Calculate grid midpoint (between left margin and left side of right box)
+            // Since we have a 50/50 grid, the midpoint is at 50% of content width
+            const gridMidpoint = contentRect.width / 2;
+            
+            // Use info box height for orb size
+            const orbSize = Math.min(infoRect.height, contentRect.height);
+            
+            // Calculate left position so orb center aligns with grid midpoint
+            // Orb center = left position + (orbSize / 2)
+            // We want: left + (orbSize / 2) = gridMidpoint
+            // Therefore: left = gridMidpoint - (orbSize / 2)
+            const orbLeft = gridMidpoint - (orbSize / 2);
+            
+            // Apply styles
+            memoryOrb.style.width = `${orbSize}px`;
+            memoryOrb.style.height = `${orbSize}px`;
+            memoryOrb.style.left = `${orbLeft}px`;
+            memoryOrb.style.top = '0';
+            
+            // Also update container height to match
+            const heroArtworks = document.querySelector('.hero-artworks');
+            if (heroArtworks) {
+                heroArtworks.style.minHeight = `${infoRect.height}px`;
+            }
+            
+            console.log('Memory Orb positioned:', {
+                infoHeight: infoRect.height,
+                contentWidth: contentRect.width,
+                midpoint: gridMidpoint,
+                orbSize: orbSize,
+                orbLeft: orbLeft
+            });
+        }
+
+        // Call on load and resize
+        document.addEventListener('DOMContentLoaded', () => {
+            positionMemoryOrb();
+            window.addEventListener('resize', positionMemoryOrb);
+            
+            // Recalculate after images load
+            const orbImg = document.querySelector('.memory-orb-1');
+            if (orbImg) {
+                orbImg.onload = positionMemoryOrb;
             }
         });
     </script>
