@@ -494,8 +494,8 @@ body {
 }
 
 .memory-orb-1 {
-    width: 300px; /* Fixed size - adjust as needed */
-    height: 300px;
+    width: 332px; /* Fixed size - adjust as needed */
+    height: 332px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid rgba(255, 255, 255, 0.4);
