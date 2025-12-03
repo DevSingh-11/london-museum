@@ -686,3 +686,11 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+.orb-container {
+    border: 2px solid red; /* Temporary */
+}
+
+.orb-item[data-index="1"] {
+    border: 2px solid blue; /* Temporary */
+}
