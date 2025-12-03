@@ -456,7 +456,7 @@ body {
 
 /* ===== HERO BANNER STYLES ===== */
 #hero {
-    background-color: var(--yale-blue);
+    background-color: var(--cerulean);
     color: white;
     padding: 80px 0;
     position: relative;
