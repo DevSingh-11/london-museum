@@ -487,12 +487,17 @@
             // 7. Calculate top position (center vertically in container)
             const orbTop = containerRect.top + (containerRect.height - totalOrbSize) / 2;
             
-            // 8. Apply positioning - ABSOLUTE TO THE PAGE
-            memoryOrb.style.position = 'absolute'; // Use fixed for page-relative positioning
+            // 8. Apply positioning - RELATIVE TO .hero-container
+            memoryOrb.style.position = 'absolute';
             memoryOrb.style.width = `${orbSize}px`;
             memoryOrb.style.height = `${orbSize}px`;
-            memoryOrb.style.left = `${orbLeft}px`;
-            memoryOrb.style.top = `${orbTop}px`;
+            
+            // Calculate positions relative to .hero-container instead of page
+            const orbLeftRelative = orbLeft - containerRect.left;
+            const orbTopRelative = orbTop - containerRect.top;
+            
+            memoryOrb.style.left = `${orbLeftRelative}px`;
+            memoryOrb.style.top = `${orbTopRelative}px`;
             memoryOrb.style.zIndex = '10';
             
             console.log('Memory Orb positioned:', {
