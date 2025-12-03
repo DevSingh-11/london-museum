@@ -511,8 +511,8 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 320px; /* MUCH LARGER - fills most of 400px container */
-    height: 320px; /* MUCH LARGER - fills most of 400px container */
+    width: 380px; /* MUCH LARGER - fills most of 400px container */
+    height: 380px; /* MUCH LARGER - fills most of 400px container */
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid rgba(255, 255, 255, 0.4);
