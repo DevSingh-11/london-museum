@@ -149,17 +149,6 @@
             <div class="hero-content">
                 <!-- Left: Orb Container -->
                 <div class="hero-artworks">
-                    <div class="orb-container">
-                        <div class="orb-carousel-container">
-                            <div class="orb-carousel">
-                                <div class="orb-wrapper">
-                                    <img src="images/artworks/memory-orb-1.png" alt="Memory Orb I" class="orb-item" data-index="0">
-                                    <img src="images/artworks/memory-orb-2.png" alt="Memory Orb II" class="orb-item" data-index="1">
-                                    <img src="images/artworks/memory-orb-3.png" alt="Memory Orb III" class="orb-item" data-index="2">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 <!-- Right: Exhibition Info -->
@@ -454,68 +443,6 @@
             if (imagesLoaded === images.length) {
                 setTimeout(centerActiveItem, 100);
             }
-        });
-
-        // ===== 3D ORB CAROUSEL =====
-        const orbWrapper = document.querySelector('.orb-wrapper');
-        const orbItems = document.querySelectorAll('.orb-item');
-        let currentOrbIndex = 0;
-        let orbInterval;
-        
-        function rotateOrbs() {
-            // Remove current positions
-            orbItems.forEach((orb, index) => {
-                orb.dataset.index = index;
-            });
-            
-            // Update indices for rotation (CHANGED FROM +1 to -1)
-            currentOrbIndex = (currentOrbIndex - 1 + 3) % 3;  // ← CHANGED THIS
-            
-            // Reassign positions based on new current index
-            orbItems.forEach((orb, index) => {
-                let newIndex = (index - currentOrbIndex + 3) % 3;
-                orb.dataset.index = newIndex;
-            });
-        }
-        
-        function startOrbRotation() {
-            orbInterval = setInterval(rotateOrbs, 5000);
-        }
-        
-        function stopOrbRotation() {
-            clearInterval(orbInterval);
-        }
-        
-        function resetOrbRotation() {
-            stopOrbRotation();
-            startOrbRotation();
-        }
-        
-        // Initialize orb carousel
-        document.addEventListener('DOMContentLoaded', () => {
-            startOrbRotation();
-            
-            // Pause on hover
-            const orbCarousel = document.querySelector('.orb-carousel-container');
-            orbCarousel.addEventListener('mouseenter', stopOrbRotation);
-            orbCarousel.addEventListener('mouseleave', startOrbRotation);
-            
-            orbItems.forEach((orb, index) => {
-                orb.addEventListener('click', () => {
-                    if (orb.dataset.index !== "0") {
-                        // Calculate how many rotations needed (for counterclockwise)
-                        const targetIndex = parseInt(orb.dataset.index);
-                        const rotationsNeeded = (3 - targetIndex) % 3; // ← Changed to work with reverse rotation
-                        
-                        // Rotate that many times
-                        for (let i = 0; i < rotationsNeeded; i++) {
-                            setTimeout(() => rotateOrbs(), i * 300);
-                        }
-                        
-                        resetOrbRotation();
-                    }
-                });
-            });
         });
     </script>
 </body>
