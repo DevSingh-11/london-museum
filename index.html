@@ -448,6 +448,31 @@
                 setTimeout(centerActiveItem, 100);
             }
         });
+
+        // ===== ORB HEIGHT MATCHING =====
+        function matchOrbToInfoBox() {
+            const infoBox = document.querySelector('.hero-info');
+            const orb = document.querySelector('.memory-orb-1');
+            
+            if (!infoBox || !orb) return;
+            
+            const infoHeight = infoBox.offsetHeight;
+            const border = 4; // 4px border on each side
+            const totalBorder = border * 2;
+            
+            // Image size = info height - borders
+            const imageSize = infoHeight - totalBorder;
+            
+            // Apply size
+            orb.style.width = `${imageSize}px`;
+            orb.style.height = `${imageSize}px`;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            matchOrbToInfoBox();
+            window.addEventListener('resize', matchOrbToInfoBox);
+        });
     </script>
 </body>
 </html>
