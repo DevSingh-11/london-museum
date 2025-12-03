@@ -448,40 +448,35 @@
             }
         });
 
-        // Hero Section - Random Circle Selection
+        // Hero Section - Random Circle Selection for 3 circles
         const circleImages = [
             'images/artworks/memory-orb-1.png',
             'images/artworks/memory-orb-2.png', 
             'images/artworks/memory-orb-3.png'
         ];
         
-        function selectRandomCircles() {
-            // Create a copy of the array
-            const availableImages = [...circleImages];
-            const selected = [];
-            
-            // Randomly select first image
-            const firstIndex = Math.floor(Math.random() * availableImages.length);
-            selected.push(availableImages[firstIndex]);
-            availableImages.splice(firstIndex, 1);
-            
-            // Randomly select second image from remaining
-            const secondIndex = Math.floor(Math.random() * availableImages.length);
-            selected.push(availableImages[secondIndex]);
-            
-            return selected;
+        function shuffleArray(array) {
+            // Fisher-Yates shuffle algorithm
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
         }
         
         function initializeHeroCircles() {
-            const selectedImages = selectRandomCircles();
+            // Shuffle all 3 images
+            const shuffledImages = shuffleArray([...circleImages]);
             
-            // Set the src for each circle
-            document.getElementById('circle-1').src = selectedImages[0];
-            document.getElementById('circle-2').src = selectedImages[1];
+            // Assign each shuffled image to a circle
+            document.getElementById('circle-1').src = shuffledImages[0];
+            document.getElementById('circle-2').src = shuffledImages[1];
+            document.getElementById('circle-3').src = shuffledImages[2];
             
-            // Optional: Add alt text based on filename
-            document.getElementById('circle-1').alt = `Memory Orb Artwork ${selectedImages[0].match(/memory-orb-(\d)/)[1]}`;
-            document.getElementById('circle-2').alt = `Memory Orb Artwork ${selectedImages[1].match(/memory-orb-(\d)/)[1]}`;
+            // Add alt text
+            document.getElementById('circle-1').alt = `Memory Orb Artwork ${shuffledImages[0].match(/memory-orb-(\d)/)[1]}`;
+            document.getElementById('circle-2').alt = `Memory Orb Artwork ${shuffledImages[1].match(/memory-orb-(\d)/)[1]}`;
+            document.getElementById('circle-3').alt = `Memory Orb Artwork ${shuffledImages[2].match(/memory-orb-(\d)/)[1]}`;
         }
         
         // Initialize when DOM is loaded
