@@ -177,7 +177,6 @@
     <footer id="footer">
         [FOOTER WILL GO HERE]
     </footer>
-
     <script>
         // Museum Slideshow
         let currentSlide = 0;
@@ -190,9 +189,8 @@
         const prevButton = document.querySelector('.slideshow-prev');
         const nextButton = document.querySelector('.slideshow-next');
         let isPlaying = true;
-
+    
         function showSlide(n) {
-            // Remove active class from current slide and mark it as leaving
             slides.forEach((slide, index) => {
                 if (slide.classList.contains('active')) {
                     slide.classList.remove('active');
@@ -203,34 +201,31 @@
                 }
             });
             
-            // Update dots
             dots.forEach(dot => dot.classList.remove('active'));
             dots[n].classList.add('active');
             
-            // Add active class to new slide
             slides[n].classList.add('active');
             currentSlide = n;
         }
-
+    
         function nextSlide() {
             let next = (currentSlide + 1) % slides.length;
             showSlide(next);
         }
-
+    
         function prevSlide() {
             let prev = (currentSlide - 1 + slides.length) % slides.length;
             showSlide(prev);
         }
-
+    
         function goToSlide(n) {
             showSlide(n);
-            // Reset auto-advance timer when manually navigating
             if (isPlaying) {
                 clearInterval(slideInterval);
                 slideInterval = setInterval(nextSlide, 5000);
             }
         }
-
+    
         function toggleSlideshow() {
             if (isPlaying) {
                 clearInterval(slideInterval);
@@ -243,11 +238,9 @@
             }
             isPlaying = !isPlaying;
         }
-
-        // Start the slideshow
+    
         slideInterval = setInterval(nextSlide, 5000);
-
-        // Event Listeners
+    
         pauseButton.addEventListener('click', toggleSlideshow);
         nextButton.addEventListener('click', () => {
             nextSlide();
@@ -263,13 +256,12 @@
                 slideInterval = setInterval(nextSlide, 5000);
             }
         });
-
-        // Dot navigation
+    
         dots.forEach((dot, index) => {
             dot.addEventListener('click', () => goToSlide(index));
         });
-
-        // Artwork Carousel - Array Rotation Concept
+    
+        // Artwork Carousel
         const artworkImages = [
             { name: "images/artworks/a-cry-for-nature.png", title: "A Cry for Nature" },
             { name: "images/artworks/a-drop-of-faith.png", title: "A Drop of Faith" },
@@ -289,7 +281,7 @@
             { name: "images/artworks/the-treachery-of-objects-4.png", title: "The Treachery of Objects IV" }
         ];
         
-        // Shuffle array function
+        // ONE shuffleArray function that works for everything
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -298,21 +290,16 @@
             return array;
         }
         
-        // Initialize carousel with array rotation concept
         let artworkArray = shuffleArray([...artworkImages]);
         let artworkInterval;
         const carousel = document.querySelector('.artwork-carousel');
         const artworkTitle = document.querySelector('.artwork-title');
         const prevArrow = document.querySelector('.carousel-prev');
         const nextArrow = document.querySelector('.carousel-next');
-        const ACTIVE_POSITION = 3; // 4th item (0-indexed)
+        const ACTIVE_POSITION = 3;
         
-        // Create carousel items
         function createCarouselItems() {
             carousel.innerHTML = '';
-            
-            // Clear any existing image load handlers
-            carousel.dataset.imagesLoading = '0';
             
             artworkArray.forEach((artwork, index) => {
                 const item = document.createElement('div');
@@ -324,83 +311,60 @@
                 const img = document.createElement('img');
                 img.src = artwork.name;
                 img.alt = artwork.title;
-                
-                // Add loading attribute for better performance
                 img.loading = 'eager';
                 
                 item.appendChild(img);
                 carousel.appendChild(item);
             });
             
-            // Update title for active artwork (4th item)
             artworkTitle.textContent = artworkArray[ACTIVE_POSITION].title;
-            
-            // Center the active item after images load
             centerActiveItem();
         }
         
-        // Center the active item
         function centerActiveItem() {
             const items = document.querySelectorAll('.carousel-item');
             const activeItem = items[ACTIVE_POSITION];
             
             if (!activeItem) return;
             
-            // Wait a moment for images to render
             setTimeout(() => {
                 const carouselWidth = carousel.offsetWidth;
                 const itemWidth = activeItem.offsetWidth;
                 
                 if (carouselWidth > 0 && itemWidth > 0) {
-                    // Calculate the scroll position to center the active item
                     const scrollLeft = activeItem.offsetLeft - (carouselWidth / 2) + (itemWidth / 2);
                     carousel.scrollLeft = scrollLeft;
                 }
             }, 50);
         }
         
-        // Rotate array forward (move first to last)
         function rotateArrayForward() {
-            // Remove first item and add it to the end
             const firstItem = artworkArray.shift();
             artworkArray.push(firstItem);
-            
-            // Re-render carousel
             createCarouselItems();
         }
         
-        // Rotate array backward (move last to first)
         function rotateArrayBackward() {
-            // Remove last item and add it to the beginning
             const lastItem = artworkArray.pop();
             artworkArray.unshift(lastItem);
-            
-            // Re-render carousel
             createCarouselItems();
         }
         
-        // Start auto-advance
         function startArtworkInterval() {
             artworkInterval = setInterval(rotateArrayForward, 5000);
         }
         
-        // Stop auto-advance (when user interacts)
-        function stopArtworkInterval() {
-            clearInterval(artworkInterval);
-        }
-        
-        // Reset interval after user interaction
         function resetArtworkInterval() {
-            stopArtworkInterval();
+            clearInterval(artworkInterval);
             startArtworkInterval();
         }
         
-        // Initialize carousel on page load
+        // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize carousel
             createCarouselItems();
             startArtworkInterval();
             
-            // Add event listeners for arrows
             prevArrow.addEventListener('click', () => {
                 rotateArrayBackward();
                 resetArtworkInterval();
@@ -411,7 +375,6 @@
                 resetArtworkInterval();
             });
             
-            // Keyboard navigation
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') {
                     rotateArrayBackward();
@@ -422,65 +385,26 @@
                 }
             });
             
-            // Re-center on window resize
             window.addEventListener('resize', centerActiveItem);
             
-            // Ensure images are loaded before centering
-            const images = carousel.querySelectorAll('img');
-            let imagesLoaded = 0;
+            // Initialize hero circles
+            const circleImages = [
+                'images/artworks/memory-orb-1.png',
+                'images/artworks/memory-orb-2.png', 
+                'images/artworks/memory-orb-3.png'
+            ];
             
-            images.forEach(img => {
-                if (img.complete) {
-                    imagesLoaded++;
-                } else {
-                    img.addEventListener('load', () => {
-                        imagesLoaded++;
-                        if (imagesLoaded === images.length) {
-                            centerActiveItem();
-                        }
-                    });
-                }
-            });
+            // Use the SAME shuffleArray function
+            const shuffledCircles = shuffleArray([...circleImages]);
             
-            // Fallback in case all images are already loaded
-            if (imagesLoaded === images.length) {
-                setTimeout(centerActiveItem, 100);
-            }
+            document.getElementById('circle-1').src = shuffledCircles[0];
+            document.getElementById('circle-2').src = shuffledCircles[1];
+            document.getElementById('circle-3').src = shuffledCircles[2];
+            
+            document.getElementById('circle-1').alt = `Memory Orb Artwork ${shuffledCircles[0].match(/memory-orb-(\d)/)[1]}`;
+            document.getElementById('circle-2').alt = `Memory Orb Artwork ${shuffledCircles[1].match(/memory-orb-(\d)/)[1]}`;
+            document.getElementById('circle-3').alt = `Memory Orb Artwork ${shuffledCircles[2].match(/memory-orb-(\d)/)[1]}`;
         });
-
-        // Hero Section - Random Circle Selection for 3 circles
-        const circleImages = [
-            'images/artworks/memory-orb-1.png',
-            'images/artworks/memory-orb-2.png', 
-            'images/artworks/memory-orb-3.png'
-        ];
-        
-        function shuffleArray(array) {
-            // Fisher-Yates shuffle algorithm
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-        
-        function initializeHeroCircles() {
-            // Shuffle all 3 images
-            const shuffledImages = shuffleArray([...circleImages]);
-            
-            // Assign each shuffled image to a circle
-            document.getElementById('circle-1').src = shuffledImages[0];
-            document.getElementById('circle-2').src = shuffledImages[1];
-            document.getElementById('circle-3').src = shuffledImages[2];
-            
-            // Add alt text
-            document.getElementById('circle-1').alt = `Memory Orb Artwork ${shuffledImages[0].match(/memory-orb-(\d)/)[1]}`;
-            document.getElementById('circle-2').alt = `Memory Orb Artwork ${shuffledImages[1].match(/memory-orb-(\d)/)[1]}`;
-            document.getElementById('circle-3').alt = `Memory Orb Artwork ${shuffledImages[2].match(/memory-orb-(\d)/)[1]}`;
-        }
-        
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initializeHeroCircles);
     </script>
 </body>
 </html>
