@@ -477,7 +477,7 @@ body {
 /* Left: Floating Circles Container */
 .hero-visual {
     position: relative;
-    height: 300px;
+    height: 450px; /* Increased height for triangular layout */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -491,43 +491,62 @@ body {
 
 .floating-circle {
     position: absolute;
-    width: 200px;
+    width: 200px; /* Adjust this size as needed */
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4));
 }
 
-/* Position circles side by side */
+/* Triangular formation positioning */
 .circle-1 {
-    left: 15%;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
+    /* Top circle */
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    z-index: 3;
 }
 
 .circle-2 {
-    right: 15%;
-    top: 50%;
-    transform: translateY(-50%);
+    /* Bottom left circle */
+    bottom: 20%;
+    left: 20%;
+    transform: translateY(50%);
+    z-index: 2;
+}
+
+.circle-3 {
+    /* Bottom right circle */
+    bottom: 20%;
+    right: 20%;
+    transform: translateY(50%);
     z-index: 1;
 }
 
-/* Floating Animation */
+/* Floating Animations - Different timing for each circle */
 @keyframes floatUpDown {
     0%, 100% {
-        transform: translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
     }
     50% {
-        transform: translateY(calc(-50% - 15px));
+        transform: translateX(-50%) translateY(calc(-50% - 15px));
     }
 }
 
 @keyframes floatDownUp {
     0%, 100% {
-        transform: translateY(-50%);
+        transform: translateY(50%);
     }
     50% {
-        transform: translateY(calc(-50% + 15px));
+        transform: translateY(calc(50% + 10px));
+    }
+}
+
+@keyframes floatGentle {
+    0%, 100% {
+        transform: translateY(50%);
+    }
+    50% {
+        transform: translateY(calc(50% - 10px));
     }
 }
 
@@ -537,6 +556,10 @@ body {
 
 .circle-2 {
     animation: floatDownUp 7s ease-in-out infinite;
+}
+
+.circle-3 {
+    animation: floatGentle 8s ease-in-out infinite;
 }
 
 /* Right: Exhibition Info */
