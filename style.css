@@ -454,21 +454,263 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* ===== HERO BANNER STYLES ===== */
+#hero {
+    background-color: var(--yale-blue);
+    color: white;
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-container {
+    max-width: 94%;
+    margin: 0 auto;
+    padding: 0 3%;
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+/* Left: Artworks Section */
+.hero-artworks {
+    position: relative;
+}
+
+.artwork-trio {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 40px;
+    position: relative;
+}
+
+.orb-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    transition: transform 0.3s ease;
+}
+
+.orb-container:hover {
+    transform: translateY(-10px);
+}
+
+.hero-orb {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.hero-orb:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05);
+}
+
+.orb-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    max-width: 200px;
+}
+
+/* Right: Exhibition Info */
+.hero-info {
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.exhibition-badge {
+    display: inline-block;
+    background-color: var(--cerulean);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.exhibition-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.1;
+}
+
+.exhibition-subtitle {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 25px;
+}
+
+.exhibition-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 30px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.view-exhibition-btn {
+    display: inline-block;
+    background-color: transparent;
+    color: white;
+    text-decoration: none;
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    border: 2px solid white;
+    text-align: center;
+    width: 100%;
+}
+
+.view-exhibition-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.secondary-btn {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+    padding: 12px 32px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    text-align: center;
+    width: 100%;
+}
+
+.secondary-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.exhibition-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.meta-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+}
+
+.meta-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+.meta-value {
+    color: white;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .hero-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+    
+    .hero-orb {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .exhibition-title {
+        font-size: 2.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .artwork-trio {
+        gap: 20px;
+    }
+    
+    .hero-orb {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .exhibition-title {
+        font-size: 2rem;
+    }
+    
+    .exhibition-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+    }
+    
+    .view-exhibition-btn,
+    .secondary-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .artwork-trio {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .hero-orb {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .orb-label {
+        font-size: 1.1rem;
+    }
+}
+
 /* ===== TEMPORARY LAYOUT STYLES ===== */
 #featured-artists {
     background-color: var(--muted-tea);
     height: 300px;
-    padding: 40px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#hero {
-    background-color: var(--cerulean);
-    height: 400px;
-    color: white;
     padding: 40px;
     text-align: center;
     display: flex;
