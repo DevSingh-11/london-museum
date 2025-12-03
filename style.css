@@ -467,6 +467,7 @@ body {
     max-width: 94%;
     margin: 0 auto;
     padding: 0 3%;
+    position: relative; /* ADD THIS LINE */
 }
 
 .hero-content {
