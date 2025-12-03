@@ -546,7 +546,7 @@ body {
 
 /* Right: Exhibition Info */
 .hero-info {
-    padding: 30px 50px 30px 40px; /* ← More right padding, keep left padding */
+    padding: 30px 3% 30px 40px; /* ← Changed 50px to 3% for right padding */
     background: rgba(255, 255, 255, 0.1);
     border-radius: 0 12px 12px 0; /* ← Round only right corners */
     backdrop-filter: blur(10px);
