@@ -499,7 +499,7 @@ body {
 
 /* Triangular formation positioning */
 .circle-1 {
-    /* Top circle */
+    /* Top circle - stays centered */
     top: 25%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
@@ -507,17 +507,17 @@ body {
 }
 
 .circle-2 {
-    /* Bottom left circle */
+    /* Bottom left circle - moved further left */
     bottom: 20%;
-    left: 20%;
+    left: 10%; /* Changed from 20% to 10% (further left) */
     transform: translateY(50%);
     z-index: 2;
 }
 
 .circle-3 {
-    /* Bottom right circle */
+    /* Bottom right circle - moved further right */
     bottom: 20%;
-    right: 20%;
+    right: 10%; /* Changed from 20% to 10% (further right) */
     transform: translateY(50%);
     z-index: 1;
 }
