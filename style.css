@@ -458,7 +458,7 @@ body {
 #hero {
     background-color: var(--cerulean);
     color: white;
-    padding: 60px 0; /* Reduced from 80px */
+    padding: 60px 0;
     position: relative;
     overflow: hidden;
 }
@@ -471,10 +471,10 @@ body {
 
 .hero-content {
     display: grid;
-    grid-template-columns: 1fr 1.2fr; /* Changed ratio: 1:1.2 instead of 2:1 */
+    grid-template-columns: 1fr 1.2fr;
     gap: 60px;
     align-items: center;
-    min-height: 400px; /* Reduced height */
+    min-height: 400px;
 }
 
 /* Left: 3D Orb Carousel */
@@ -487,8 +487,8 @@ body {
 
 .orb-carousel-container {
     position: relative;
-    width: 400px;
-    height: 300px;
+    width: 500px;
+    height: 400px;
     perspective: 1000px;
 }
 
@@ -511,12 +511,12 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 180px; /* Base size */
-    height: 180px;
+    width: 240px;
+    height: 240px;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     transform-origin: center center;
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -526,26 +526,26 @@ body {
     transform: translate(-50%, -50%) translateZ(0px) scale(1);
     opacity: 1;
     z-index: 3;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
 }
 
 /* Left orb */
 .orb-item[data-index="1"] {
-    transform: translate(-50%, -50%) translateX(-150px) translateZ(-100px) scale(0.8);
-    opacity: 0.7;
+    transform: translate(-50%, -50%) translateX(-180px) translateZ(-120px) scale(0.75);
+    opacity: 0.6;
     z-index: 2;
 }
 
 /* Right orb */
 .orb-item[data-index="2"] {
-    transform: translate(-50%, -50%) translateX(150px) translateZ(-100px) scale(0.8);
-    opacity: 0.7;
+    transform: translate(-50%, -50%) translateX(180px) translateZ(-120px) scale(0.75);
+    opacity: 0.6;
     z-index: 2;
 }
 
 /* Right: Exhibition Info */
 .hero-info {
-    padding: 30px 40px; /* Increased horizontal padding */
+    padding: 30px 40px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     backdrop-filter: blur(10px);
@@ -567,28 +567,28 @@ body {
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border: 2px solid white; /* White outline to match button */
+    border: 2px solid white;
     width: fit-content;
 }
 
 .exhibition-title {
-    font-size: 2.5rem; /* Slightly smaller */
+    font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 10px;
     line-height: 1.1;
 }
 
 .exhibition-subtitle {
-    font-size: 1.3rem; /* Slightly smaller */
+    font-size: 1.3rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 20px; /* Reduced */
+    margin-bottom: 20px;
 }
 
 .exhibition-description {
     font-size: 1.1rem;
     line-height: 1.7;
-    margin-bottom: 25px; /* Reduced */
+    margin-bottom: 25px;
     color: rgba(255, 255, 255, 0.9);
 }
 
@@ -596,7 +596,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-bottom: 25px; /* Reduced */
+    margin-bottom: 25px;
 }
 
 .view-exhibition-btn {
@@ -672,21 +672,21 @@ body {
     }
     
     .orb-carousel-container {
-        width: 350px;
-        height: 250px;
+        width: 450px;
+        height: 350px;
     }
     
     .orb-item {
-        width: 150px;
-        height: 150px;
+        width: 200px;
+        height: 200px;
     }
     
     .orb-item[data-index="1"] {
-        transform: translate(-50%, -50%) translateX(-120px) translateZ(-80px) scale(0.8);
+        transform: translate(-50%, -50%) translateX(-150px) translateZ(-100px) scale(0.75);
     }
     
     .orb-item[data-index="2"] {
-        transform: translate(-50%, -50%) translateX(120px) translateZ(-80px) scale(0.8);
+        transform: translate(-50%, -50%) translateX(150px) translateZ(-100px) scale(0.75);
     }
     
     .exhibition-title {
@@ -702,22 +702,22 @@ body {
     }
     
     .orb-carousel-container {
-        width: 300px;
-        height: 220px;
+        width: 400px;
+        height: 300px;
         margin: 0 auto;
     }
     
     .orb-item {
-        width: 130px;
-        height: 130px;
+        width: 180px;
+        height: 180px;
     }
     
     .orb-item[data-index="1"] {
-        transform: translate(-50%, -50%) translateX(-100px) translateZ(-70px) scale(0.8);
+        transform: translate(-50%, -50%) translateX(-130px) translateZ(-90px) scale(0.75);
     }
     
     .orb-item[data-index="2"] {
-        transform: translate(-50%, -50%) translateX(100px) translateZ(-70px) scale(0.8);
+        transform: translate(-50%, -50%) translateX(130px) translateZ(-90px) scale(0.75);
     }
     
     .exhibition-title {
@@ -739,21 +739,21 @@ body {
     }
     
     .orb-carousel-container {
-        width: 250px;
-        height: 180px;
+        width: 320px;
+        height: 240px;
     }
     
     .orb-item {
-        width: 110px;
-        height: 110px;
+        width: 150px;
+        height: 150px;
     }
     
     .orb-item[data-index="1"] {
-        transform: translate(-50%, -50%) translateX(-80px) translateZ(-60px) scale(0.8);
+        transform: translate(-50%, -50%) translateX(-100px) translateZ(-70px) scale(0.75);
     }
     
     .orb-item[data-index="2"] {
-        transform: translate(-50%, -50%) translateX(80px) translateZ(-60px) scale(0.8);
+        transform: translate(-50%, -50%) translateX(100px) translateZ(-70px) scale(0.75);
     }
     
     .exhibition-title {
@@ -768,7 +768,6 @@ body {
         padding: 20px;
     }
 }
-
 /* ===== TEMPORARY LAYOUT STYLES ===== */
 #featured-artists {
     background-color: var(--muted-tea);
