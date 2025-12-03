@@ -611,8 +611,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* REMOVED: exhibition-meta styles entirely */
-
 /* ===== TEMPORARY LAYOUT STYLES ===== */
 #featured-artists {
     background-color: var(--muted-tea);
