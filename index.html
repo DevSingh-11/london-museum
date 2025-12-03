@@ -147,14 +147,6 @@
     <section id="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <!-- Left column: Empty for spacing -->
-                <div class="hero-left-column"></div>
-                
-                <!-- Orb positioned at midpoint -->
-                <div class="midpoint-orb">
-                    <img src="images/artworks/memory-orb-1.png" alt="Memory Orb I" class="memory-orb-1">
-                </div>
-                
                 <!-- Right: Exhibition Info -->
                 <div class="hero-info">
                     <div class="exhibition-badge">Current Exhibition</div>
@@ -447,29 +439,6 @@
             if (imagesLoaded === images.length) {
                 setTimeout(centerActiveItem, 100);
             }
-        });
-
-        // ===== ORB HEIGHT MATCHING =====
-        function matchOrbToInfoBox() {
-            const infoBox = document.querySelector('.hero-info');
-            const orb = document.querySelector('.memory-orb-1');
-            
-            if (!infoBox || !orb) return;
-            
-            const infoHeight = infoBox.offsetHeight;
-            
-            // Image size = info height - borders
-            const imageSize = infoHeight;
-            
-            // Apply size
-            orb.style.width = `${imageSize}px`;
-            orb.style.height = `${imageSize}px`;
-        }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            matchOrbToInfoBox();
-            window.addEventListener('resize', matchOrbToInfoBox);
         });
     </script>
 </body>
