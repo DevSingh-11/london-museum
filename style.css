@@ -477,7 +477,7 @@ body {
 /* Left: Floating Circles Container */
 .hero-visual {
     position: relative;
-    height: 350px;
+    height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
