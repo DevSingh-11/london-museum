@@ -458,26 +458,26 @@ body {
 #hero {
     background-color: var(--cerulean);
     color: white;
-    padding: 80px 0;
-    min-height: 600px;
+    padding: 60px 0;
+    min-height: 500px;
     display: flex;
     align-items: center;
 }
 
 .hero-container {
-    max-width: 1200px;
+    max-width: 94%;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 3%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    gap: 60px;
     align-items: center;
 }
 
 /* Left: Floating Circles Container */
 .hero-visual {
     position: relative;
-    height: 400px;
+    height: 350px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -491,7 +491,7 @@ body {
 
 .floating-circle {
     position: absolute;
-    width: 220px;
+    width: 200px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4));
@@ -499,14 +499,14 @@ body {
 
 /* Position circles side by side */
 .circle-1 {
-    left: 20%;
+    left: 15%;
     top: 50%;
     transform: translateY(-50%);
     z-index: 2;
 }
 
 .circle-2 {
-    right: 20%;
+    right: 15%;
     top: 50%;
     transform: translateY(-50%);
     z-index: 1;
@@ -541,9 +541,9 @@ body {
 
 /* Right: Exhibition Info */
 .hero-info {
-    padding: 50px;
+    padding: 40px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
+    border-radius: 12px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
@@ -553,22 +553,21 @@ body {
     display: inline-block;
     background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
     color: white;
-    padding: 8px 20px;
+    padding: 6px 16px;
     border-radius: 100px;
     font-size: 0.9rem;
     font-weight: 600;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .title-wrapper {
     display: flex;
-    align-items: baseline;
-    gap: 20px;
+    flex-direction: column;
+    gap: 10px;
     margin-bottom: 20px;
-    flex-wrap: wrap;
 }
 
 .exhibition-title {
@@ -576,7 +575,6 @@ body {
     font-weight: 700;
     margin-bottom: 0;
     line-height: 1.1;
-    flex-shrink: 0;
 }
 
 .exhibition-subtitle {
@@ -584,7 +582,6 @@ body {
     font-weight: 500;
     color: rgba(255, 255, 255, 0.9);
     margin-bottom: 0;
-    flex-shrink: 0;
 }
 
 .exhibition-description {
@@ -605,7 +602,7 @@ body {
     background-color: transparent;
     color: white;
     text-decoration: none;
-    padding: 14px 32px;
+    padding: 12px 32px;
     border-radius: 100px;
     font-weight: 600;
     font-size: 1.1rem;
