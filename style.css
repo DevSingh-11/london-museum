@@ -475,7 +475,7 @@ body {
     gap: 0;
     align-items: stretch;
     min-height: 400px;
-    position: relative; /* This is already correct */
+    position: relative; /* Important for absolute positioning */
 }
 
 /* Left: Memory Orb Container */
@@ -484,8 +484,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Remove position: relative */
-    overflow: visible;
+    position: relative; /* Container for absolute positioning */
+    overflow: visible; /* Allow orb to extend beyond container if needed */
 }
 
 .memory-orb-container {
@@ -500,9 +500,7 @@ body {
     border-radius: 50%;
     border: 4px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
-    /* Position relative to .hero-content, not .hero-artworks */
-    left: 0; /* Will be set by JavaScript */
-    top: 0; /* Will be set by JavaScript */
+    /* JavaScript will set width, height, left, and top */
 }
 
 /* Right: Exhibition Info */
