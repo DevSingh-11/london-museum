@@ -602,9 +602,9 @@ body {
     color: rgba(255, 255, 255, 0.9);
 }
 
+/* CHANGED: Buttons on same line, half width each */
 .hero-actions {
     display: flex;
-    flex-direction: column;
     gap: 15px;
     margin-bottom: 25px;
 }
@@ -614,14 +614,15 @@ body {
     background-color: transparent;
     color: white;
     text-decoration: none;
-    padding: 14px 32px;
+    padding: 14px 0; /* Changed from 14px 32px to 14px 0 */
     border-radius: 100px;
     font-weight: 600;
     font-size: 1.1rem;
     transition: all 0.3s ease;
     border: 2px solid white;
     text-align: center;
-    width: 100%;
+    width: 50%; /* Half width */
+    flex: 1; /* Makes them equal width */
 }
 
 .view-exhibition-btn:hover {
@@ -635,14 +636,15 @@ body {
     background-color: rgba(255, 255, 255, 0.1);
     color: white;
     text-decoration: none;
-    padding: 12px 32px;
+    padding: 12px 0; /* Changed from 12px 32px to 12px 0 */
     border-radius: 100px;
     font-weight: 600;
     font-size: 1rem;
     transition: all 0.3s ease;
     border: 2px solid transparent;
     text-align: center;
-    width: 100%;
+    width: 50%; /* Half width */
+    flex: 1; /* Makes them equal width */
 }
 
 .secondary-btn:hover {
@@ -650,29 +652,7 @@ body {
     transform: translateY(-2px);
 }
 
-.exhibition-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.meta-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.95rem;
-}
-
-.meta-label {
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: 500;
-}
-
-.meta-value {
-    color: white;
-    font-weight: 600;
-}
+/* REMOVED: exhibition-meta styles entirely */
 
 /* ===== TEMPORARY LAYOUT STYLES ===== */
 #featured-artists {
