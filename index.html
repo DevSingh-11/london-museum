@@ -506,13 +506,12 @@
             orbCarousel.addEventListener('mouseenter', stopOrbRotation);
             orbCarousel.addEventListener('mouseleave', startOrbRotation);
             
-            // Click to navigate
             orbItems.forEach((orb, index) => {
                 orb.addEventListener('click', () => {
                     if (orb.dataset.index !== "0") {
-                        // Calculate how many rotations needed
+                        // Calculate how many rotations needed (for counterclockwise)
                         const targetIndex = parseInt(orb.dataset.index);
-                        const rotationsNeeded = targetIndex;
+                        const rotationsNeeded = (3 - targetIndex) % 3; // ← Changed to work with reverse rotation
                         
                         // Rotate that many times
                         for (let i = 0; i < rotationsNeeded; i++) {
