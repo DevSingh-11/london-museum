@@ -474,8 +474,8 @@
                 orb.dataset.index = index;
             });
             
-            // Update indices for rotation
-            currentOrbIndex = (currentOrbIndex + 1) % 3;
+            // Update indices for rotation (CHANGED FROM +1 to -1)
+            currentOrbIndex = (currentOrbIndex - 1 + 3) % 3;  // ← CHANGED THIS
             
             // Reassign positions based on new current index
             orbItems.forEach((orb, index) => {
