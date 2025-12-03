@@ -466,30 +466,36 @@ body {
 .hero-container {
     max-width: 94%;
     margin: 0 auto;
-    padding: 0; /* ← Remove side padding here */
+    padding: 0 3%; /* ← ADDED: Same padding as other sections */
 }
 
 .hero-content {
     display: grid;
-    grid-template-columns: 400px 1fr; /* ← Left column fixed at orb width, right takes remaining space */
-    gap: 0; /* ← Remove gap between columns */
+    grid-template-columns: 1fr 1fr; /* ← CHANGED: Equal columns */
+    gap: 0;
     align-items: center;
     min-height: 400px;
 }
 
-/* Left: 3D Orb Carousel */
+/* Left: Orb Container */
 .hero-artworks {
-    display: flex;
-    justify-content: flex-start; /* ← Align left instead of center */
-    align-items: center;
     height: 100%;
-    padding-left: 3%; /* ← Add left padding to match other sections */
+    padding-right: 20px; /* ← Space between orbs and info box */
+}
+
+.orb-container {
+    width: 100%;
+    height: 340px; /* ← MATCHES right box height */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .orb-carousel-container {
     position: relative;
-    width: 400px; /* KEEP SAME width */
-    height: 400px; /* KEEP SAME height */
+    width: 100%;
+    height: 100%;
     perspective: 1000px;
 }
 
@@ -512,8 +518,8 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 380px; /* MUCH LARGER - fills most of 400px container */
-    height: 380px; /* MUCH LARGER - fills most of 400px container */
+    width: 280px; /* ← ADJUSTED: Slightly smaller to fit in container */
+    height: 280px; /* ← ADJUSTED: Slightly smaller to fit in container */
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid rgba(255, 255, 255, 0.4);
@@ -530,34 +536,32 @@ body {
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
 }
 
-/* Left orb - POSITION THEM OUTSIDE THE CONTAINER */
+/* Left orb - ADJUSTED positions for smaller size */
 .orb-item[data-index="1"] {
-    transform: translate(-50%, -50%) translateX(-240px) translateZ(-150px) scale(0.6);
+    transform: translate(-50%, -50%) translateX(-180px) translateZ(-120px) scale(0.6);
     opacity: 0.4;
     z-index: 2;
 }
 
-/* Right orb - POSITION THEM OUTSIDE THE CONTAINER */
+/* Right orb - ADJUSTED positions for smaller size */
 .orb-item[data-index="2"] {
-    transform: translate(-50%, -50%) translateX(240px) translateZ(-150px) scale(0.6);
+    transform: translate(-50%, -50%) translateX(180px) translateZ(-120px) scale(0.6);
     opacity: 0.4;
     z-index: 2;
 }
 
 /* Right: Exhibition Info */
 .hero-info {
-    padding: 30px 3% 30px 40px; /* ← Changed 50px to 3% for right padding */
+    padding: 30px 40px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 0 12px 12px 0; /* ← Round only right corners */
+    border-radius: 12px; /* ← CHANGED: All corners rounded */
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-left: none; /* ← Remove left border since it touches the left column */
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-height: 340px; /* Exhibition box height */
-    margin-left: -1px; /* ← Overlap slightly to hide the gap */
 }
 
 .exhibition-badge {
