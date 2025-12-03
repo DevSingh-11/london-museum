@@ -147,20 +147,15 @@
     <section id="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <!-- Left: Three Memory Orbs -->
+                <!-- Left: 3D Orb Carousel -->
                 <div class="hero-artworks">
-                    <div class="artwork-trio">
-                        <div class="orb-container">
-                            <img src="images/artworks/memory-orb-1.png" alt="Memory Orb I" class="hero-orb">
-                            <span class="orb-label">Memory Orb I</span>
-                        </div>
-                        <div class="orb-container">
-                            <img src="images/artworks/memory-orb-2.png" alt="Memory Orb II" class="hero-orb">
-                            <span class="orb-label">Memory Orb II</span>
-                        </div>
-                        <div class="orb-container">
-                            <img src="images/artworks/memory-orb-3.png" alt="Memory Orb III" class="hero-orb">
-                            <span class="orb-label">Memory Orb III</span>
+                    <div class="orb-carousel-container">
+                        <div class="orb-carousel">
+                            <div class="orb-wrapper">
+                                <img src="images/artworks/memory-orb-1.png" alt="Memory Orb I" class="orb-item" data-index="0">
+                                <img src="images/artworks/memory-orb-2.png" alt="Memory Orb II" class="orb-item" data-index="1">
+                                <img src="images/artworks/memory-orb-3.png" alt="Memory Orb III" class="orb-item" data-index="2">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -469,6 +464,69 @@
             if (imagesLoaded === images.length) {
                 setTimeout(centerActiveItem, 100);
             }
+        });
+
+        // ===== 3D ORB CAROUSEL =====
+        const orbWrapper = document.querySelector('.orb-wrapper');
+        const orbItems = document.querySelectorAll('.orb-item');
+        let currentOrbIndex = 0;
+        let orbInterval;
+        
+        function rotateOrbs() {
+            // Remove current positions
+            orbItems.forEach((orb, index) => {
+                orb.dataset.index = index;
+            });
+            
+            // Update indices for rotation
+            currentOrbIndex = (currentOrbIndex + 1) % 3;
+            
+            // Reassign positions based on new current index
+            orbItems.forEach((orb, index) => {
+                let newIndex = (index - currentOrbIndex + 3) % 3;
+                orb.dataset.index = newIndex;
+            });
+        }
+        
+        function startOrbRotation() {
+            orbInterval = setInterval(rotateOrbs, 5000);
+        }
+        
+        function stopOrbRotation() {
+            clearInterval(orbInterval);
+        }
+        
+        function resetOrbRotation() {
+            stopOrbRotation();
+            startOrbRotation();
+        }
+        
+        // Initialize orb carousel
+        document.addEventListener('DOMContentLoaded', () => {
+            startOrbRotation();
+            
+            // Pause on hover
+            const orbCarousel = document.querySelector('.orb-carousel-container');
+            orbCarousel.addEventListener('mouseenter', stopOrbRotation);
+            orbCarousel.addEventListener('mouseleave', startOrbRotation);
+            
+            // Click to navigate
+            orbItems.forEach((orb, index) => {
+                orb.addEventListener('click', () => {
+                    if (orb.dataset.index !== "0") {
+                        // Calculate how many rotations needed
+                        const targetIndex = parseInt(orb.dataset.index);
+                        const rotationsNeeded = targetIndex;
+                        
+                        // Rotate that many times
+                        for (let i = 0; i < rotationsNeeded; i++) {
+                            setTimeout(() => rotateOrbs(), i * 300);
+                        }
+                        
+                        resetOrbRotation();
+                    }
+                });
+            });
         });
     </script>
 </body>
