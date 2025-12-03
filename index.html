@@ -440,6 +440,45 @@
                 setTimeout(centerActiveItem, 100);
             }
         });
+
+        // Hero Section - Random Circle Selection
+        const circleImages = [
+            'images/artworks/memory-orb-1.png',
+            'images/artworks/memory-orb-2.png', 
+            'images/artworks/memory-orb-3.png'
+        ];
+        
+        function selectRandomCircles() {
+            // Create a copy of the array
+            const availableImages = [...circleImages];
+            const selected = [];
+            
+            // Randomly select first image
+            const firstIndex = Math.floor(Math.random() * availableImages.length);
+            selected.push(availableImages[firstIndex]);
+            availableImages.splice(firstIndex, 1);
+            
+            // Randomly select second image from remaining
+            const secondIndex = Math.floor(Math.random() * availableImages.length);
+            selected.push(availableImages[secondIndex]);
+            
+            return selected;
+        }
+        
+        function initializeHeroCircles() {
+            const selectedImages = selectRandomCircles();
+            
+            // Set the src for each circle
+            document.getElementById('circle-1').src = selectedImages[0];
+            document.getElementById('circle-2').src = selectedImages[1];
+            
+            // Optional: Add alt text based on filename
+            document.getElementById('circle-1').alt = `Memory Orb Artwork ${selectedImages[0].match(/memory-orb-(\d)/)[1]}`;
+            document.getElementById('circle-2').alt = `Memory Orb Artwork ${selectedImages[1].match(/memory-orb-(\d)/)[1]}`;
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeHeroCircles);
     </script>
 </body>
 </html>
