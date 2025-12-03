@@ -147,11 +147,12 @@
     <section id="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <!-- Left: Memory Orb Container -->
-                <div class="hero-artworks">
-                    <div class="memory-orb-container">
-                        <img src="images/artworks/memory-orb-1.png" alt="Memory Orb I" class="memory-orb-1">
-                    </div>
+                <!-- Left column: Empty for spacing -->
+                <div class="hero-left-column"></div>
+                
+                <!-- Orb positioned at midpoint -->
+                <div class="midpoint-orb">
+                    <img src="images/artworks/memory-orb-1.png" alt="Memory Orb I" class="memory-orb-1">
                 </div>
                 
                 <!-- Right: Exhibition Info -->
@@ -447,77 +448,6 @@
                 setTimeout(centerActiveItem, 100);
             }
         });
-
-        // ===== MEMORY ORB POSITIONING =====
-        function positionMemoryOrb() {
-            const heroContainer = document.querySelector('.hero-container');
-            const heroInfo = document.querySelector('.hero-info');
-            const memoryOrb = document.querySelector('.memory-orb-1');
-            
-            if (!heroContainer || !heroInfo || !memoryOrb) return;
-            
-            // Get dimensions
-            const containerRect = heroContainer.getBoundingClientRect();
-            const infoRect = heroInfo.getBoundingClientRect();
-            
-            // 1. Left page margin = left edge of .hero-container
-            const leftMargin = containerRect.left;
-            
-            // 2. Left edge of right info box
-            const infoBoxLeft = infoRect.left;
-            
-            // 3. Calculate midpoint
-            const midpoint = leftMargin + (infoBoxLeft - leftMargin) / 2;
-            
-            // 4. Get border width
-            const computedStyle = window.getComputedStyle(memoryOrb);
-            const borderWidth = parseInt(computedStyle.borderWidth) || 0;
-            const totalBorder = borderWidth * 2;
-            
-            // 5. Orb size = info box height - border
-            const orbSize = infoRect.height - totalBorder;
-            const totalOrbSize = orbSize + totalBorder; // Includes border
-            
-            // 6. Position orb so its center is at midpoint
-            // Orb center = left position + (totalOrbSize / 2)
-            // We want: left + (totalOrbSize / 2) = midpoint
-            // So: left = midpoint - (totalOrbSize / 2)
-            const orbLeft = midpoint - (totalOrbSize / 2);
-            
-            // 7. Calculate top position (center vertically in container)
-            const orbTop = containerRect.top + (containerRect.height - totalOrbSize) / 2;
-            
-            // 8. Apply positioning - RELATIVE TO .hero-container
-            memoryOrb.style.position = 'absolute';
-            memoryOrb.style.width = `${orbSize}px`;
-            memoryOrb.style.height = `${orbSize}px`;
-            
-            // Calculate positions relative to .hero-container instead of page
-            const orbLeftRelative = orbLeft - containerRect.left;
-            const orbTopRelative = orbTop - containerRect.top;
-            
-            memoryOrb.style.left = `${orbLeftRelative}px`;
-            memoryOrb.style.top = `${orbTopRelative}px`;
-            memoryOrb.style.zIndex = '10';
-            
-            console.log('Memory Orb positioned:', {
-                leftMargin: leftMargin,
-                infoBoxLeft: infoBoxLeft,
-                midpoint: midpoint,
-                orbSize: orbSize,
-                totalOrbSize: totalOrbSize,
-                orbLeft: orbLeft,
-                orbTop: orbTop
-            });
-        }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            positionMemoryOrb();
-            window.addEventListener('resize', positionMemoryOrb);
-        });
-        
-        window.addEventListener('load', positionMemoryOrb);
     </script>
 </body>
 </html>
