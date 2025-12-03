@@ -458,51 +458,109 @@ body {
 #hero {
     background-color: var(--cerulean);
     color: white;
-    padding: 60px 0;
-    position: relative;
+    padding: 80px 0;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
 }
 
 .hero-container {
-    max-width: 94%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 3%;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
 }
 
-.hero-content {
-    display: grid;
-    grid-template-columns: 1fr;
+/* Left: Floating Circles Container */
+.hero-visual {
+    position: relative;
+    height: 400px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 400px;
+}
+
+.circle-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.floating-circle {
+    position: absolute;
+    width: 220px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4));
+}
+
+/* Position circles side by side */
+.circle-1 {
+    left: 20%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+.circle-2 {
+    right: 20%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+/* Floating Animation */
+@keyframes floatUpDown {
+    0%, 100% {
+        transform: translateY(-50%);
+    }
+    50% {
+        transform: translateY(calc(-50% - 15px));
+    }
+}
+
+@keyframes floatDownUp {
+    0%, 100% {
+        transform: translateY(-50%);
+    }
+    50% {
+        transform: translateY(calc(-50% + 15px));
+    }
+}
+
+.circle-1 {
+    animation: floatUpDown 6s ease-in-out infinite;
+}
+
+.circle-2 {
+    animation: floatDownUp 7s ease-in-out infinite;
 }
 
 /* Right: Exhibition Info */
 .hero-info {
-    padding: 30px 40px;
+    padding: 50px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border-radius: 16px;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    max-width: 600px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
 }
 
 .exhibition-badge {
     display: inline-block;
-    background-color: transparent;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
     color: white;
-    padding: 6px 16px;
-    border-radius: 20px;
+    padding: 8px 20px;
+    border-radius: 100px;
     font-size: 0.9rem;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border: 2px solid white;
-    width: fit-content;
+    letter-spacing: 1px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .title-wrapper {
