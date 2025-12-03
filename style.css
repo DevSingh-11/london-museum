@@ -482,14 +482,14 @@ body {
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center; /* Center horizontally */
+    justify-content: center;
 }
 
 .orb-container {
-    width: 340px; /* Fixed width to match orb size */
-    height: 340px; /* Container height = 340px */
+    width: 340px; /* Container fits the orb IMAGE size */
+    height: 340px;
     position: relative;
-    overflow: visible; /* Allow shadow to overflow */
+    /* Container doesn't need overflow visible since we'll adjust positioning */
 }
 
 .orb-carousel-container {
@@ -514,41 +514,41 @@ body {
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ALL ORBS: Same base transform properties */
+/* ALL ORBS: Make them all the same total size including border */
 .orb-item {
     position: absolute;
-    width: 340px; /* Exact orb size */
-    height: 340px; /* Exact orb size */
+    width: 340px; /* Image size */
+    height: 340px; /* Image size */
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); /* Reduced shadow */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     transform-origin: center center;
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Position the image so border extends equally on all sides */
     top: 0;
+    left: 0;
+    box-sizing: content-box; /* Border is outside the dimensions */
 }
 
-/* Center orb - CENTERED in container */
+/* Center orb - Perfectly centered */
 .orb-item[data-index="0"] {
-    left: 0;
     transform: translateX(0) translateZ(0px);
     opacity: 1;
     z-index: 3;
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6); /* Stronger shadow for center */
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
 }
 
-/* Left orb - Touches left edge of container */
+/* Left orb - Moves left so entire orb (including border) touches left edge */
 .orb-item[data-index="1"] {
-    left: -170px; /* Half orb width to the left (340/2 = 170) */
-    transform: translateX(0) translateZ(-100px);
+    transform: translateX(-174px) translateZ(-100px); /* Half of total visible size (340/2 + 4) */
     opacity: 0.6;
     z-index: 2;
 }
 
-/* Right orb - Touches right edge of container */
+/* Right orb - Moves right so entire orb (including border) touches right edge */
 .orb-item[data-index="2"] {
-    left: 170px; /* Half orb width to the right (340/2 = 170) */
-    transform: translateX(0) translateZ(-100px);
+    transform: translateX(174px) translateZ(-100px); /* Half of total visible size (340/2 + 4) */
     opacity: 0.6;
     z-index: 2;
 }
