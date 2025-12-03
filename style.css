@@ -652,9 +652,10 @@ body {
 }
 
 .hero-actions {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Makes them equal width */
     gap: 15px;
-    margin-bottom: 0; /* Changed from 25px to 0 */
+    margin-bottom: 0;
 }
 
 .view-exhibition-btn {
@@ -662,38 +663,20 @@ body {
     background-color: transparent;
     color: white;
     text-decoration: none;
-    padding: 12px 32px;
+    padding: 14px 20px; /* Adjusted padding for equal buttons */
     border-radius: 100px;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1rem;
     transition: all 0.3s ease;
     border: 2px solid white;
     text-align: center;
+    width: 100%; /* Makes them fill their grid column */
 }
 
 .view-exhibition-btn:hover {
     background-color: rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.secondary-btn {
-    display: inline-block;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    text-decoration: none;
-    padding: 12px 32px;
-    border-radius: 100px;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    text-align: center;
-}
-
-.secondary-btn:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
 }
 
 /* ===== TEMPORARY LAYOUT STYLES ===== */
