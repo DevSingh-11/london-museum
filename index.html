@@ -456,63 +456,112 @@
             
             if (!heroContent || !heroInfo || !memoryOrb) return;
             
-            // Get the actual rendered dimensions
-            const contentRect = heroContent.getBoundingClientRect();
-            const infoRect = heroInfo.getBoundingClientRect();
-            
-            // Calculate grid midpoint (between left margin and left side of right box)
-            const gridMidpoint = contentRect.width / 2;
-            
-            // Get border width from CSS (4px border on each side = 8px total)
-            const computedStyle = window.getComputedStyle(memoryOrb);
-            const borderWidth = parseInt(computedStyle.borderWidth) || 0;
-            const totalBorder = borderWidth * 2; // Both sides
-            
-            // Orb image size should be: info box height - total border
-            const imageSize = infoRect.height - totalBorder;
-            
-            // Total orb size (image + border) = info box height
-            const totalOrbSize = infoRect.height;
-            
-            // Calculate left position so TOTAL orb center aligns with grid midpoint
-            // Orb center = left position + (totalOrbSize / 2)
-            // We want: left + (totalOrbSize / 2) = gridMidpoint
-            // Therefore: left = gridMidpoint - (totalOrbSize / 2)
-            const orbLeft = gridMidpoint - (totalOrbSize / 2);
-            
-            // Apply styles
-            memoryOrb.style.width = `${imageSize}px`;  // Image size (without border)
-            memoryOrb.style.height = `${imageSize}px`; // Image size (without border)
-            memoryOrb.style.left = `${orbLeft}px`;
-            memoryOrb.style.top = '0';
-            
-            // Also update container height to match
-            const heroArtworks = document.querySelector('.hero-artworks');
-            if (heroArtworks) {
-                heroArtworks.style.minHeight = `${infoRect.height}px`;
-            }
-            
-            console.log('Memory Orb positioned:', {
-                infoHeight: infoRect.height,
-                borderWidth: borderWidth,
-                imageSize: imageSize,
-                totalOrbSize: totalOrbSize,
-                contentWidth: contentRect.width,
-                midpoint: gridMidpoint,
-                orbLeft: orbLeft
+            // Wait for next frame to ensure layout is complete
+            requestAnimationFrame(() => {
+                // Get the actual rendered dimensions
+                const contentRect = heroContent.getBoundingClientRect();
+                const infoRect = heroInfo.getBoundingClientRect();
+                
+                // The midpoint is at 50% of the .hero-content width
+                // This is the grid line between the two columns
+                const gridMidpoint = contentRect.width / 2;
+                
+                // Get border width from CSS
+                const computedStyle = window.getComputedStyle(memoryOrb);
+                const borderWidth = parseInt(computedStyle.borderWidth) || 0;
+                const totalBorder = borderWidth * 2;
+                
+                // Image size = info box height - borders
+                const imageSize = Math.max(100, infoRect.height - totalBorder);
+                
+                // Total orb size (image + border)
+                const totalOrbSize = imageSize + totalBorder;
+                
+                // IMPORTANT: Calculate left position relative to .hero-content
+                // The orb should be centered on the grid midpoint
+                // Orb center = left position + (totalOrbSize / 2)
+                // We want: left + (totalOrbSize / 2) = gridMidpoint
+                // Therefore: left = gridMidpoint - (totalOrbSize / 2)
+                const orbLeft = gridMidpoint - (totalOrbSize / 2);
+                
+                // Calculate top position to center vertically
+                // Orb should be vertically centered within the .hero-content container
+                const orbTop = (contentRect.height - totalOrbSize) / 2;
+                
+                // Apply styles
+                memoryOrb.style.width = `${imageSize}px`;
+                memoryOrb.style.height = `${imageSize}px`;
+                memoryOrb.style.left = `${orbLeft}px`;
+                memoryOrb.style.top = `${orbTop}px`;
+                
+                console.log('Memory Orb positioning debug:', {
+                    contentWidth: contentRect.width,
+                    contentHeight: contentRect.height,
+                    gridMidpoint: gridMidpoint,
+                    infoHeight: infoRect.height,
+                    imageSize: imageSize,
+                    totalOrbSize: totalOrbSize,
+                    calculatedLeft: orbLeft,
+                    calculatedTop: orbTop
+                });
+                
+                // Visual debug - add a line at the midpoint (remove in production)
+                addMidpointDebugLine(contentRect.width);
             });
         }
-
+        
+        // Debug function to visualize the midpoint (remove in production)
+        function addMidpointDebugLine(contentWidth) {
+            // Remove existing debug line
+            const existingLine = document.querySelector('.debug-midpoint-line');
+            if (existingLine) existingLine.remove();
+            
+            const debugLine = document.createElement('div');
+            debugLine.className = 'debug-midpoint-line';
+            debugLine.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 50%;
+                width: 2px;
+                height: 100%;
+                background-color: red;
+                z-index: 1000;
+                pointer-events: none;
+            `;
+            
+            const heroContent = document.querySelector('.hero-content');
+            if (heroContent) {
+                heroContent.appendChild(debugLine);
+            }
+        }
+        
+        // Better initialization
+        function initializeOrbPosition() {
+            positionMemoryOrb();
+            
+            // Try again after delays to ensure everything is loaded
+            setTimeout(positionMemoryOrb, 100);
+            setTimeout(positionMemoryOrb, 500);
+            setTimeout(positionMemoryOrb, 1000);
+        }
+        
         // Call on load and resize
         document.addEventListener('DOMContentLoaded', () => {
-            positionMemoryOrb();
-            window.addEventListener('resize', positionMemoryOrb);
+            // Initialize other carousels first
+            // ... existing carousel initialization code ...
             
-            // Recalculate after images load
-            const orbImg = document.querySelector('.memory-orb-1');
-            if (orbImg) {
-                orbImg.onload = positionMemoryOrb;
-            }
+            // Then initialize orb position
+            initializeOrbPosition();
+        });
+        
+        window.addEventListener('resize', positionMemoryOrb);
+        window.addEventListener('load', positionMemoryOrb);
+        
+        // Recalculate when images load
+        const orbImg = document.querySelector('.memory-orb-1');
+        if (orbImg) {
+            orbImg.addEventListener('load', positionMemoryOrb);
+        }
         });
     </script>
 </body>
