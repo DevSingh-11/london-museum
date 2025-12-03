@@ -485,7 +485,7 @@ body {
 
 .orb-container {
     width: 100%;
-    height: 340px; /* ← MATCHES right box height */
+    height: 340px; /* ← MATCHES right box min-height exactly */
     position: relative;
     display: flex;
     align-items: center;
@@ -516,10 +516,8 @@ body {
 
 .orb-item {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 280px; /* ← ADJUSTED: Slightly smaller to fit in container */
-    height: 280px; /* ← ADJUSTED: Slightly smaller to fit in container */
+    width: 280px;
+    height: 280px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid rgba(255, 255, 255, 0.4);
@@ -528,24 +526,31 @@ body {
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Center orb (active) */
+/* Center orb - TOP ALIGNED */
 .orb-item[data-index="0"] {
-    transform: translate(-50%, -50%) translateZ(0px) scale(1);
+    top: 0; /* ← Aligns with container top */
+    left: 50%;
+    transform: translateX(-50%) translateZ(0px) scale(1);
     opacity: 1;
     z-index: 3;
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
 }
 
-/* Left orb - ADJUSTED positions for smaller size */
+/* Left orb - LEFT ALIGNED */
 .orb-item[data-index="1"] {
-    transform: translate(-50%, -50%) translateX(-180px) translateZ(-120px) scale(0.6);
+    top: 50%;
+    left: 0; /* ← Aligns with container left */
+    transform: translateY(-50%) translateX(0) translateZ(-120px) scale(0.6);
     opacity: 0.4;
     z-index: 2;
 }
 
-/* Right orb - ADJUSTED positions for smaller size */
+/* Right orb - RIGHT ALIGNED */
 .orb-item[data-index="2"] {
-    transform: translate(-50%, -50%) translateX(180px) translateZ(-120px) scale(0.6);
+    top: 50%;
+    right: 0; /* ← Aligns with container right */
+    left: auto; /* ← Override the left: 50% from .orb-item */
+    transform: translateY(-50%) translateX(0) translateZ(-120px) scale(0.6);
     opacity: 0.4;
     z-index: 2;
 }
