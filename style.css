@@ -482,12 +482,14 @@ body {
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center; /* Center horizontally */
 }
 
 .orb-container {
-    width: 100%;
+    width: 340px; /* Fixed width to match orb size */
     height: 340px; /* Container height = 340px */
     position: relative;
+    overflow: visible; /* Allow shadow to overflow */
 }
 
 .orb-carousel-container {
@@ -515,39 +517,38 @@ body {
 /* ALL ORBS: Same base transform properties */
 .orb-item {
     position: absolute;
-    width: 340px;
-    height: 340px;
+    width: 340px; /* Exact orb size */
+    height: 340px; /* Exact orb size */
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); /* Reduced shadow */
     transform-origin: center center;
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     top: 0;
 }
 
-/* Center orb - CENTERED horizontally, on top */
+/* Center orb - CENTERED in container */
 .orb-item[data-index="0"] {
-    left: 50%;
-    transform: translateX(-50%) translateZ(0px);
+    left: 0;
+    transform: translateX(0) translateZ(0px);
     opacity: 1;
     z-index: 3;
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6); /* Stronger shadow for center */
 }
 
-/* Left orb - LEFT EDGE touches container, tucked behind */
+/* Left orb - Touches left edge of container */
 .orb-item[data-index="1"] {
-    left: 0;
-    transform: translateX(0) translateZ(-100px); /* ← ADDED translateX(0) */
+    left: -170px; /* Half orb width to the left (340/2 = 170) */
+    transform: translateX(0) translateZ(-100px);
     opacity: 0.6;
     z-index: 2;
 }
 
-/* Right orb - RIGHT EDGE touches container, tucked behind */
+/* Right orb - Touches right edge of container */
 .orb-item[data-index="2"] {
-    right: 0;
-    left: auto;
-    transform: translateX(0) translateZ(-100px); /* ← ADDED translateX(0) */
+    left: 170px; /* Half orb width to the right (340/2 = 170) */
+    transform: translateX(0) translateZ(-100px);
     opacity: 0.6;
     z-index: 2;
 }
@@ -581,29 +582,28 @@ body {
     width: fit-content;
 }
 
-/* NEW: Title wrapper for inline title and subtitle */
 .title-wrapper {
     display: flex;
-    align-items: baseline; /* Align text on baseline */
+    align-items: baseline;
     gap: 20px;
     margin-bottom: 20px;
-    flex-wrap: wrap; /* Allows wrapping on smaller screens if needed */
+    flex-wrap: wrap;
 }
 
 .exhibition-title {
     font-size: 2.5rem;
     font-weight: 700;
-    margin-bottom: 0; /* Remove bottom margin since wrapper handles spacing */
+    margin-bottom: 0;
     line-height: 1.1;
-    flex-shrink: 0; /* Prevents title from shrinking */
+    flex-shrink: 0;
 }
 
 .exhibition-subtitle {
     font-size: 1.3rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 0; /* Remove bottom margin since wrapper handles spacing */
-    flex-shrink: 0; /* Prevents subtitle from shrinking */
+    margin-bottom: 0;
+    flex-shrink: 0;
 }
 
 .exhibition-description {
@@ -613,7 +613,6 @@ body {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* CHANGED: Buttons on same line, half width each */
 .hero-actions {
     display: flex;
     gap: 15px;
@@ -625,15 +624,15 @@ body {
     background-color: transparent;
     color: white;
     text-decoration: none;
-    padding: 14px 0; /* Changed from 14px 32px to 14px 0 */
+    padding: 14px 0;
     border-radius: 100px;
     font-weight: 600;
     font-size: 1.1rem;
     transition: all 0.3s ease;
     border: 2px solid white;
     text-align: center;
-    width: 50%; /* Half width */
-    flex: 1; /* Makes them equal width */
+    width: 50%;
+    flex: 1;
 }
 
 .view-exhibition-btn:hover {
@@ -647,15 +646,15 @@ body {
     background-color: rgba(255, 255, 255, 0.1);
     color: white;
     text-decoration: none;
-    padding: 12px 0; /* Changed from 12px 32px to 12px 0 */
+    padding: 12px 0;
     border-radius: 100px;
     font-weight: 600;
     font-size: 1rem;
     transition: all 0.3s ease;
     border: 2px solid transparent;
     text-align: center;
-    width: 50%; /* Half width */
-    flex: 1; /* Makes them equal width */
+    width: 50%;
+    flex: 1;
 }
 
 .secondary-btn:hover {
