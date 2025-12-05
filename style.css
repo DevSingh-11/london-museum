@@ -692,8 +692,8 @@ body {
     padding: 0 3%;
 }
 
-/* Footer Top Section */
-.footer-top {
+/* Footer Top Row */
+.footer-top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -708,6 +708,32 @@ body {
     filter: brightness(0) invert(1);
 }
 
+/* Center: Support Logos */
+.support-logos {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.support-logo {
+    height: 70px; /* Adjust based on your image sizes */
+    width: auto;
+}
+
+.support-logo img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.support-logo img:hover {
+    opacity: 1;
+}
+
+/* Right: Social Media */
 .footer-social {
     text-align: right;
 }
@@ -715,13 +741,13 @@ body {
 .footer-heading {
     font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     color: rgba(255, 255, 255, 0.9);
 }
 
 .social-icons {
     display: flex;
-    gap: 30px;
+    gap: 25px;
 }
 
 .social-icon {
@@ -740,8 +766,8 @@ body {
 }
 
 .social-svg {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     transition: all 0.3s ease;
 }
 
@@ -750,46 +776,29 @@ body {
 }
 
 .social-icon span {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
 }
 
-/* Footer Support Section */
-.footer-support {
-    margin-bottom: 50px;
-}
-
-.support-logos {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    flex-wrap: wrap;
-}
-
-.support-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Footer Bottom Row */
+.footer-bottom-row {
     text-align: center;
-    max-width: 250px;
 }
 
-.support-icon {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-    opacity: 0.9;
-}
-
+/* Support Text */
 .support-text {
+    margin-bottom: 30px;
+}
+
+.support-text p {
     font-size: 1rem;
-    line-height: 1.5;
     color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
+    line-height: 1.5;
 }
 
-/* Footer Bottom Section */
-.footer-bottom {
-    text-align: center;
+/* Legal Section */
+.legal-section {
     padding-top: 30px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
