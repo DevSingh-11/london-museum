@@ -692,45 +692,55 @@ body {
     padding: 0 3%;
 }
 
-/* Footer Top Row */
-.footer-top-row {
+/* Section 1: Main Content Row */
+.footer-main-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 40px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .footer-logo img {
     height: 60px;
     width: auto;
-    filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1); /* Keeps museum logo white */
 }
 
-/* Center: Support Logos */
-.support-logos {
+/* Center: Support Section */
+.support-section {
     display: flex;
-    gap: 40px;
+    gap: 50px;
     align-items: center;
+}
+
+.support-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 200px;
 }
 
 .support-logo {
     height: 70px; /* Adjust based on your image sizes */
     width: auto;
+    margin-bottom: 10px;
 }
 
 .support-logo img {
     height: 100%;
     width: auto;
     object-fit: contain;
-    filter: brightness(0) invert(1);
-    opacity: 0.9;
-    transition: opacity 0.3s ease;
+    /* REMOVED filter to keep original colors */
 }
 
-.support-logo img:hover {
-    opacity: 1;
+.support-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    line-height: 1.4;
 }
 
 /* Right: Social Media */
@@ -780,31 +790,13 @@ body {
     font-weight: 500;
 }
 
-/* Footer Bottom Row */
-.footer-bottom-row {
+/* Section 2: Legal Information */
+.footer-legal-row {
     text-align: center;
 }
 
-/* Support Text */
-.support-text {
-    margin-bottom: 30px;
-}
-
-.support-text p {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
-    line-height: 1.5;
-}
-
-/* Legal Section */
-.legal-section {
-    padding-top: 30px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 .legal-links {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -828,7 +820,7 @@ body {
 }
 
 .charity-info {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .charity-info p {
