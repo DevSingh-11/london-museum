@@ -679,21 +679,164 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* ===== FOOTER STYLES ===== */
+#footer {
+    background-color: var(--yale-blue);
+    color: white;
+    padding: 60px 0 30px;
+}
+
+.footer-container {
+    max-width: 94%;
+    margin: 0 auto;
+    padding: 0 3%;
+}
+
+/* Footer Top Section */
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 40px;
+}
+
+.footer-logo img {
+    height: 60px;
+    width: auto;
+    filter: brightness(0) invert(1);
+}
+
+.footer-social {
+    text-align: right;
+}
+
+.footer-heading {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.social-icons {
+    display: flex;
+    gap: 30px;
+}
+
+.social-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    color: var(--lavender-blush);
+    transform: translateY(-3px);
+}
+
+.social-svg {
+    width: 32px;
+    height: 32px;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover .social-svg {
+    transform: scale(1.1);
+}
+
+.social-icon span {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Footer Support Section */
+.footer-support {
+    margin-bottom: 50px;
+}
+
+.support-logos {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+.support-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 250px;
+}
+
+.support-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.support-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+/* Footer Bottom Section */
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legal-links {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.legal-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.legal-link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.charity-info {
+    margin-bottom: 15px;
+}
+
+.charity-info p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.copyright p {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
 /* ===== TEMPORARY LAYOUT STYLES ===== */
 #featured-artists {
     background-color: var(--muted-tea);
     height: 300px;
-    padding: 40px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#footer {
-    background-color: var(--yale-blue);
-    height: 250px;
-    color: white;
     padding: 40px;
     text-align: center;
     display: flex;
