@@ -50,6 +50,7 @@
             gap: 60px;
             max-width: 1200px;
             margin: 0 auto;
+            align-items: start;
         }
         
         .booking-form-section {
@@ -57,12 +58,15 @@
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            min-height: 100%;
         }
         
         .booking-sidebar {
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             gap: 30px;
+            height: 100%;
         }
         
         .info-card {
@@ -70,6 +74,7 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
         }
         
         .info-card h3 {
@@ -320,7 +325,7 @@
         .day-hours {
             display: flex;
             justify-content: space-between;
-            padding: 12px 0; /* Increased padding */
+            padding: 12px 0;
             border-bottom: 1px solid var(--lavender-blush);
         }
         
@@ -338,6 +343,11 @@
             .booking-grid {
                 grid-template-columns: 1fr;
                 gap: 40px;
+            }
+            
+            .booking-sidebar {
+                height: auto;
+                justify-content: flex-start;
             }
             
             .date-time-group {
@@ -597,42 +607,25 @@
                     <div class="info-card">
                         <h3>📍 Location</h3>
                         <p><strong>The London Museum</strong><br>
-                        100 Museum Street<br>
-                        London WC1B 3DG</p>
-                        <p>Nearest tube: Holborn (5 min walk)<br>
-                        Buses: 1, 8, 19, 25, 38, 55, 98</p>
+                        No. 1 Warehouse, West India Quay<br>
+                        Hertsmere Rd, London E14 4AL</p>
+                        <p><strong>Nearest transport:</strong><br>
+                        • West India Quay (DLR) – 3 min walk<br>
+                        • Canary Wharf (Jubilee, Elizabeth line & DLR) – 7 min walk<br>
+                        • Westferry (DLR) – 7 min walk</p>
+                        <p><strong>Buses:</strong> 135, 277, D3, D7, D8, N277, N550</p>
                     </div>
                     
                     <div class="info-card">
                         <h3>🕒 Opening Hours</h3>
                         <div class="hours-grid">
                             <div class="day-hours">
-                                <span class="day">Monday</span>
+                                <span class="day">Monday - Sunday</span>
                                 <span class="hours">10:00 - 17:00</span>
                             </div>
                             <div class="day-hours">
-                                <span class="day">Tuesday</span>
-                                <span class="hours">10:00 - 17:00</span>
-                            </div>
-                            <div class="day-hours">
-                                <span class="day">Wednesday</span>
-                                <span class="hours">10:00 - 17:00</span>
-                            </div>
-                            <div class="day-hours">
-                                <span class="day">Thursday</span>
-                                <span class="hours">10:00 - 17:00</span>
-                            </div>
-                            <div class="day-hours">
-                                <span class="day">Friday</span>
-                                <span class="hours">10:00 - 17:00</span>
-                            </div>
-                            <div class="day-hours">
-                                <span class="day">Saturday</span>
-                                <span class="hours">11:00 - 17:00</span>
-                            </div>
-                            <div class="day-hours">
-                                <span class="day">Sunday</span>
-                                <span class="hours">11:00 - 17:00</span>
+                                <span class="day">Last Entry</span>
+                                <span class="hours">16:00</span>
                             </div>
                         </div>
                     </div>
@@ -642,7 +635,7 @@
                         <ul>
                             <li>Free entry for Members</li>
                             <li>Under 5s go free (ticket required)</li>
-                            <li>Last entry 1 hour before closing</li>
+                            <li>Last entry at 16:00</li>
                             <li>Free Wi-Fi available throughout</li>
                             <li>Locker facilities available</li>
                             <li>Photography permitted (no flash)</li>
@@ -650,11 +643,10 @@
                     </div>
                     
                     <div class="info-card">
-                        <h3>📞 Need Help?</h3>
-                        <p>Contact our visitor services team:</p>
-                        <p><strong>Phone:</strong> 020 7001 9844<br>
-                        <strong>Email:</strong> visits@londonmuseum.org<br>
-                        <strong>Hours:</strong> Mon-Fri, 9:00-17:00</p>
+                        <h3>📞 Contact Information</h3>
+                        <p><strong>Phone:</strong> 020 7001 9844</p>
+                        <p><strong>Email:</strong> info.docklands@museumoflondon.org.uk</p>
+                        <p><strong>General Inquiries:</strong> Mon-Fri, 9:00-17:00</p>
                     </div>
                 </div>
             </div>
