@@ -311,16 +311,16 @@
         
         /* Opening Hours */
         .hours-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             margin-top: 15px;
         }
-        
+                
         .day-hours {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 12px 0; /* Increased padding */
             border-bottom: 1px solid var(--lavender-blush);
         }
         
