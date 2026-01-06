@@ -51,15 +51,22 @@
             gap: 60px;
             max-width: 1400px;
             margin: 0 auto;
-            align-items: start;
+            align-items: stretch; /* Changed from 'start' to 'stretch' */
         }
         
-        /* Left: Map Section */
+        /* Left: Map Section - FIXED HEIGHT */
         .map-section {
             display: flex;
             flex-direction: column;
             gap: 30px;
-            height: 100%;
+            height: 100%; /* Takes full height of grid */
+        }
+        
+        /* Add this to make the two items expand to fill space */
+        .map-container, .museum-image-container {
+            flex: 1; /* Makes both containers share available space equally */
+            display: flex;
+            flex-direction: column;
         }
         
         .map-container {
@@ -68,13 +75,16 @@
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            min-height: 300px; /* Minimum height */
         }
         
         .map-frame {
             width: 100%;
-            height: 600px;
+            height: 100%; /* Changed from 600px to 100% */
             border: none;
             border-radius: 8px;
+            flex: 1; /* Takes remaining space in container */
+            min-height: 400px;
         }
         
         .museum-image-container {
@@ -83,6 +93,7 @@
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            min-height: 300px; /* Minimum height */
         }
         
         .museum-image {
@@ -90,6 +101,8 @@
             height: auto;
             border-radius: 8px;
             display: block;
+            flex: 1; /* Takes remaining space in container */
+            object-fit: contain; /* Changed from cover to contain for portrait images */
         }
         
         /* Right: Information Section */
@@ -260,7 +273,7 @@
         /* Responsive */
         @media (max-width: 1200px) {
             .map-frame {
-                height: 500px;
+                min-height: 350px;
             }
         }
         
@@ -271,7 +284,13 @@
             }
             
             .map-frame {
+                min-height: 450px;
                 height: 450px;
+            }
+            
+            /* Reset flex behavior on mobile */
+            .map-container, .museum-image-container {
+                flex: none;
             }
         }
         
@@ -281,6 +300,7 @@
             }
             
             .map-frame {
+                min-height: 400px;
                 height: 400px;
             }
             
@@ -291,6 +311,7 @@
         
         @media (max-width: 480px) {
             .map-frame {
+                min-height: 300px;
                 height: 300px;
             }
         }
