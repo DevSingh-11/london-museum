@@ -1,1 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Here & Map - The London Museum</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific styles for Getting Here & Map */
+        body {
+            background-color: var(--ash-grey);
+        }
+        
+        .directions-page {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+        }
+        
+        .directions-container {
+            max-width: 94%;
+            margin: 0 auto;
+            padding: 0 3%;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--yale-blue);
+            margin-bottom: 15px;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Main Content Grid */
+        .directions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: start;
+        }
+        
+        /* Left: Map Section */
+        .map-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            height: 100%;
+        }
+        
+        .map-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .map-frame {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+        }
+        
+        .museum-image-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .museum-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+        
+        /* Right: Information Section */
+        .info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            height: 100%;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+        
+        .info-card h3 {
+            color: var(--yale-blue);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-card h3 .icon {
+            font-size: 1.3rem;
+        }
+        
+        .info-card p {
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .info-card p:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Address Card */
+        .address-details {
+            margin: 20px 0;
+        }
+        
+        .address-line {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--lavender-blush);
+        }
+        
+        .address-line:last-child {
+            border-bottom: none;
+        }
+        
+        .address-icon {
+            color: var(--cerulean);
+            min-width: 24px;
+            text-align: center;
+        }
+        
+        /* Transport Lists */
+        .transport-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .transport-list li {
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        .transport-list li:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--cerulean);
+            border-radius: 50%;
+        }
+        
+        /* Opening Hours (reusing from booking page) */
+        .hours-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .day-hours {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--lavender-blush);
+        }
+        
+        .day {
+            font-weight: 600;
+            color: var(--yale-blue);
+        }
+        
+        .hours {
+            color: var(--text-dark);
+        }
+        
+        /* Contact Info */
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--lavender-blush);
+        }
+        
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+        
+        .contact-icon {
+            color: var(--cerulean);
+            font-size: 1.2rem;
+            min-width: 24px;
+            text-align: center;
+        }
+        
+        /* CTA Button */
+        .cta-container {
+            text-align: center;
+            margin-top: 40px;
+            grid-column: 1 / -1;
+        }
+        
+        .book-visit-btn {
+            display: inline-block;
+            background-color: var(--cerulean);
+            color: white;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--cerulean);
+        }
+        
+        .book-visit-btn:hover {
+            background-color: var(--yale-blue);
+            border-color: var(--yale-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33, 80, 110, 0.3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .map-frame {
+                height: 500px;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .directions-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .map-frame {
+                height: 450px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .map-frame {
+                height: 400px;
+            }
+            
+            .info-card {
+                padding: 25px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .map-frame {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section (Same as index.html) -->
+    <header id="header">
+        <div class="header-container">
+            <!-- Left: Logo -->
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The London Museum">
+                </a>
+            </div>
+            
+            <!-- Center: Search Bar -->
+            <div class="search-container">
+                <input type="text" placeholder="Search artists, artworks...">
+                <button>Search</button>
+            </div>
+                        
+            <!-- Right: Navigation Menu -->
+            <nav class="main-nav">
+                <!-- Collections Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Collections</span>
+                    <div class="dropdown-content">
+                        <a href="artists.html">Browse all Artists</a>
+                        <a href="artworks.html">Browse all Artworks</a>
+                        <a href="search-collection.html">Search Collection</a>
+                    </div>
+                </div>
+            
+                <!-- Exhibitions Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Exhibitions & Events</span>
+                    <div class="dropdown-content">
+                        <a href="exhibitions.html">Current Exhibitions</a>
+                        <a href="events.html">Events Calendar</a>
+                        <a href="upcoming-exhibitions.html">Upcoming Exhibitions</a>
+                    </div>
+                </div>
+            
+                <!-- Shop Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Shop</span>
+                    <div class="dropdown-content">
+                        <a href="shop.html">Exhibition Merchandise</a>
+                        <a href="gifts.html">Gifts & Souvenirs</a>
+                        <a href="prints.html">Prints & Posters</a>
+                    </div>
+                </div>
+            
+                <!-- Visit Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Visit</span>
+                    <div class="dropdown-content">
+                        <a href="book-visit.html">Book your Visit</a>
+                        <a href="cafe.html">Café & Facilities</a>
+                        <a href="directions.html" class="active">Getting Here & Map</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Getting Here & Map Page Content -->
+    <main class="directions-page">
+        <div class="directions-container">
+            <div class="page-header">
+                <h1>Getting Here & Map</h1>
+                <p>Find your way to The London Museum with our detailed directions, transport information, and interactive map.</p>
+            </div>
+            
+            <div class="directions-grid">
+                <!-- Left Column: Map & Museum Image -->
+                <div class="map-section">
+                    <!-- Google Maps Embed -->
+                    <div class="map-container">
+                        <h3>📍 Interactive Map</h3>
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d369.1459220135029!2d-0.024052471545141545!3d51.507567717726545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487602c7b0543655%3A0xfff66a923afecf31!2sLondon%20Museum%20Docklands!5e0!3m2!1sen!2suk!4v1767690713272!5m2!1sen!2suk" 
+                            class="map-frame"
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Google Maps location of The London Museum">
+                        </iframe>
+                    </div>
+                    
+                    <!-- Museum Exterior Image -->
+                    <div class="museum-image-container">
+                        <h3>🏛️ Museum Entrance</h3>
+                        <img src="images/museum.png" alt="The London Museum exterior" class="museum-image">
+                    </div>
+                </div>
+                
+                <!-- Right Column: Information -->
+                <div class="info-section">
+                    <!-- Address Card -->
+                    <div class="info-card">
+                        <h3><span class="icon">📍</span> Address</h3>
+                        <div class="address-details">
+                            <div class="address-line">
+                                <span class="address-icon">🏛️</span>
+                                <div>
+                                    <strong>The London Museum</strong><br>
+                                    No. 1 Warehouse, West India Quay<br>
+                                    Hertsmere Rd, London E14 4AL
+                                </div>
+                            </div>
+                            <div class="address-line">
+                                <span class="address-icon">📞</span>
+                                <div>
+                                    <strong>Phone:</strong> 020 7001 9844
+                                </div>
+                            </div>
+                            <div class="address-line">
+                                <span class="address-icon">✉️</span>
+                                <div>
+                                    <strong>Email:</strong> info.docklands@museumoflondon.org.uk
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Transport Card -->
+                    <div class="info-card">
+                        <h3><span class="icon">🚆</span> Public Transport</h3>
+                        <p>The museum is easily accessible by various forms of public transport:</p>
+                        
+                        <h4 style="color: var(--cerulean); margin: 20px 0 10px; font-size: 1.2rem;">🚇 Nearest Tube/DLR Stations:</h4>
+                        <ul class="transport-list">
+                            <li><strong>West India Quay (DLR)</strong> – 3 minute walk</li>
+                            <li><strong>Canary Wharf</strong> (Jubilee, Elizabeth line & DLR) – 7 minute walk</li>
+                            <li><strong>Westferry (DLR)</strong> – 7 minute walk</li>
+                        </ul>
+                        
+                        <h4 style="color: var(--cerulean); margin: 20px 0 10px; font-size: 1.2rem;">🚌 Bus Routes:</h4>
+                        <ul class="transport-list">
+                            <li><strong>135, 277, D3, D7, D8, N277, N550</strong></li>
+                            <li>All stop within a 5-minute walk of the museum</li>
+                        </ul>
+                        
+                        <h4 style="color: var(--cerulean); margin: 20px 0 10px; font-size: 1.2rem;">⛴️ River Services:</h4>
+                        <ul class="transport-list">
+                            <li><strong>Canary Wharf Pier</strong> – 10 minute walk</li>
+                            <li>Regular Thames Clippers services</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Parking & Accessibility -->
+                    <div class="info-card">
+                        <h3><span class="icon">🚗</span> Parking & Accessibility</h3>
+                        
+                        <h4 style="color: var(--cerulean); margin: 15px 0 10px; font-size: 1.2rem;">🅿️ Parking:</h4>
+                        <ul class="transport-list">
+                            <li><strong>Museum Car Park:</strong> Limited spaces available on site (£15/day)</li>
+                            <li><strong>West India Quay Car Park:</strong> 2-minute walk (£12/day)</li>
+                            <li><strong>Disabled Parking:</strong> 6 dedicated spaces available at museum entrance</li>
+                            <li><strong>Coach Parking:</strong> Available by prior arrangement</li>
+                        </ul>
+                        
+                        <h4 style="color: var(--cerulean); margin: 15px 0 10px; font-size: 1.2rem;">♿ Accessibility:</h4>
+                        <ul class="transport-list">
+                            <li>Full wheelchair access throughout the museum</li>
+                            <li>Step-free access from all entrances</li>
+                            <li>Accessible toilets on all floors</li>
+                            <li>Lift access to all exhibition spaces</li>
+                            <li>Wheelchairs available to borrow (free of charge)</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Opening Hours -->
+                    <div class="info-card">
+                        <h3><span class="icon">🕒</span> Opening Hours</h3>
+                        <div class="hours-grid">
+                            <div class="day-hours">
+                                <span class="day">Monday</span>
+                                <span class="hours">10:00 - 17:00</span>
+                            </div>
+                            <div class="day-hours">
+                                <span class="day">Tuesday</span>
+                                <span class="hours">10:00 - 17:00</span>
+                            </div>
+                            <div class="day-hours">
+                                <span class="day">Wednesday</span>
+                                <span class="hours">10:00 - 17:00</span>
+                            </div>
+                            <div class="day-hours">
+                                <span class="day">Thursday</span>
+                                <span class="hours">10:00 - 17:00</span>
+                            </div>
+                            <div class="day-hours">
+                                <span class="day">Friday</span>
+                                <span class="hours">10:00 - 17:00</span>
+                            </div>
+                            <div class="day-hours">
+                                <span class="day">Saturday</span>
+                                <span class="hours">10:00 - 17:00</span>
+                            </div>
+                            <div class="day-hours">
+                                <span class="day">Sunday</span>
+                                <span class="hours">10:00 - 17:00</span>
+                            </div>
+                            <div class="day-hours">
+                                <span class="day">Last Entry</span>
+                                <span class="hours">16:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CTA Button -->
+                <div class="cta-container">
+                    <a href="book-visit.html" class="book-visit-btn">Book Your Visit Now</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer Section (Same as index.html) -->
+    <footer id="footer">
+        <div class="footer-container">
+            <!-- Section 1: Main Content Row -->
+            <div class="footer-main-row">
+                <!-- Left: Museum Logo -->
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="The London Museum">
+                </div>
+                
+                <!-- Center: Support Logos with Text -->
+                <div class="support-section">
+                    <!-- Mayor of London -->
+                    <div class="support-item">
+                        <div class="support-logo">
+                            <img src="images/mayor-of-london.png" alt="Mayor of London">
+                        </div>
+                        <p class="support-text">Supported by Mayor of London</p>
+                    </div>
+                    
+                    <!-- Arts Council England -->
+                    <div class="support-item">
+                        <div class="support-logo">
+                            <img src="images/arts-council-england.png" alt="Arts Council England">
+                        </div>
+                        <p class="support-text">Supported using public funding by Arts Council England</p>
+                    </div>
+                </div>
+                
+                <!-- Right: Social Media -->
+                <div class="footer-social">
+                    <h3 class="footer-heading">Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/wearelondonmuseum/" target="_blank" class="social-icon" aria-label="Facebook">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://www.instagram.com/wearelondonmuseum/" target="_blank" class="social-icon" aria-label="Instagram">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="https://x.com/LDN_Museum" target="_blank" class="social-icon" aria-label="X (Twitter)">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                            <span>X</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Section 2: Legal Information -->
+            <div class="footer-legal-row">
+                <div class="legal-links">
+                    <a href="#" class="legal-link">Terms of Use</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Privacy Policy</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Cookies</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Website Accessibility Policy</a>
+                </div>
+                
+                <div class="charity-info">
+                    <p>The London Museum registered charity number 1139250</p>
+                </div>
+                
+                <div class="copyright">
+                    <p>&copy; 2026 The London Museum. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
