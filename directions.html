@@ -94,15 +94,28 @@
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             min-height: 300px; /* Minimum height */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* NEW: Image wrapper for proper white border */
+        .museum-image-wrapper {
+            flex: 1;
+            background: white; /* Creates the white border effect */
+            padding: 10px; /* This creates space around the image */
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
         
         .museum-image {
             width: 100%;
-            height: auto;
-            border-radius: 8px;
+            height: 100%;
+            object-fit: contain; /* Shows full image without distortion */
             display: block;
-            object-fit: contain;
-            max-width: 100%;
+            border-radius: 4px; /* Slightly smaller radius than wrapper */
         }
         
         /* Right: Information Section */
@@ -406,7 +419,9 @@
                     <!-- Museum Exterior Image -->
                     <div class="museum-image-container">
                         <h3>🏛️ Museum Entrance</h3>
-                        <img src="images/museum.png" alt="The London Museum exterior" class="museum-image">
+                        <div class="museum-image-wrapper">
+                            <img src="images/museum.png" alt="The London Museum exterior" class="museum-image">
+                        </div>
                     </div>
                 </div>
                 
