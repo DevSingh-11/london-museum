@@ -54,16 +54,6 @@
             align-items: start;
         }
         
-        /* Add this to make grid items fill the row height */
-        .cafe-grid > * {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .cafe-visual-section, .info-section {
-            height: 100%;
-        }
-        
         /* Left: Café Image & Menu */
         .cafe-visual-section {
             display: flex;
@@ -282,15 +272,6 @@
             .cafe-grid {
                 grid-template-columns: 1fr;
                 gap: 40px;
-            }
-            
-            /* Remove the flex behavior on mobile since columns stack */
-            .cafe-grid > * {
-                display: block;
-            }
-            
-            .cafe-visual-section, .info-section {
-                height: auto;
             }
         }
         
