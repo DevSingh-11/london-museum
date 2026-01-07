@@ -44,14 +44,24 @@
             line-height: 1.6;
         }
         
-        /* Main Content Grid - EQUAL HEIGHT COLUMNS */
+        /* Main Content Grid */
         .cafe-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 60px;
             max-width: 1400px;
             margin: 0 auto;
-            align-items: stretch;
+            align-items: start;
+        }
+        
+        /* Add this to make grid items fill the row height */
+        .cafe-grid > * {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .cafe-visual-section, .info-section {
+            height: 100%;
         }
         
         /* Left: Café Image & Menu */
@@ -68,19 +78,13 @@
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            flex: 1;
-        }
-        
-        .cafe-image-container {
-            min-height: 300px;
         }
         
         .cafe-image {
             width: 100%;
-            height: 100%;
+            height: auto;
             border-radius: 8px;
             display: block;
-            object-fit: cover;
         }
         
         .menu-container h3 {
@@ -271,6 +275,48 @@
         .shop-link:hover {
             color: var(--yale-blue);
             text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .cafe-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            /* Remove the flex behavior on mobile since columns stack */
+            .cafe-grid > * {
+                display: block;
+            }
+            
+            .cafe-visual-section, .info-section {
+                height: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .info-card {
+                padding: 25px 20px;
+            }
+            
+            .menu-container, .cafe-image-container {
+                padding: 20px 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .dietary-tags {
+                justify-content: center;
+            }
+            
+            .menu-item {
+                flex-direction: column;
+                gap: 5px;
+            }
         }
     </style>
 </head>
