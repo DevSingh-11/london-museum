@@ -58,13 +58,14 @@
         .cafe-visual-section {
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 80px; /* Increased from 30px to 80px */
             height: 100%;
+            justify-content: space-between; /* Added to help with vertical alignment */
         }
         
         .cafe-image-container, .menu-container {
             background: white;
-            padding: 20px;
+            padding: 30px; /* Increased from 20px to 30px */
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
@@ -273,6 +274,10 @@
                 grid-template-columns: 1fr;
                 gap: 40px;
             }
+            
+            .cafe-visual-section {
+                gap: 40px; /* Reduced gap for tablet */
+            }
         }
         
         @media (max-width: 768px) {
@@ -286,6 +291,10 @@
             
             .menu-container, .cafe-image-container {
                 padding: 20px 15px;
+            }
+            
+            .cafe-visual-section {
+                gap: 30px; /* Reduced gap for mobile */
             }
         }
         
