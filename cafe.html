@@ -51,15 +51,15 @@
             gap: 60px;
             max-width: 1400px;
             margin: 0 auto;
-            align-items: stretch; /* KEY CHANGE: Make columns equal height */
+            align-items: start; /* Changed back to start for JS calculation */
         }
         
         /* Left: Café Image & Menu */
         .cafe-visual-section {
             display: flex;
             flex-direction: column;
-            gap: 30px;
-            height: 100%;
+            gap: 0; /* Start with 0 gap, will be set by JavaScript */
+            height: auto;
         }
         
         .cafe-image-container, .menu-container {
@@ -112,7 +112,7 @@
             display: flex;
             flex-direction: column;
             gap: 30px;
-            height: 100%;
+            height: auto;
         }
         
         .info-card {
@@ -272,11 +272,10 @@
             .cafe-grid {
                 grid-template-columns: 1fr;
                 gap: 40px;
-                align-items: stretch; /* Keep for mobile */
             }
             
             .cafe-visual-section {
-                gap: 40px; /* Slightly reduce gap on tablet */
+                gap: 40px !important; /* Fixed gap for mobile/tablet */
             }
         }
         
@@ -294,7 +293,7 @@
             }
             
             .cafe-visual-section {
-                gap: 30px; /* Further reduce gap on mobile */
+                gap: 30px !important; /* Fixed gap for mobile */
             }
         }
         
@@ -589,5 +588,67 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function adjustLeftColumnGap() {
+            // Only run on desktop (1024px and above)
+            if (window.innerWidth < 1024) {
+                // On mobile/tablet, use fixed gaps from CSS
+                return;
+            }
+            
+            // Get the elements
+            const leftColumn = document.querySelector('.cafe-visual-section');
+            const rightColumn = document.querySelector('.info-section');
+            const cafeImageContainer = document.querySelector('.cafe-image-container');
+            const menuContainer = document.querySelector('.menu-container');
+            
+            if (!leftColumn || !rightColumn || !cafeImageContainer || !menuContainer) {
+                return;
+            }
+            
+            // Calculate the total height of the right column
+            const rightColumnHeight = rightColumn.offsetHeight;
+            
+            // Calculate the total height of the left column containers
+            const cafeImageHeight = cafeImageContainer.offsetHeight;
+            const menuContainerHeight = menuContainer.offsetHeight;
+            const totalLeftContentHeight = cafeImageHeight + menuContainerHeight;
+            
+            // Calculate the required gap
+            const requiredGap = rightColumnHeight - totalLeftContentHeight;
+            
+            // Set a minimum gap (30px) in case right column is shorter
+            const finalGap = Math.max(requiredGap, 30);
+            
+            // Apply the gap to the left column
+            leftColumn.style.gap = finalGap + 'px';
+            
+            // Debug logging (you can remove this)
+            console.log('Right column height:', rightColumnHeight);
+            console.log('Left content height:', totalLeftContentHeight);
+            console.log('Calculated gap:', requiredGap);
+            console.log('Final gap applied:', finalGap);
+        }
+        
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Small delay to ensure all images are loaded
+            setTimeout(adjustLeftColumnGap, 100);
+            
+            // Re-calculate when images load (important for the café image)
+            const cafeImage = document.querySelector('.cafe-image');
+            if (cafeImage) {
+                cafeImage.onload = adjustLeftColumnGap;
+            }
+        });
+        
+        // Run on window resize (with debounce to prevent too many calculations)
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(adjustLeftColumnGap, 250);
+        });
+    </script>
 </body>
 </html>
