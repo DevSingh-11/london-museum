@@ -1,1 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse all Artworks - The London Museum</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific styles for Browse all Artworks */
+        body {
+            background-color: var(--ash-grey);
+        }
+        
+        .artworks-page {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+        }
+        
+        .artworks-container {
+            max-width: 94%;
+            margin: 0 auto;
+            padding: 0 3%;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--yale-blue);
+            margin-bottom: 15px;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Search Section */
+        .search-section {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+        
+        .search-wrapper {
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 18px 24px;
+            font-size: 1.2rem;
+            border: 2px solid var(--ash-grey);
+            border-radius: 12px;
+            background: white;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--cerulean);
+            box-shadow: 0 0 0 3px rgba(26, 125, 158, 0.1);
+        }
+        
+        .search-input::placeholder {
+            color: var(--ash-grey);
+        }
+        
+        .results-counter {
+            color: var(--yale-blue);
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-top: 15px;
+        }
+        
+        /* Artworks Grid */
+        .artworks-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .artwork-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .artwork-card.hidden {
+            display: none;
+        }
+        
+        .artwork-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .artwork-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .artwork-info {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .artwork-title {
+            color: var(--yale-blue);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.4;
+        }
+        
+        /* No Results Message */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+        
+        .no-results h3 {
+            color: var(--yale-blue);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .no-results p {
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+        
+        /* Clear Search Button */
+        .clear-search {
+            display: inline-block;
+            background: var(--cerulean);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .clear-search:hover {
+            background: var(--yale-blue);
+            transform: translateY(-2px);
+        }
+        
+        /* Instructions */
+        .instructions {
+            text-align: center;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 50px auto;
+            max-width: 900px;
+            width: 90%;
+            border-radius: 12px;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: var(--yale-blue);
+            color: white;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+        
+        .modal-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-description {
+            color: var(--text-dark);
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+        
+        .modal-description p {
+            margin-bottom: 20px;
+        }
+        
+        .modal-description p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .artist-credit {
+            font-style: italic;
+            color: var(--cerulean);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--lavender-blush);
+        }
+        
+        /* Responsive Grid */
+        @media (max-width: 1200px) {
+            .artworks-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .modal-body {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .artworks-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .artworks-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .search-input {
+                padding: 15px 20px;
+                font-size: 1.1rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20px auto;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .modal-header {
+                padding: 15px 20px;
+            }
+            
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section (Same as index.html) -->
+    <header id="header">
+        <div class="header-container">
+            <!-- Left: Logo -->
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The London Museum">
+                </a>
+            </div>
+            
+            <!-- Center: Search Bar -->
+            <div class="search-container">
+                <input type="text" placeholder="Search artists, artworks...">
+                <button>Search</button>
+            </div>
+                        
+            <!-- Right: Navigation Menu -->
+            <nav class="main-nav">
+                <!-- Collections Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Collections</span>
+                    <div class="dropdown-content">
+                        <a href="artists.html">Browse all Artists</a>
+                        <a href="artworks.html" class="active">Browse all Artworks</a>
+                        <a href="search-collection.html">Search Collection</a>
+                    </div>
+                </div>
+            
+                <!-- Exhibitions Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Exhibitions & Events</span>
+                    <div class="dropdown-content">
+                        <a href="exhibitions.html">Current Exhibitions</a>
+                        <a href="events.html">Events Calendar</a>
+                        <a href="upcoming-exhibitions.html">Upcoming Exhibitions</a>
+                    </div>
+                </div>
+            
+                <!-- Shop Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Shop</span>
+                    <div class="dropdown-content">
+                        <a href="shop.html">Exhibition Merchandise</a>
+                        <a href="gifts.html">Gifts & Souvenirs</a>
+                        <a href="prints.html">Prints & Posters</a>
+                    </div>
+                </div>
+            
+                <!-- Visit Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Visit</span>
+                    <div class="dropdown-content">
+                        <a href="book-visit.html">Book your Visit</a>
+                        <a href="cafe.html">Café & Facilities</a>
+                        <a href="directions.html">Getting Here & Map</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Browse all Artworks Page Content -->
+    <main class="artworks-page">
+        <div class="artworks-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Browse all Artworks</h1>
+                <p>Explore the complete collection of artworks from The London Museum. Click any artwork to view details and description.</p>
+            </div>
+            
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        placeholder="Search artworks by title..." 
+                        id="searchInput"
+                        autocomplete="off"
+                    >
+                    <p class="instructions">Start typing to filter artworks. Search is case-insensitive.</p>
+                </div>
+                
+                <div class="results-counter" id="resultsCounter">
+                    Showing all 19 artworks
+                </div>
+                
+                <button class="clear-search" id="clearSearch" style="display: none;">
+                    Clear Search
+                </button>
+            </div>
+            
+            <!-- Artworks Grid -->
+            <div class="artworks-grid" id="artworksGrid">
+                <!-- Artworks will be dynamically inserted here -->
+            </div>
+            
+            <!-- No Results Message (hidden by default) -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <h3>No artworks found</h3>
+                <p>No artworks match your search "<span id="searchTerm"></span>"</p>
+                <button class="clear-search" onclick="clearSearch()">Show All Artworks</button>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modal for Artwork Details -->
+    <div class="modal" id="artworkModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Artwork Title</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="" class="modal-image">
+                <div class="modal-description" id="modalDescription">
+                    <!-- Description will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer Section (Same as index.html) -->
+    <footer id="footer">
+        <div class="footer-container">
+            <!-- Section 1: Main Content Row -->
+            <div class="footer-main-row">
+                <!-- Left: Museum Logo -->
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="The London Museum">
+                </div>
+                
+                <!-- Center: Support Logos with Text -->
+                <div class="support-section">
+                    <!-- Mayor of London -->
+                    <div class="support-item">
+                        <div class="support-logo">
+                            <img src="images/mayor-of-london.png" alt="Mayor of London">
+                        </div>
+                        <p class="support-text">Supported by Mayor of London</p>
+                    </div>
+                    
+                    <!-- Arts Council England -->
+                    <div class="support-item">
+                        <div class="support-logo">
+                            <img src="images/arts-council-england.png" alt="Arts Council England">
+                        </div>
+                        <p class="support-text">Supported using public funding by Arts Council England</p>
+                    </div>
+                </div>
+                
+                <!-- Right: Social Media -->
+                <div class="footer-social">
+                    <h3 class="footer-heading">Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/wearelondonmuseum/" target="_blank" class="social-icon" aria-label="Facebook">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://www.instagram.com/wearelondonmuseum/" target="_blank" class="social-icon" aria-label="Instagram">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="https://x.com/LDN_Museum" target="_blank" class="social-icon" aria-label="X (Twitter)">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                            <span>X</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Section 2: Legal Information -->
+            <div class="footer-legal-row">
+                <div class="legal-links">
+                    <a href="#" class="legal-link">Terms of Use</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Privacy Policy</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Cookies</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Website Accessibility Policy</a>
+                </div>
+                
+                <div class="charity-info">
+                    <p>The London Museum registered charity number 1139250</p>
+                </div>
+                
+                <div class="copyright">
+                    <p>&copy; 2026 The London Museum. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Artworks data with descriptions - Sorted alphabetically by title
+        const artworks = [
+            { 
+                name: "images/artworks/a-cry-for-nature.png", 
+                title: "A Cry for Nature",
+                description: `"My idea for this piece grew out of the feeling that we've become strangely numb to what's happening to the natural world. I wanted to show that connection in a really direct, almost literal way. The tears themselves aren't just water. They're pulled straight from leaves. That's why they're green and why you can see the little vein-like patterns running through them, and the reflections of more leaves. It's as if nature is crying through the boy, using him as a kind of messenger. His expression isn't dramatic or exaggerated. He's looking upward, almost searching for something, which ties into the idea of hope or longing. By keeping the whole face in black and white and letting only the tears stay in colour, the piece highlights how out of place nature can feel in our modern world, but also how essential it still is." - Dev, the artist of this piece.`
+            },
+            { 
+                name: "images/artworks/a-drop-of-faith.png", 
+                title: "A Drop of Faith",
+                description: `In this piece, the artist explores the idea that the world can often feel dark and overwhelming. The surrounding image is stripped of colour, creating a sense of emptiness and isolation. The only source of light comes from the eyedrop, which contains the image of a gurdwara - a sacred place of worship that represents faith, hope and guidance for the artist.
+                By placing the gurdwara inside an eyedrop, the artist suggests that faith is something deeply personal and internal, something that helps you see clearly when everything else feels uncertain. The contrast between darkness and light emphasises the belief that spiritual connection can act as a source of clarity and comfort in an otherwise shadowed world.`
+            },
+            { 
+                name: "images/artworks/bond-of-self.png", 
+                title: "Bond of Self",
+                description: `This piece is inspired by M.C. Escher's Bond of Union, where the human form is shown as something both whole and unravelled. The spiralling ribbons reveal parts of the artist's face, floating in space, caught between coming together and falling apart. This sense of movement and stillness creates a dreamlike feeling, as though time has paused. The soft, drifting spheres add to the quiet mystery, making the figure feel suspended in a strange, endless space. Like Escher's work, it explores the idea of identity as something layered and delicate.`
+            },
+            { 
+                name: "images/artworks/eye.png", 
+                title: "The Eye",
+                description: `This drawing takes inspiration from M.C. Escher's; Eye, where a reflection within the pupil hints at something deeper and more unsettling. Like Escher, the artist has focused on close detail to make the eye feel lifelike and intense. But instead of a human skull, this artwork reflects a deer skull. This small shift changes the mood of the piece, making it feel more personal and symbolic. The soft shading around the eye contrasts with the hard, bony form inside it, creating a tension between life and death, presence and memory.`
+            },
+            { 
+                name: "images/artworks/graphite-tears.png", 
+                title: "Graphite Tears",
+                description: `The original piece is a photograph, where this is fully hand-drawn in pencil. The artist wanted to capture a similar emotional intensity through realism, focusing closely on the eyes and artificial tears. Like Man Ray, the contrast between human emotion and artificiality has been explored - Ray's tears were glass, and these are drawn, both representing something false yet convincing and giving this version a more human and reflective quality.`
+            },
+            { 
+                name: "images/artworks/grey-and-white.png", 
+                title: "Grey and White",
+                description: `This piece is a reinterpretation of the composition of Man Ray's "Black and White", by replacing the female subject with a white male and using an African male mask. This change brings a new perspective while still paying homage to Man Ray's original setup. It explores themes of duality and identity, but also challenges the historical gaze by shifting the context. Rather than presenting the African mask as a distant, exotic object, this work encourages the viewer to question how identity, culture, and representation are connected today.`
+            },
+            { 
+                name: "images/artworks/hand-with-refracting-sphere.png", 
+                title: "Hand with Refracting Sphere",
+                description: `This drawing takes inspiration from Escher's "Hand with Reflecting Sphere" and "Relativity", merging the two to explore perspective, reflection, and spatial confusion. Like Escher, the sphere is used to distort the environment, but instead of the artist drawing himself, he drew through the sphere, rather than what it displayed on its surface, allowing the viewer to see the scene as he did when drawing. The staircase and layered architecture are a nod to "Relativity", where gravity and direction are uncertain. It imitates that same feeling of disorientation, but in a more realistic way. Unlike Escher's perfectly mathematical precision, this uses softer, more natural shading to give the piece warmth and depth, making it feel less like a puzzle and more like a surreal moment frozen in time.`
+            },
+            { 
+                name: "images/artworks/memory-orb-1.png", 
+                title: "Memory Orb I",
+                description: `This artwork is an exclusive one of three, which act as first part to a much larger artwork, "Tears of the Past". The scenery inside displays scenes from the artists school life, showing different areas of the school with a warped perspective, as if the scene has been viewed from a lens or a glass orb.`
+            },
+            { 
+                name: "images/artworks/memory-orb-2.png", 
+                title: "Memory Orb II",
+                description: `This artwork is an exclusive one of three, which act as first part to a much larger artwork, "Tears of the Past". The scenery inside displays scenes from the artists school life, showing different areas of the school with a warped perspective, as if the scene has been viewed from a lens or a glass orb.`
+            },
+            { 
+                name: "images/artworks/memory-orb-3.png", 
+                title: "Memory Orb III",
+                description: `This artwork is an exclusive one of three, which act as first part to a much larger artwork, "Tears of the Past". The scenery inside displays scenes from the artists school life, showing different areas of the school with a warped perspective, as if the scene has been viewed from a lens or a glass orb.`
+            },
+            { 
+                name: "images/artworks/rayograph.png", 
+                title: "Rayograph",
+                description: `This piece is a recreation of a Rayograph, but instead of using a darkroom, the image is created digitally in Photoshop. Like Ray's, there is high contrast and ghostly silhouettes to give objects a surreal, floating quality. Each wooden item included links to the theme of complexity. While Man Ray's objects were often abstract and spontaneous, these were chosen carefully to reflect thought, time, and craftsmanship.`
+            },
+            { 
+                name: "images/artworks/self-creation.png", 
+                title: "Self Creation",
+                description: `This piece was inspired by Escher's "Drawing Hands", where the hands sketch each other into existence. This recreation uses the same surreal idea but in the artists own style, using realistic shading and details like his kara (Sikh bangle) and Fitbit to make it personal and modern. While Escher's version is more mathematical and precise, this version feels more natural and expressive, showing the human side of the illusion. The artist explained that they liked exploring how a drawing can seem alive, blurring the line between the artist and their creation, just as Escher did, but through their own hands and identity.`
+            },
+            { 
+                name: "images/artworks/tears-of-the-past.png", 
+                title: "Tears of the Past",
+                description: `This is a large-scale piece, so the images inside the tears are big enough to see. The boy is reminiscing of the places of his past; hence he looks back, and we see the visualisations of his memories within his teardrops.`
+            },
+            { 
+                name: "images/artworks/the-persistence-of-time.png", 
+                title: "The Persistence of Time",
+                description: `The design clearly draws inspiration from Salvador Dalí's surrealist style. The melting clocks incorporated into the structure reference Dalí's iconic imagery, symbolising the fluidity and distortion of time. Additionally, the birdcage metaphor suggests themes of entrapment or surreal freedom, reinforcing the dreamlike quality of the piece. The reflective or sky-like surfaces add an illusionistic depth, making the artwork feel detached from reality - another hallmark of Dalí's surrealism.`
+            },
+            { 
+                name: "images/artworks/the-rhinos.png", 
+                title: "The Rhinos",
+                description: `This piece is inspired by Dali capturing the surreal contrast between strength and fragility. Instead of elephants, there are rhinos with impossibly long giraffe legs, making them feel both powerful and strangely weightless as they rise above the clouds. The patterned cloths draped over their backs add a gentle touch, while the human rider introduces a sense of calm curiosity within the dreamlike scene. Like Dali's work, the piece plays with scale, reality, and balance, making something fantastical and mysterious.`
+            },
+            { 
+                name: "images/artworks/the-treachery-of-objects-1.png", 
+                title: "The Treachery of Objects I",
+                description: `This artwork forces viewers to question the difference between an object and its representation. This image plays with identity and perception through the symbol of the turban. At first glance, the tied turban feels complete and recognisable, but the text disrupts that certainty. Like Magritte, the piece displays simple, direct visuals to challenge assumptions. The contrast between the neatly tied turban and the loose cloth below flips expectations. It suggests that the essence of the object lies not in its final form, but in its potential.`
+            },
+            { 
+                name: "images/artworks/the-treachery-of-objects-2.png", 
+                title: "The Treachery of Objects II",
+                description: `This artwork forces viewers to question the difference between an object and its representation. This image plays with identity and perception through the symbol of the turban. At first glance, the tied turban feels complete and recognisable, but the text disrupts that certainty. Like Magritte, the piece displays simple, direct visuals to challenge assumptions. The contrast between the neatly tied turban and the loose cloth below flips expectations. It suggests that the essence of the object lies not in its final form, but in its potential.`
+            },
+            { 
+                name: "images/artworks/the-treachery-of-objects-3.png", 
+                title: "The Treachery of Objects III",
+                description: `This artwork uses a similar idea to the turban done up and unravelled but replaces the turban with a Rubik's Cube. The complete, untouched cube is labelled "This is not a Rubik's Cube," while the scattered, broken pieces are captioned "This is a Rubik's Cube." Like Magritte, the artist has played with how we see and define things - not just by their appearance, but by their meaning. It makes the viewer question what makes something "real" or "true." Is it the image, or the idea behind it?`
+            },
+            { 
+                name: "images/artworks/the-treachery-of-objects-4.png", 
+                title: "The Treachery of Objects IV",
+                description: `This artwork uses a similar idea to the turban done up and unravelled but replaces the turban with a Rubik's Cube. The complete, untouched cube is labelled "This is not a Rubik's Cube," while the scattered, broken pieces are captioned "This is a Rubik's Cube." Like Magritte, the artist has played with how we see and define things - not just by their appearance, but by their meaning. It makes the viewer question what makes something "real" or "true." Is it the image, or the idea behind it?`
+            }
+        ];
+
+        // Sort artworks alphabetically by title
+        artworks.sort((a, b) => a.title.localeCompare(b.title));
+
+        // DOM Elements
+        const artworksGrid = document.getElementById('artworksGrid');
+        const searchInput = document.getElementById('searchInput');
+        const resultsCounter = document.getElementById('resultsCounter');
+        const clearSearchBtn = document.getElementById('clearSearch');
+        const noResults = document.getElementById('noResults');
+        const searchTermSpan = document.getElementById('searchTerm');
+        const artworkModal = document.getElementById('artworkModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalImage = document.getElementById('modalImage');
+        const modalDescription = document.getElementById('modalDescription');
+        const closeModal = document.getElementById('closeModal');
+
+        // Initialize artworks grid
+        function initializeArtworksGrid() {
+            artworksGrid.innerHTML = '';
+            artworks.forEach((artwork, index) => {
+                const card = document.createElement('div');
+                card.className = 'artwork-card';
+                card.dataset.index = index;
+                card.dataset.title = artwork.title.toLowerCase();
+                
+                card.innerHTML = `
+                    <img src="${artwork.name}" alt="${artwork.title}" class="artwork-image" loading="lazy">
+                    <div class="artwork-info">
+                        <h3 class="artwork-title">${artwork.title}</h3>
+                    </div>
+                `;
+                
+                // Add click event to open modal
+                card.addEventListener('click', () => openArtworkModal(index));
+                
+                artworksGrid.appendChild(card);
+            });
+            
+            updateResultsCounter(artworks.length, artworks.length);
+        }
+
+        // Open artwork modal
+        function openArtworkModal(index) {
+            const artwork = artworks[index];
+            modalTitle.textContent = artwork.title;
+            modalImage.src = artwork.name;
+            modalImage.alt = artwork.title;
+            
+            // Format description with paragraphs
+            const descriptionLines = artwork.description.split('\n');
+            modalDescription.innerHTML = '';
+            descriptionLines.forEach(line => {
+                if (line.trim()) {
+                    const p = document.createElement('p');
+                    p.textContent = line.trim();
+                    modalDescription.appendChild(p);
+                }
+            });
+            
+            // Show modal
+            artworkModal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        // Close modal
+        function closeArtworkModal() {
+            artworkModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+
+        // Filter artworks based on search
+        function filterArtworks(searchTerm) {
+            const searchLower = searchTerm.toLowerCase().trim();
+            let visibleCount = 0;
+            
+            // Show/hide cards based on search
+            document.querySelectorAll('.artwork-card').forEach(card => {
+                const title = card.dataset.title;
+                
+                if (searchTerm === '' || title.includes(searchLower)) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            
+            // Update results counter
+            updateResultsCounter(visibleCount, artworks.length);
+            
+            // Show/hide no results message
+            if (visibleCount === 0 && searchTerm !== '') {
+                noResults.style.display = 'block';
+                searchTermSpan.textContent = searchTerm;
+            } else {
+                noResults.style.display = 'none';
+            }
+            
+            // Show/hide clear search button
+            if (searchTerm !== '') {
+                clearSearchBtn.style.display = 'inline-block';
+            } else {
+                clearSearchBtn.style.display = 'none';
+            }
+        }
+
+        // Update results counter text
+        function updateResultsCounter(visible, total) {
+            if (visible === total) {
+                resultsCounter.textContent = `Showing all ${total} artworks`;
+            } else {
+                resultsCounter.textContent = `Showing ${visible} of ${total} artworks`;
+            }
+        }
+
+        // Clear search function
+        function clearSearch() {
+            searchInput.value = '';
+            filterArtworks('');
+            searchInput.focus();
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize grid
+            initializeArtworksGrid();
+            
+            // Search input event
+            searchInput.addEventListener('input', function() {
+                filterArtworks(this.value);
+            });
+            
+            // Clear search button
+            clearSearchBtn.addEventListener('click', clearSearch);
+            
+            // Modal events
+            closeModal.addEventListener('click', closeArtworkModal);
+            
+            // Close modal when clicking outside content
+            artworkModal.addEventListener('click', function(e) {
+                if (e.target === artworkModal) {
+                    closeArtworkModal();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && artworkModal.style.display === 'block') {
+                    closeArtworkModal();
+                }
+                
+                // Focus search with Ctrl+F or Cmd+F
+                if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                    e.preventDefault();
+                    searchInput.focus();
+                    searchInput.select();
+                }
+                
+                // Escape key clears search when modal not open
+                if (e.key === 'Escape' && searchInput.value !== '' && artworkModal.style.display !== 'block') {
+                    clearSearch();
+                }
+            });
+            
+            // Focus search input on page load
+            searchInput.focus();
+        });
+
+        // Make clearSearch available globally for the no results button
+        window.clearSearch = clearSearch;
+    </script>
+</body>
+</html>
