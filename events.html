@@ -158,7 +158,8 @@
             z-index: 2;
         }
         
-        .calendar-day.today::after {
+        /* REMOVED: Circle around today's date */
+        /* .calendar-day.today::after {
             content: '';
             position: absolute;
             top: -3px;
@@ -169,7 +170,7 @@
             border-radius: 50%;
             z-index: 1;
             pointer-events: none;
-        }
+        } */
         
         /* Exhibition Period - Next 10 days */
         .calendar-day.exhibition-period {
@@ -219,6 +220,7 @@
             justify-content: center;
             gap: 30px;
             margin-top: 30px;
+            margin-bottom: 50px; /* INCREASED GAP HERE */
             flex-wrap: wrap;
         }
         
@@ -324,7 +326,7 @@
             text-decoration: underline;
         }
         
-        /* Responsive */
+        /* Responsive - CAN REMOVE THESE IF NOT NEEDED */
         @media (max-width: 768px) {
             .page-header h1 {
                 font-size: 2.5rem;
