@@ -1,1 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Calendar - The London Museum</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific styles for Events Calendar */
+        body {
+            background-color: var(--ash-grey);
+        }
+        
+        .events-page {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+        }
+        
+        .events-container {
+            max-width: 94%;
+            margin: 0 auto;
+            padding: 0 3%;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--yale-blue);
+            margin-bottom: 15px;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Calendar Section */
+        .calendar-section {
+            max-width: 1000px;
+            margin: 0 auto 60px;
+        }
+        
+        .calendar-wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        
+        .calendar-header {
+            background: var(--yale-blue);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .calendar-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .calendar-nav button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-nav button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        /* Days of Week */
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: var(--lavender-blush);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--ash-grey);
+        }
+        
+        .day-header {
+            text-align: center;
+            font-weight: 600;
+            color: var(--yale-blue);
+            font-size: 1.1rem;
+            padding: 10px 0;
+        }
+        
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            padding: 20px;
+            gap: 5px;
+            min-height: 400px;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            border-radius: 8px;
+            cursor: default;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        /* Different day states */
+        .calendar-day.other-month {
+            color: var(--ash-grey);
+            opacity: 0.5;
+        }
+        
+        .calendar-day.weekend {
+            color: var(--cerulean);
+        }
+        
+        /* Today - Special Styling */
+        .calendar-day.today {
+            color: white;
+            background: var(--cerulean);
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .calendar-day.today::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 2px solid var(--cerulean);
+            border-radius: 50%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        /* Exhibition Period - Next 10 days */
+        .calendar-day.exhibition-period {
+            background: rgba(114, 155, 121, 0.15); /* Pastel Muted Tea */
+            color: var(--yale-blue);
+            font-weight: 600;
+            position: relative;
+            cursor: help;
+        }
+        
+        .calendar-day.exhibition-period:hover {
+            background: rgba(114, 155, 121, 0.25);
+            transform: scale(1.05);
+            z-index: 3;
+        }
+        
+        /* Tooltip for exhibition days */
+        .calendar-day.exhibition-period::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--yale-blue);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10;
+            margin-bottom: 8px;
+            pointer-events: none;
+        }
+        
+        .calendar-day.exhibition-period:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Calendar Legend */
+        .calendar-legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .legend-text {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+        
+        .legend-color.today {
+            background: var(--cerulean);
+        }
+        
+        .legend-color.exhibition {
+            background: rgba(114, 155, 121, 0.15);
+            border: 2px solid rgba(114, 155, 121, 0.3);
+        }
+        
+        /* Events Info */
+        .events-info {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .events-info h3 {
+            color: var(--yale-blue);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .events-info p {
+            color: var(--text-dark);
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+        
+        .events-info p:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* CTA Button */
+        .cta-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .book-visit-btn {
+            display: inline-block;
+            background-color: var(--cerulean);
+            color: white;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--cerulean);
+        }
+        
+        .book-visit-btn:hover {
+            background-color: var(--yale-blue);
+            border-color: var(--yale-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33, 80, 110, 0.3);
+        }
+        
+        /* Exhibitions Link */
+        .exhibitions-link-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .exhibitions-link {
+            color: var(--cerulean);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+        
+        .exhibitions-link:hover {
+            color: var(--yale-blue);
+            text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .calendar-header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .calendar-title {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+            
+            .calendar-grid {
+                padding: 15px;
+                gap: 3px;
+            }
+            
+            .calendar-day {
+                font-size: 1rem;
+            }
+            
+            .calendar-legend {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .events-info {
+                padding: 25px 20px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .calendar-day {
+                font-size: 0.9rem;
+            }
+            
+            .day-header {
+                font-size: 1rem;
+                padding: 8px 0;
+            }
+            
+            .calendar-days {
+                padding: 10px 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .calendar-grid {
+                padding: 10px;
+            }
+            
+            .book-visit-btn {
+                padding: 14px 30px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section (Same as index.html) -->
+    <header id="header">
+        <div class="header-container">
+            <!-- Left: Logo -->
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The London Museum">
+                </a>
+            </div>
+            
+            <!-- Center: Search Bar -->
+            <div class="search-container">
+                <input type="text" placeholder="Search artists, artworks...">
+                <button>Search</button>
+            </div>
+                        
+            <!-- Right: Navigation Menu -->
+            <nav class="main-nav">
+                <!-- Collections Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Collections</span>
+                    <div class="dropdown-content">
+                        <a href="artists.html">Browse all Artists</a>
+                        <a href="artworks.html">Browse all Artworks</a>
+                        <a href="search-collection.html">Search Collection</a>
+                    </div>
+                </div>
+            
+                <!-- Exhibitions Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Exhibitions & Events</span>
+                    <div class="dropdown-content">
+                        <a href="exhibitions.html">Current Exhibitions</a>
+                        <a href="events.html" class="active">Events Calendar</a>
+                        <a href="upcoming-exhibitions.html">Upcoming Exhibitions</a>
+                    </div>
+                </div>
+            
+                <!-- Shop Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Shop</span>
+                    <div class="dropdown-content">
+                        <a href="shop.html">Exhibition Merchandise</a>
+                        <a href="gifts.html">Gifts & Souvenirs</a>
+                        <a href="prints.html">Prints & Posters</a>
+                    </div>
+                </div>
+            
+                <!-- Visit Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Visit</span>
+                    <div class="dropdown-content">
+                        <a href="book-visit.html">Book your Visit</a>
+                        <a href="cafe.html">Café & Facilities</a>
+                        <a href="directions.html">Getting Here & Map</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Events Calendar Page Content -->
+    <main class="events-page">
+        <div class="events-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Events Calendar</h1>
+                <p>Plan your visit to The London Museum. See exhibition dates, special events, and plan your perfect day exploring art and culture.</p>
+            </div>
+            
+            <!-- Calendar Section -->
+            <div class="calendar-section">
+                <div class="calendar-wrapper">
+                    <!-- Calendar Header with Month/Year and Navigation -->
+                    <div class="calendar-header">
+                        <h2 class="calendar-title" id="calendarTitle">January 2026</h2>
+                        <div class="calendar-nav">
+                            <button id="prevMonth" aria-label="Previous month">‹</button>
+                            <button id="todayBtn" aria-label="Go to today">Today</button>
+                            <button id="nextMonth" aria-label="Next month">›</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Days of Week -->
+                    <div class="calendar-days">
+                        <div class="day-header">Sun</div>
+                        <div class="day-header">Mon</div>
+                        <div class="day-header">Tue</div>
+                        <div class="day-header">Wed</div>
+                        <div class="day-header">Thu</div>
+                        <div class="day-header">Fri</div>
+                        <div class="day-header">Sat</div>
+                    </div>
+                    
+                    <!-- Calendar Grid (will be populated by JavaScript) -->
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar days will be dynamically inserted here -->
+                    </div>
+                </div>
+                
+                <!-- Calendar Legend -->
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <div class="legend-color today"></div>
+                        <span class="legend-text">Today's date</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color exhibition"></div>
+                        <span class="legend-text">Surrealism & Perspective Exhibition</span>
+                    </div>
+                </div>
+                
+                <!-- Events Information -->
+                <div class="events-info">
+                    <h3><span class="icon">📅</span> Current Exhibition Period</h3>
+                    <p>The highlighted dates show when our current exhibition "<strong>Surrealism & Perspective</strong>" is running. This exhibition explores the boundaries of reality through three interconnected works that challenge conventional perception.</p>
+                    <p>The exhibition is open during regular museum hours (10am – 6pm daily). Special curator talks and guided tours are available on weekends - check back for specific event dates.</p>
+                    <p><em>Note: The museum is closed on December 25th and January 1st.</em></p>
+                </div>
+            </div>
+            
+            <!-- CTA Button -->
+            <div class="cta-container">
+                <a href="book-visit.html" class="book-visit-btn">Book Your Visit Now</a>
+                
+                <div class="exhibitions-link-container">
+                    <a href="exhibitions.html" class="exhibitions-link">
+                        <span>📅 Also view Current Exhibitions</span>
+                        <span>→</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer Section (Same as index.html) -->
+    <footer id="footer">
+        <div class="footer-container">
+            <!-- Section 1: Main Content Row -->
+            <div class="footer-main-row">
+                <!-- Left: Museum Logo -->
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="The London Museum">
+                </div>
+                
+                <!-- Center: Support Logos with Text -->
+                <div class="support-section">
+                    <!-- Mayor of London -->
+                    <div class="support-item">
+                        <div class="support-logo">
+                            <img src="images/mayor-of-london.png" alt="Mayor of London">
+                        </div>
+                        <p class="support-text">Supported by Mayor of London</p>
+                    </div>
+                    
+                    <!-- Arts Council England -->
+                    <div class="support-item">
+                        <div class="support-logo">
+                            <img src="images/arts-council-england.png" alt="Arts Council England">
+                        </div>
+                        <p class="support-text">Supported using public funding by Arts Council England</p>
+                    </div>
+                </div>
+                
+                <!-- Right: Social Media -->
+                <div class="footer-social">
+                    <h3 class="footer-heading">Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/wearelondonmuseum/" target="_blank" class="social-icon" aria-label="Facebook">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://www.instagram.com/wearelondonmuseum/" target="_blank" class="social-icon" aria-label="Instagram">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="https://x.com/LDN_Museum" target="_blank" class="social-icon" aria-label="X (Twitter)">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                            <span>X</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Section 2: Legal Information -->
+            <div class="footer-legal-row">
+                <div class="legal-links">
+                    <a href="#" class="legal-link">Terms of Use</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Privacy Policy</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Cookies</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Website Accessibility Policy</a>
+                </div>
+                
+                <div class="charity-info">
+                    <p>The London Museum registered charity number 1139250</p>
+                </div>
+                
+                <div class="copyright">
+                    <p>&copy; 2026 The London Museum. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Calendar functionality
+        let currentDate = new Date();
+        
+        // DOM Elements
+        const calendarTitle = document.getElementById('calendarTitle');
+        const calendarGrid = document.getElementById('calendarGrid');
+        const prevMonthBtn = document.getElementById('prevMonth');
+        const nextMonthBtn = document.getElementById('nextMonth');
+        const todayBtn = document.getElementById('todayBtn');
+        
+        // Month names
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        
+        // Update calendar title
+        function updateCalendarTitle() {
+            const month = monthNames[currentDate.getMonth()];
+            const year = currentDate.getFullYear();
+            calendarTitle.textContent = `${month} ${year}`;
+        }
+        
+        // Get days in month
+        function getDaysInMonth(year, month) {
+            return new Date(year, month + 1, 0).getDate();
+        }
+        
+        // Get first day of month (0 = Sunday, 1 = Monday, etc.)
+        function getFirstDayOfMonth(year, month) {
+            return new Date(year, month, 1).getDay();
+        }
+        
+        // Check if date is today
+        function isToday(year, month, day) {
+            const today = new Date();
+            return today.getFullYear() === year &&
+                   today.getMonth() === month &&
+                   today.getDate() === day;
+        }
+        
+        // Check if date is in exhibition period (today + next 10 days)
+        function isExhibitionPeriod(year, month, day) {
+            const today = new Date();
+            const checkDate = new Date(year, month, day);
+            
+            // Reset times to compare only dates
+            today.setHours(0, 0, 0, 0);
+            checkDate.setHours(0, 0, 0, 0);
+            
+            // Calculate difference in days
+            const diffTime = checkDate - today;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            // Exhibition runs for 11 days total (today + next 10)
+            return diffDays >= 0 && diffDays <= 10;
+        }
+        
+        // Check if date is weekend
+        function isWeekend(year, month, day) {
+            const date = new Date(year, month, day);
+            const dayOfWeek = date.getDay();
+            return dayOfWeek === 0 || dayOfWeek === 6; // 0 = Sunday, 6 = Saturday
+        }
+        
+        // Render calendar
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            updateCalendarTitle();
+            calendarGrid.innerHTML = '';
+            
+            const daysInMonth = getDaysInMonth(year, month);
+            const firstDay = getFirstDayOfMonth(year, month);
+            
+            // Add empty cells for days before first day of month
+            for (let i = 0; i < firstDay; i++) {
+                const prevMonthDays = getDaysInMonth(year, month - 1);
+                const day = document.createElement('div');
+                day.className = 'calendar-day other-month';
+                day.textContent = prevMonthDays - firstDay + i + 1;
+                calendarGrid.appendChild(day);
+            }
+            
+            // Add days of current month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                // Add tooltip for exhibition days
+                if (isExhibitionPeriod(year, month, day)) {
+                    dayElement.dataset.tooltip = "Surrealism & Perspective Exhibition runs through these dates";
+                }
+                
+                // Apply styles based on date properties
+                if (isToday(year, month, day)) {
+                    dayElement.classList.add('today');
+                } else if (isExhibitionPeriod(year, month, day)) {
+                    dayElement.classList.add('exhibition-period');
+                } else if (isWeekend(year, month, day)) {
+                    dayElement.classList.add('weekend');
+                }
+                
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Calculate how many cells we have so far
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = 42 - totalCells; // 6 rows * 7 days = 42 cells
+            
+            // Add empty cells for days after last day of month
+            for (let i = 1; i <= remainingCells; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day other-month';
+                day.textContent = i;
+                calendarGrid.appendChild(day);
+            }
+        }
+        
+        // Navigation functions
+        function goToPrevMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+        
+        function goToNextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+        
+        function goToToday() {
+            currentDate = new Date();
+            renderCalendar();
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial render
+            renderCalendar();
+            
+            // Navigation events
+            prevMonthBtn.addEventListener('click', goToPrevMonth);
+            nextMonthBtn.addEventListener('click', goToNextMonth);
+            todayBtn.addEventListener('click', goToToday);
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    goToPrevMonth();
+                } else if (e.key === 'ArrowRight') {
+                    goToNextMonth();
+                } else if (e.key === 't' || e.key === 'T') {
+                    goToToday();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
