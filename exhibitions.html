@@ -1,1 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Exhibitions - The London Museum</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific styles for Current Exhibitions */
+        body {
+            background-color: var(--ash-grey);
+        }
+        
+        .exhibitions-page {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+        }
+        
+        .exhibitions-container {
+            max-width: 94%;
+            margin: 0 auto;
+            padding: 0 3%;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--yale-blue);
+            margin-bottom: 15px;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Exhibition Hero */
+        .exhibition-hero {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 60px;
+        }
+        
+        .exhibition-badge {
+            background: var(--cerulean);
+            color: white;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border-radius: 100px;
+        }
+        
+        .exhibition-header {
+            padding: 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--lavender-blush);
+        }
+        
+        .exhibition-title {
+            font-size: 2.5rem;
+            color: var(--yale-blue);
+            margin-bottom: 10px;
+        }
+        
+        .exhibition-subtitle {
+            font-size: 1.3rem;
+            color: var(--cerulean);
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        .exhibition-meta {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            text-align: center;
+        }
+        
+        .meta-label {
+            display: block;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .meta-value {
+            display: block;
+            color: var(--yale-blue);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        /* Exhibition Content */
+        .exhibition-content {
+            padding: 40px;
+        }
+        
+        .exhibition-description {
+            max-width: 800px;
+            margin: 0 auto 50px;
+        }
+        
+        .exhibition-description h3 {
+            color: var(--yale-blue);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .exhibition-description p {
+            color: var(--text-dark);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        /* Artworks Gallery */
+        .artworks-gallery {
+            margin-bottom: 60px;
+        }
+        
+        .gallery-title {
+            text-align: center;
+            color: var(--yale-blue);
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .artwork-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .artwork-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .artwork-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .artwork-info {
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .artwork-title {
+            color: var(--yale-blue);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .artwork-description {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* Exhibition Details */
+        .exhibition-details {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .details-title {
+            color: var(--yale-blue);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .detail-item {
+            padding: 25px;
+            background: var(--lavender-blush);
+            border-radius: 8px;
+            border-left: 4px solid var(--cerulean);
+        }
+        
+        .detail-item h4 {
+            color: var(--yale-blue);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .detail-item p {
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        /* Call to Action */
+        .cta-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 16px 40px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button.primary {
+            background-color: var(--cerulean);
+            color: white;
+            border: 2px solid var(--cerulean);
+        }
+        
+        .cta-button.primary:hover {
+            background-color: var(--yale-blue);
+            border-color: var(--yale-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33, 80, 110, 0.3);
+        }
+        
+        .cta-button.secondary {
+            background-color: transparent;
+            color: var(--cerulean);
+            border: 2px solid var(--cerulean);
+        }
+        
+        .cta-button.secondary:hover {
+            background-color: rgba(26, 125, 158, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Related Links */
+        .related-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .related-link {
+            color: var(--cerulean);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+        
+        .related-link:hover {
+            color: var(--yale-blue);
+            text-decoration: underline;
+        }
+        
+        /* Upcoming Exhibitions */
+        .upcoming-exhibitions {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+        
+        .upcoming-title {
+            color: var(--yale-blue);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .upcoming-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .upcoming-card {
+            background: var(--lavender-blush);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px dashed var(--ash-grey);
+        }
+        
+        .upcoming-card h4 {
+            color: var(--yale-blue);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .upcoming-card p {
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .coming-soon {
+            color: var(--cerulean);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section (Same as index.html) -->
+    <header id="header">
+        <div class="header-container">
+            <!-- Left: Logo -->
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The London Museum">
+                </a>
+            </div>
+            
+            <!-- Center: Search Bar -->
+            <div class="search-container">
+                <input type="text" placeholder="Search artists, artworks...">
+                <button>Search</button>
+            </div>
+                        
+            <!-- Right: Navigation Menu -->
+            <nav class="main-nav">
+                <!-- Collections Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Collections</span>
+                    <div class="dropdown-content">
+                        <a href="artists.html">Browse all Artists</a>
+                        <a href="artworks.html">Browse all Artworks</a>
+                        <a href="search-collection.html">Search Collection</a>
+                    </div>
+                </div>
+            
+                <!-- Exhibitions Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Exhibitions & Events</span>
+                    <div class="dropdown-content">
+                        <a href="exhibitions.html" class="active">Current Exhibitions</a>
+                        <a href="events.html">Events Calendar</a>
+                        <a href="upcoming-exhibitions.html">Upcoming Exhibitions</a>
+                    </div>
+                </div>
+            
+                <!-- Shop Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Shop</span>
+                    <div class="dropdown-content">
+                        <a href="shop.html">Exhibition Merchandise</a>
+                        <a href="gifts.html">Gifts & Souvenirs</a>
+                        <a href="prints.html">Prints & Posters</a>
+                    </div>
+                </div>
+            
+                <!-- Visit Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Visit</span>
+                    <div class="dropdown-content">
+                        <a href="book-visit.html">Book your Visit</a>
+                        <a href="cafe.html">Café & Facilities</a>
+                        <a href="directions.html">Getting Here & Map</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Current Exhibitions Page Content -->
+    <main class="exhibitions-page">
+        <div class="exhibitions-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Current Exhibitions</h1>
+                <p>Explore our current exhibitions showcasing innovative artistic visions and challenging perspectives on reality, perception, and consciousness.</p>
+            </div>
+            
+            <!-- Exhibition Hero -->
+            <div class="exhibition-hero">
+                <div class="exhibition-header">
+                    <div class="exhibition-badge">Current Exhibition</div>
+                    <h2 class="exhibition-title">Surrealism & Perspective</h2>
+                    <h3 class="exhibition-subtitle">Exploring the Boundaries of Reality</h3>
+                    
+                    <div class="exhibition-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Location</span>
+                            <span class="meta-value">Main Gallery</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Dates</span>
+                            <span class="meta-value">January 1 - March 31, 2026</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Admission</span>
+                            <span class="meta-value">Free with Museum Entry</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Exhibition Content -->
+                <div class="exhibition-content">
+                    <!-- Exhibition Description -->
+                    <div class="exhibition-description">
+                        <h3>About the Exhibition</h3>
+                        <p>This exhibition explores the boundaries of reality through three interconnected works that challenge conventional perception and invite viewers into a world of imaginative possibility. Drawing from the rich traditions of surrealism, the exhibition examines how artistic vision transforms our understanding of space, time, and consciousness.</p>
+                        <p>Each artwork in this exhibition represents a different approach to surrealist expression, from the mathematical precision inspired by M.C. Escher to the dreamlike qualities reminiscent of Salvador Dalí. The works collectively investigate how perception can be manipulated, reality can be questioned, and new perspectives can emerge through artistic intervention.</p>
+                        <p>Visitors are invited to engage with the works not just as observers, but as participants in a dialogue about the nature of reality. The exhibition challenges viewers to question what they see, how they see it, and why certain interpretations emerge over others.</p>
+                    </div>
+                    
+                    <!-- Artworks Gallery -->
+                    <div class="artworks-gallery">
+                        <h3 class="gallery-title">Featured Artworks</h3>
+                        <div class="gallery-grid">
+                            <!-- Artwork 1 -->
+                            <div class="artwork-card">
+                                <img src="images/artworks/memory-orb-1.png" alt="Memory Orb I" class="artwork-image">
+                                <div class="artwork-info">
+                                    <h4 class="artwork-title">Memory Orb I</h4>
+                                    <p class="artwork-description">The first in a series of three interconnected works exploring memory, perspective, and the distortion of reality through spherical lenses.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Artwork 2 -->
+                            <div class="artwork-card">
+                                <img src="images/artworks/memory-orb-2.png" alt="Memory Orb II" class="artwork-image">
+                                <div class="artwork-info">
+                                    <h4 class="artwork-title">Memory Orb II</h4>
+                                    <p class="artwork-description">Continuing the exploration of memory and perception, this work examines how personal history can be refracted and reinterpreted.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Artwork 3 -->
+                            <div class="artwork-card">
+                                <img src="images/artworks/memory-orb-3.png" alt="Memory Orb III" class="artwork-image">
+                                <div class="artwork-info">
+                                    <h4 class="artwork-title">Memory Orb III</h4>
+                                    <p class="artwork-description">The final piece in the trilogy, completing the examination of how memory shapes our understanding of space and time.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exhibition Details -->
+                    <div class="exhibition-details">
+                        <h3 class="details-title">Exhibition Information</h3>
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <h4><span>🕒</span> Opening Hours</h4>
+                                <p>Monday - Sunday: 10:00 AM - 6:00 PM<br>
+                                Last admission: 5:30 PM<br>
+                                Closed: December 25, January 1</p>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <h4><span>📍</span> Location & Access</h4>
+                                <p>Main Gallery, Level 2<br>
+                                Fully wheelchair accessible<br>
+                                Audio guides available<br>
+                                Guided tours: Saturdays at 2:00 PM</p>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <h4><span>🎫</span> Tickets & Admission</h4>
+                                <p>Free with museum admission<br>
+                                No additional booking required<br>
+                                Group visits: Please book in advance<br>
+                                Student/senior discounts available</p>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <h4><span>📚</span> Educational Resources</h4>
+                                <p>Exhibition guide available<br>
+                                School workshops available<br>
+                                Family activity packs<br>
+                                Curator talks: First Sunday of each month</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Call to Action -->
+                    <div class="cta-section">
+                        <div class="cta-buttons">
+                            <a href="book-visit.html" class="cta-button primary">Book Your Visit</a>
+                            <a href="events.html" class="cta-button secondary">View Events Calendar</a>
+                        </div>
+                        
+                        <div class="related-links">
+                            <a href="shop.html" class="related-link">
+                                <span>🛍️ Exhibition merchandise available in our shop</span>
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Upcoming Exhibitions Preview -->
+                    <div class="upcoming-exhibitions">
+                        <h3 class="upcoming-title">Coming Soon</h3>
+                        <div class="upcoming-grid">
+                            <div class="upcoming-card">
+                                <h4>Urban Perspectives</h4>
+                                <p>A photographic exploration of London's changing cityscape through the lenses of contemporary urban photographers.</p>
+                                <div class="coming-soon">Opening April 2026</div>
+                            </div>
+                            
+                            <div class="upcoming-card">
+                                <h4>Digital Realities</h4>
+                                <p>An immersive exhibition examining the intersection of digital technology and traditional art forms in the 21st century.</p>
+                                <div class="coming-soon">Opening June 2026</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer Section (Same as index.html) -->
+    <footer id="footer">
+        <div class="footer-container">
+            <!-- Section 1: Main Content Row -->
+            <div class="footer-main-row">
+                <!-- Left: Museum Logo -->
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="The London Museum">
+                </div>
+                
+                <!-- Center: Support Logos with Text -->
+                <div class="support-section">
+                    <!-- Mayor of London -->
+                    <div class="support-item">
+                        <div class="support-logo">
+                            <img src="images/mayor-of-london.png" alt="Mayor of London">
+                        </div>
+                        <p class="support-text">Supported by Mayor of London</p>
+                    </div>
+                    
+                    <!-- Arts Council England -->
+                    <div class="support-item">
+                        <div class="support-logo">
+                            <img src="images/arts-council-england.png" alt="Arts Council England">
+                        </div>
+                        <p class="support-text">Supported using public funding by Arts Council England</p>
+                    </div>
+                </div>
+                
+                <!-- Right: Social Media -->
+                <div class="footer-social">
+                    <h3 class="footer-heading">Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/wearelondonmuseum/" target="_blank" class="social-icon" aria-label="Facebook">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://www.instagram.com/wearelondonmuseum/" target="_blank" class="social-icon" aria-label="Instagram">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="https://x.com/LDN_Museum" target="_blank" class="social-icon" aria-label="X (Twitter)">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                            <span>X</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Section 2: Legal Information -->
+            <div class="footer-legal-row">
+                <div class="legal-links">
+                    <a href="#" class="legal-link">Terms of Use</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Privacy Policy</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Cookies</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Website Accessibility Policy</a>
+                </div>
+                
+                <div class="charity-info">
+                    <p>The London Museum registered charity number 1139250</p>
+                </div>
+                
+                <div class="copyright">
+                    <p>&copy; 2026 The London Museum. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple image loading check
+        document.addEventListener('DOMContentLoaded', function() {
+            const artworkImages = document.querySelectorAll('.artwork-image');
+            
+            artworkImages.forEach(img => {
+                // Check if image loads successfully
+                img.onerror = function() {
+                    console.log('Image failed to load:', img.src);
+                    // You could add a fallback image here if needed
+                };
+            });
+            
+            // Add smooth scroll for anchor links (if any)
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#') {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
