@@ -240,7 +240,7 @@
             margin: 0;
         }
         
-        /* Call to Action */
+        /* Call to Action - UPDATED TO MATCH CAFÉ PAGE */
         .cta-section {
             text-align: center;
             margin-bottom: 60px;
@@ -253,47 +253,33 @@
             margin-bottom: 30px;
         }
         
-        .cta-button {
+        .book-visit-btn {
             display: inline-block;
+            background-color: var(--cerulean);
+            color: white;
+            text-decoration: none;
             padding: 16px 40px;
             border-radius: 100px;
             font-weight: 600;
-            font-size: 1.1rem;
-            text-decoration: none;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
-        }
-        
-        .cta-button.primary {
-            background-color: var(--cerulean);
-            color: white;
             border: 2px solid var(--cerulean);
         }
         
-        .cta-button.primary:hover {
+        .book-visit-btn:hover {
             background-color: var(--yale-blue);
             border-color: var(--yale-blue);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(33, 80, 110, 0.3);
         }
         
-        .cta-button.secondary {
-            background-color: transparent;
-            color: var(--cerulean);
-            border: 2px solid var(--cerulean);
-        }
-        
-        .cta-button.secondary:hover {
-            background-color: rgba(26, 125, 158, 0.1);
-            transform: translateY(-2px);
-        }
-        
-        /* Related Links */
-        .related-links {
+        /* Shop Link - UPDATED TO MATCH CAFÉ PAGE */
+        .shop-link-container {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 20px;
         }
         
-        .related-link {
+        .shop-link {
             color: var(--cerulean);
             text-decoration: none;
             font-weight: 600;
@@ -304,58 +290,12 @@
             transition: color 0.3s ease;
         }
         
-        .related-link:hover {
+        .shop-link:hover {
             color: var(--yale-blue);
             text-decoration: underline;
         }
         
-        /* Upcoming Exhibitions */
-        .upcoming-exhibitions {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-        }
-        
-        .upcoming-title {
-            color: var(--yale-blue);
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .upcoming-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-        }
-        
-        .upcoming-card {
-            background: var(--lavender-blush);
-            padding: 25px;
-            border-radius: 8px;
-            border: 1px dashed var(--ash-grey);
-        }
-        
-        .upcoming-card h4 {
-            color: var(--yale-blue);
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-        }
-        
-        .upcoming-card p {
-            color: var(--text-dark);
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-        
-        .coming-soon {
-            color: var(--cerulean);
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        /* REMOVED: Upcoming Exhibitions section (moved to upcoming-exhibitions.html) */
     </style>
 </head>
 <body>
@@ -535,35 +475,18 @@
                     <!-- Call to Action -->
                     <div class="cta-section">
                         <div class="cta-buttons">
-                            <a href="book-visit.html" class="cta-button primary">Book Your Visit</a>
-                            <a href="events.html" class="cta-button secondary">View Events Calendar</a>
+                            <a href="book-visit.html" class="book-visit-btn">Book Your Visit</a>
                         </div>
                         
-                        <div class="related-links">
-                            <a href="shop.html" class="related-link">
+                        <div class="shop-link-container">
+                            <a href="shop.html" class="shop-link">
                                 <span>🛍️ Exhibition merchandise available in our shop</span>
                                 <span>→</span>
                             </a>
                         </div>
                     </div>
                     
-                    <!-- Upcoming Exhibitions Preview -->
-                    <div class="upcoming-exhibitions">
-                        <h3 class="upcoming-title">Coming Soon</h3>
-                        <div class="upcoming-grid">
-                            <div class="upcoming-card">
-                                <h4>Urban Perspectives</h4>
-                                <p>A photographic exploration of London's changing cityscape through the lenses of contemporary urban photographers.</p>
-                                <div class="coming-soon">Opening April 2026</div>
-                            </div>
-                            
-                            <div class="upcoming-card">
-                                <h4>Digital Realities</h4>
-                                <p>An immersive exhibition examining the intersection of digital technology and traditional art forms in the 21st century.</p>
-                                <div class="coming-soon">Opening June 2026</div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- REMOVED: Upcoming Exhibitions section - moved to upcoming-exhibitions.html -->
                 </div>
             </div>
         </div>
