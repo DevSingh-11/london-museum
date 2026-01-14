@@ -555,28 +555,51 @@
     </footer>
 
     <script>
-        // Prints data - using same artworks as artworks.html
+        // Prints data - SORTED in proper alphabetical order with updated prices
         const prints = [
-            { name: "images/artworks/a-cry-for-nature.png", title: "A Cry for Nature", price: 24.99 },
-            { name: "images/artworks/a-drop-of-faith.png", title: "A Drop of Faith", price: 22.99 },
-            { name: "images/artworks/a-shadow-in-the-smoke.png", title: "A Shadow in the Smoke", price: 19.99 },
-            { name: "images/artworks/bond-of-self.png", title: "Bond of Self", price: 26.99 },
-            { name: "images/artworks/eye.png", title: "The Eye", price: 21.99 },
-            { name: "images/artworks/graphite-tears.png", title: "Graphite Tears", price: 23.99 },
-            { name: "images/artworks/grey-and-white.png", title: "Grey and White", price: 20.99 },
+            // A titles
+            { name: "images/artworks/a-cry-for-nature.png", title: "A Cry for Nature", price: 21.99 },
+            { name: "images/artworks/a-drop-of-faith.png", title: "A Drop of Faith", price: 23.99 },
+            { name: "images/artworks/a-shadow-in-the-smoke.png", title: "A Shadow in the Smoke", price: 23.99 },
+            
+            // B titles
+            { name: "images/artworks/bond-of-self.png", title: "Bond of Self", price: 29.99 },
+            
+            // G titles
+            { name: "images/artworks/graphite-tears.png", title: "Graphite Tears", price: 25.99 },
+            { name: "images/artworks/grey-and-white.png", title: "Grey and White", price: 29.99 },
+            
+            // H titles
             { name: "images/artworks/hand-with-refracting-sphere.png", title: "Hand with Refracting Sphere", price: 27.99 },
+            
+            // M titles
             { name: "images/artworks/memory-orb-1.png", title: "Memory Orb I", price: 25.99 },
             { name: "images/artworks/memory-orb-2.png", title: "Memory Orb II", price: 25.99 },
             { name: "images/artworks/memory-orb-3.png", title: "Memory Orb III", price: 25.99 },
-            { name: "images/artworks/rayograph.png", title: "Rayograph", price: 18.99 },
-            { name: "images/artworks/self-creation.png", title: "Self Creation", price: 28.99 },
-            { name: "images/artworks/tears-of-the-past.png", title: "Tears of the Past", price: 29.99 },
-            { name: "images/artworks/the-persistence-of-time.png", title: "The Persistence of Time", price: 26.99 },
-            { name: "images/artworks/the-rhinos.png", title: "The Rhinos", price: 24.99 },
-            { name: "images/artworks/the-treachery-of-objects-1.png", title: "The Treachery of Objects I", price: 22.99 },
-            { name: "images/artworks/the-treachery-of-objects-2.png", title: "The Treachery of Objects II", price: 22.99 },
-            { name: "images/artworks/the-treachery-of-objects-3.png", title: "The Treachery of Objects III", price: 22.99 },
-            { name: "images/artworks/the-treachery-of-objects-4.png", title: "The Treachery of Objects IV", price: 22.99 }
+            
+            // R titles
+            { name: "images/artworks/rayograph.png", title: "Rayograph", price: 21.99 },
+            
+            // S titles
+            { name: "images/artworks/self-creation.png", title: "Self Creation", price: 29.99 },
+            
+            // T titles (The titles are sorted by the main word, ignoring "The")
+            { name: "images/artworks/tears-of-the-past.png", title: "Tears of the Past", price: 27.99 },
+            
+            // The Eye (sorted under "E" for Eye)
+            { name: "images/artworks/eye.png", title: "The Eye", price: 25.99 },
+            
+            // The Persistence of Time (sorted under "P" for Persistence)
+            { name: "images/artworks/the-persistence-of-time.png", title: "The Persistence of Time", price: 23.99 },
+            
+            // The Rhinos (sorted under "R" for Rhinos)
+            { name: "images/artworks/the-rhinos.png", title: "The Rhinos", price: 23.99 },
+            
+            // The Treachery of Objects (sorted under "T" for Treachery)
+            { name: "images/artworks/the-treachery-of-objects-1.png", title: "The Treachery of Objects I", price: 21.99 },
+            { name: "images/artworks/the-treachery-of-objects-2.png", title: "The Treachery of Objects II", price: 21.99 },
+            { name: "images/artworks/the-treachery-of-objects-3.png", title: "The Treachery of Objects III", price: 21.99 },
+            { name: "images/artworks/the-treachery-of-objects-4.png", title: "The Treachery of Objects IV", price: 21.99 }
         ];
 
         // Initialize cart
