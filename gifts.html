@@ -275,6 +275,84 @@
             border-color: var(--cerulean);
         }
         
+        /* NEW: Remove Item Modal */
+        .remove-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .remove-modal.active {
+            display: flex;
+        }
+        
+        .remove-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.3s ease;
+        }
+        
+        .remove-modal-title {
+            color: var(--yale-blue);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .remove-modal-subtitle {
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+        
+        .color-remove-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .color-remove-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            border: 2px solid var(--ash-grey);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .color-remove-option:hover {
+            border-color: var(--cerulean);
+            background: rgba(26, 125, 158, 0.05);
+        }
+        
+        .color-remove-name {
+            color: var(--text-dark);
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        .color-remove-price {
+            color: var(--cerulean);
+            font-weight: 600;
+        }
+        
         /* Cart Summary */
         .cart-summary {
             background: white;
@@ -328,6 +406,30 @@
             font-weight: 600;
             flex: 1;
             text-align: right;
+        }
+        
+        /* NEW: Remove Button for Cart Items */
+        .remove-item-btn {
+            background: transparent;
+            border: none;
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 10px;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        .remove-item-btn:hover {
+            color: #ff3b3b;
+            background: rgba(255, 107, 107, 0.1);
+            transform: scale(1.1);
         }
         
         .empty-cart {
@@ -480,12 +582,18 @@
             }
             
             .cart-summary,
-            .checkout-section {
+            .checkout-section,
+            .color-modal-content,
+            .remove-modal-content {
                 padding: 30px 20px;
             }
             
-            .color-modal-content {
-                padding: 30px 20px;
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
             }
         }
     </style>
@@ -632,6 +740,22 @@
         </div>
     </div>
     
+    <!-- NEW: Remove Item Modal -->
+    <div class="remove-modal" id="removeModal">
+        <div class="remove-modal-content">
+            <h3 class="remove-modal-title" id="removeModalTitle">Remove Item</h3>
+            <p class="remove-modal-subtitle" id="removeModalSubtitle"></p>
+            
+            <div class="color-remove-options" id="colorRemoveOptions">
+                <!-- Remove options will be dynamically inserted here -->
+            </div>
+            
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" id="cancelRemove">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Footer Section (Same as index.html) -->
     <footer id="footer">
         <div class="footer-container">
@@ -738,6 +862,7 @@
         // Modal state
         let currentProductIndex = null;
         let selectedColor = null;
+        let currentProductForRemoval = null;
         
         // DOM Elements
         const giftsGrid = document.getElementById('giftsGrid');
@@ -756,6 +881,13 @@
         const colorOptionsContainer = document.getElementById('colorOptions');
         const cancelColorBtn = document.getElementById('cancelColor');
         const addToCartBtn = document.getElementById('addToCart');
+        
+        // NEW: Remove modal elements
+        const removeModal = document.getElementById('removeModal');
+        const removeModalTitle = document.getElementById('removeModalTitle');
+        const removeModalSubtitle = document.getElementById('removeModalSubtitle');
+        const colorRemoveOptions = document.getElementById('colorRemoveOptions');
+        const cancelRemoveBtn = document.getElementById('cancelRemove');
 
         // Initialize gifts grid
         function initializeGiftsGrid() {
@@ -781,7 +913,7 @@
                 giftsGrid.appendChild(card);
             });
             
-            // Add event listeners for plus buttons only
+            // Add event listeners for plus buttons
             document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const index = parseInt(this.getAttribute('data-index'));
@@ -789,7 +921,81 @@
                 });
             });
             
+            // Add event listeners for minus buttons
+            document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    handleMinusClick(index);
+                });
+            });
+            
             updateCart();
+        }
+
+        // NEW: Handle minus button click
+        function handleMinusClick(index) {
+            const productItems = cart.filter(item => item.productIndex === index);
+            
+            if (productItems.length === 0) {
+                return; // Shouldn't happen since button is disabled
+            } else if (productItems.length === 1) {
+                // Only one item of this product, remove it directly
+                removeCartItem(productItems[0].id);
+            } else {
+                // Multiple items, open removal modal
+                openRemoveModal(index, productItems);
+            }
+        }
+
+        // NEW: Open remove item modal
+        function openRemoveModal(productIndex, items) {
+            currentProductForRemoval = productIndex;
+            
+            const gift = gifts[productIndex];
+            removeModalTitle.textContent = `Remove London Museum ${gift.title}`;
+            removeModalSubtitle.textContent = `Select which color to remove (${items.length} items in cart):`;
+            
+            // Clear previous options
+            colorRemoveOptions.innerHTML = '';
+            
+            // Create remove options
+            items.forEach(item => {
+                const color = colorOptions.find(c => c.value === item.colorValue);
+                const removeOption = document.createElement('div');
+                removeOption.className = 'color-remove-option';
+                removeOption.dataset.id = item.id;
+                
+                removeOption.innerHTML = `
+                    <div class="color-swatch" style="background-color: ${color?.hex || '#CCCCCC'}"></div>
+                    <div class="color-remove-name">${item.color}</div>
+                    <div class="color-remove-price">£${item.price.toFixed(2)}</div>
+                `;
+                
+                removeOption.addEventListener('click', () => removeCartItem(item.id));
+                colorRemoveOptions.appendChild(removeOption);
+            });
+            
+            removeModal.classList.add('active');
+        }
+
+        // NEW: Remove item from cart by ID
+        function removeCartItem(itemId) {
+            // Find the item to get its product index
+            const itemToRemove = cart.find(item => item.id === itemId);
+            const productIndex = itemToRemove ? itemToRemove.productIndex : null;
+            
+            // Remove from cart
+            cart = cart.filter(item => item.id !== itemId);
+            
+            // Close modals
+            colorModal.classList.remove('active');
+            removeModal.classList.remove('active');
+            
+            // Update displays
+            updateCart();
+            if (productIndex !== null) {
+                updateProductQuantityDisplay(productIndex);
+            }
         }
 
         // Open color selection modal
@@ -847,7 +1053,7 @@
             
             // Add to cart with unique ID (product + color)
             const cartItem = {
-                id: `${currentProductIndex}-${selectedColor}`,
+                id: `${currentProductIndex}-${selectedColor}-${Date.now()}`,
                 productIndex: currentProductIndex,
                 title: gift.title,
                 color: colorName,
@@ -892,7 +1098,7 @@
                 let cartHTML = '';
                 let total = 0;
                 
-                cart.forEach((item, index) => {
+                cart.forEach((item) => {
                     total += item.price;
                     
                     cartHTML += `
@@ -902,11 +1108,20 @@
                                 <div class="cart-item-color">Color: ${item.color}</div>
                             </div>
                             <div class="cart-item-price">£${item.price.toFixed(2)}</div>
+                            <button class="remove-item-btn" data-id="${item.id}" aria-label="Remove item">×</button>
                         </div>
                     `;
                 });
                 
                 cartItems.innerHTML = cartHTML;
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-item-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const itemId = this.getAttribute('data-id');
+                        removeCartItem(itemId);
+                    });
+                });
             }
             
             // Update totals
@@ -969,10 +1184,20 @@
         
         addToCartBtn.addEventListener('click', addItemToCart);
         
-        // Close modal when clicking outside
+        cancelRemoveBtn.addEventListener('click', () => {
+            removeModal.classList.remove('active');
+        });
+        
+        // Close modals when clicking outside
         colorModal.addEventListener('click', (e) => {
             if (e.target === colorModal) {
                 colorModal.classList.remove('active');
+            }
+        });
+        
+        removeModal.addEventListener('click', (e) => {
+            if (e.target === removeModal) {
+                removeModal.classList.remove('active');
             }
         });
 
