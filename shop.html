@@ -1,1 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exhibition Merchandise - The London Museum</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific styles for Exhibition Merchandise */
+        body {
+            background-color: var(--ash-grey);
+        }
+        
+        .merchandise-page {
+            padding: 120px 0 60px;
+            min-height: 100vh;
+        }
+        
+        .merchandise-container {
+            max-width: 94%;
+            margin: 0 auto;
+            padding: 0 3%;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--yale-blue);
+            margin-bottom: 15px;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Merchandise Grid */
+        .merchandise-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        
+        .merch-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .merch-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .merch-image {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            display: block;
+            padding: 20px;
+            background: var(--lavender-blush);
+        }
+        
+        .merch-info {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .merch-title {
+            color: var(--yale-blue);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            line-height: 1.4;
+            min-height: 2.8rem;
+        }
+        
+        .merch-price {
+            color: var(--cerulean);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        /* Quantity Controls */
+        .quantity-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--cerulean);
+            background: transparent;
+            color: var(--cerulean);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .quantity-btn:hover {
+            background: var(--cerulean);
+            color: white;
+        }
+        
+        .quantity-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .quantity-btn:disabled:hover {
+            background: transparent;
+            color: var(--cerulean);
+        }
+        
+        .quantity-value {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+        }
+        
+        /* Artwork Selection Modal */
+        .artwork-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .artwork-modal.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .artwork-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .artwork-modal-title {
+            color: var(--yale-blue);
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .artwork-instructions {
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .selected-count {
+            color: var(--cerulean);
+            font-weight: 600;
+        }
+        
+        .artwork-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .artwork-option {
+            padding: 15px;
+            border: 2px solid var(--ash-grey);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .artwork-option:hover {
+            transform: translateY(-2px);
+            border-color: var(--cerulean);
+        }
+        
+        .artwork-option.selected {
+            border-color: var(--cerulean);
+            background: rgba(26, 125, 158, 0.1);
+        }
+        
+        .artwork-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: var(--ash-grey);
+        }
+        
+        .artwork-option.disabled:hover {
+            transform: none;
+            border-color: var(--ash-grey);
+        }
+        
+        .artwork-thumbnail {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border: 1px solid var(--lavender-blush);
+        }
+        
+        .artwork-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            line-height: 1.3;
+            text-align: center;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .modal-btn.cancel {
+            background: transparent;
+            color: var(--text-dark);
+            border-color: var(--ash-grey);
+        }
+        
+        .modal-btn.cancel:hover {
+            background: var(--lavender-blush);
+        }
+        
+        .modal-btn.add {
+            background: var(--cerulean);
+            color: white;
+            border-color: var(--cerulean);
+        }
+        
+        .modal-btn.add:hover {
+            background: var(--yale-blue);
+            border-color: var(--yale-blue);
+        }
+        
+        .modal-btn.add:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .modal-btn.add:disabled:hover {
+            background: var(--cerulean);
+            border-color: var(--cerulean);
+        }
+        
+        /* Remove Item Modal */
+        .remove-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .remove-modal.active {
+            display: flex;
+        }
+        
+        .remove-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.3s ease;
+        }
+        
+        .remove-modal-title {
+            color: var(--yale-blue);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .remove-modal-subtitle {
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+        
+        .artwork-remove-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .artwork-remove-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            border: 2px solid var(--ash-grey);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .artwork-remove-option:hover {
+            border-color: var(--cerulean);
+            background: rgba(26, 125, 158, 0.05);
+        }
+        
+        .artwork-remove-name {
+            color: var(--text-dark);
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        .artwork-remove-price {
+            color: var(--cerulean);
+            font-weight: 600;
+        }
+        
+        /* Cart Summary */
+        .cart-summary {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .cart-summary h2 {
+            color: var(--yale-blue);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .cart-items {
+            margin-bottom: 30px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--lavender-blush);
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .cart-item-details {
+            flex: 3;
+        }
+        
+        .cart-item-name {
+            color: var(--text-dark);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .cart-item-artworks {
+            color: var(--cerulean);
+            font-size: 0.9rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        
+        .cart-item-price {
+            color: var(--cerulean);
+            font-weight: 600;
+            flex: 1;
+            text-align: right;
+        }
+        
+        /* Remove Button for Cart Items */
+        .remove-item-btn {
+            background: transparent;
+            border: none;
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 10px;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        .remove-item-btn:hover {
+            color: #ff3b3b;
+            background: rgba(255, 107, 107, 0.1);
+            transform: scale(1.1);
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+        }
+        
+        /* Price Total */
+        .price-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--ash-grey);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--yale-blue);
+        }
+        
+        /* Checkout Section */
+        .checkout-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+        
+        .checkout-section h3 {
+            color: var(--yale-blue);
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--yale-blue);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--ash-grey);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--cerulean);
+        }
+        
+        /* Payment Button */
+        .payment-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: var(--cerulean);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            margin-top: 30px;
+        }
+        
+        .payment-btn:hover {
+            background: var(--yale-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33, 80, 110, 0.3);
+        }
+        
+        .payment-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .payment-btn:disabled:hover {
+            background: var(--cerulean);
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .merchandise-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .artwork-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .merchandise-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .artwork-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .merchandise-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .merchandise-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .cart-summary,
+            .checkout-section,
+            .artwork-modal-content,
+            .remove-modal-content {
+                padding: 30px 20px;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+            
+            .artwork-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .artwork-thumbnail {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section (Same as index.html) -->
+    <header id="header">
+        <div class="header-container">
+            <!-- Left: Logo -->
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The London Museum">
+                </a>
+            </div>
+            
+            <!-- Center: Search Bar -->
+            <div class="search-container">
+                <input type="text" placeholder="Search artists, artworks...">
+                <button>Search</button>
+            </div>
+                        
+            <!-- Right: Navigation Menu -->
+            <nav class="main-nav">
+                <!-- Collections Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Collections</span>
+                    <div class="dropdown-content">
+                        <a href="artists.html">Browse all Artists</a>
+                        <a href="artworks.html">Browse all Artworks</a>
+                        <a href="search-collection.html">Search Collection</a>
+                    </div>
+                </div>
+            
+                <!-- Exhibitions Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Exhibitions & Events</span>
+                    <div class="dropdown-content">
+                        <a href="exhibitions.html">Current Exhibitions</a>
+                        <a href="events.html">Events Calendar</a>
+                        <a href="upcoming-exhibitions.html">Upcoming Exhibitions</a>
+                    </div>
+                </div>
+            
+                <!-- Shop Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Shop</span>
+                    <div class="dropdown-content">
+                        <a href="shop.html" class="active">Exhibition Merchandise</a>
+                        <a href="gifts.html">Gifts & Souvenirs</a>
+                        <a href="prints.html">Prints & Posters</a>
+                    </div>
+                </div>
+            
+                <!-- Visit Dropdown -->
+                <div class="dropdown">
+                    <span class="dropdown-title">Visit</span>
+                    <div class="dropdown-content">
+                        <a href="book-visit.html">Book your Visit</a>
+                        <a href="cafe.html">Café & Facilities</a>
+                        <a href="directions.html">Getting Here & Map</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Exhibition Merchandise Page Content -->
+    <main class="merchandise-page">
+        <div class="merchandise-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Exhibition Merchandise</h1>
+                <p>Take home a piece of the "Surrealism & Perspective" exhibition with our exclusive artwork merchandise. Each item features artworks from the exhibition.</p>
+            </div>
+            
+            <!-- Merchandise Grid -->
+            <div class="merchandise-grid" id="merchandiseGrid">
+                <!-- Merchandise items will be dynamically inserted here -->
+            </div>
+            
+            <!-- Cart Summary -->
+            <div class="cart-summary">
+                <h2>Your Order</h2>
+                <div class="cart-items" id="cartItems">
+                    <div class="empty-cart" id="emptyCart">
+                        Your cart is empty. Add items from above.
+                    </div>
+                    <!-- Cart items will be dynamically inserted here -->
+                </div>
+                
+                <div class="price-total">
+                    <span>Total</span>
+                    <span>£<span id="cartTotal">0.00</span></span>
+                </div>
+            </div>
+            
+            <!-- Checkout Section -->
+            <div class="checkout-section">
+                <h3>Checkout</h3>
+                <form id="checkoutForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required placeholder="Your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Delivery Address</label>
+                        <input type="text" id="address" name="address" required placeholder="Your full delivery address">
+                    </div>
+                    
+                    <button type="submit" class="payment-btn" id="paymentBtn" disabled>
+                        Proceed to Payment (£<span id="paymentTotal">0.00</span>)
+                    </button>
+                    
+                    <!-- Success Message -->
+                    <div class="success-message" id="successMessage">
+                        <h3>🎉 Order Successful!</h3>
+                        <p>Your merchandise order has been placed. A confirmation email has been sent to your inbox.</p>
+                        <p>Order Reference: <strong>EXHIB-<span id="orderRef">0000</span></strong></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Artwork Selection Modal -->
+    <div class="artwork-modal" id="artworkModal">
+        <div class="artwork-modal-content">
+            <h3 class="artwork-modal-title" id="artworkModalTitle">Select Artworks</h3>
+            <p class="artwork-instructions" id="artworkInstructions">
+                Select <span id="requiredCount">1</span> artwork(s): <span class="selected-count" id="selectedCount">0</span> selected
+            </p>
+            
+            <div class="artwork-grid" id="artworkGrid">
+                <!-- Artwork options will be dynamically inserted here -->
+            </div>
+            
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" id="cancelArtwork">Cancel</button>
+                <button type="button" class="modal-btn add" id="addToCart" disabled>Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Remove Item Modal -->
+    <div class="remove-modal" id="removeModal">
+        <div class="remove-modal-content">
+            <h3 class="remove-modal-title" id="removeModalTitle">Remove Item</h3>
+            <p class="remove-modal-subtitle" id="removeModalSubtitle"></p>
+            
+            <div class="artwork-remove-options" id="artworkRemoveOptions">
+                <!-- Remove options will be dynamically inserted here -->
+            </div>
+            
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" id="cancelRemove">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer Section (Same as index.html) -->
+    <footer id="footer">
+        <div class="footer-container">
+            <!-- Section 1: Main Content Row -->
+            <div class="footer-main-row">
+                <!-- Left: Museum Logo -->
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="The London Museum">
+                </div>
+                
+                <!-- Center: Support Logos with Text -->
+                <div class="support-section">
+                    <!-- Mayor of London -->
+                    <div class="support-item">
+                        <div class="support-logo">
+                            <img src="images/mayor-of-london.png" alt="Mayor of London">
+                        </div>
+                        <p class="support-text">Supported by Mayor of London</p>
+                    </div>
+                    
+                    <!-- Arts Council England -->
+                    <div class="support-item">
+                        <div class="support-logo">
+                            <img src="images/arts-council-england.png" alt="Arts Council England">
+                        </div>
+                        <p class="support-text">Supported using public funding by Arts Council England</p>
+                    </div>
+                </div>
+                
+                <!-- Right: Social Media -->
+                <div class="footer-social">
+                    <h3 class="footer-heading">Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/wearelondonmuseum/" target="_blank" class="social-icon" aria-label="Facebook">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://www.instagram.com/wearelondonmuseum/" target="_blank" class="social-icon" aria-label="Instagram">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="https://x.com/LDN_Museum" target="_blank" class="social-icon" aria-label="X (Twitter)">
+                            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                            <span>X</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Section 2: Legal Information -->
+            <div class="footer-legal-row">
+                <div class="legal-links">
+                    <a href="#" class="legal-link">Terms of Use</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Privacy Policy</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Cookies</a>
+                    <span class="separator">|</span>
+                    <a href="#" class="legal-link">Website Accessibility Policy</a>
+                </div>
+                
+                <div class="charity-info">
+                    <p>The London Museum registered charity number 1139250</p>
+                </div>
+                
+                <div class="copyright">
+                    <p>&copy; 2026 The London Museum. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Artworks data from artworks.html (sorted alphabetically including "a", "an", "the")
+        const artworks = [
+            { name: "images/artworks/a-cry-for-nature.png", title: "A Cry for Nature" },
+            { name: "images/artworks/a-drop-of-faith.png", title: "A Drop of Faith" },
+            { name: "images/artworks/a-shadow-in-the-smoke.png", title: "A Shadow in the Smoke" },
+            { name: "images/artworks/bond-of-self.png", title: "Bond of Self" },
+            { name: "images/artworks/eye.png", title: "The Eye" },
+            { name: "images/artworks/graphite-tears.png", title: "Graphite Tears" },
+            { name: "images/artworks/grey-and-white.png", title: "Grey and White" },
+            { name: "images/artworks/hand-with-refracting-sphere.png", title: "Hand with Refracting Sphere" },
+            { name: "images/artworks/memory-orb-1.png", title: "Memory Orb I" },
+            { name: "images/artworks/memory-orb-2.png", title: "Memory Orb II" },
+            { name: "images/artworks/memory-orb-3.png", title: "Memory Orb III" },
+            { name: "images/artworks/rayograph.png", title: "Rayograph" },
+            { name: "images/artworks/self-creation.png", title: "Self Creation" },
+            { name: "images/artworks/tears-of-the-past.png", title: "Tears of the Past" },
+            { name: "images/artworks/the-persistence-of-time.png", title: "The Persistence of Time" },
+            { name: "images/artworks/the-rhinos.png", title: "The Rhinos" },
+            { name: "images/artworks/the-treachery-of-objects-1.png", title: "The Treachery of Objects I" },
+            { name: "images/artworks/the-treachery-of-objects-2.png", title: "The Treachery of Objects II" },
+            { name: "images/artworks/the-treachery-of-objects-3.png", title: "The Treachery of Objects III" },
+            { name: "images/artworks/the-treachery-of-objects-4.png", title: "The Treachery of Objects IV" }
+        ];
+
+        // Exhibition merchandise data
+        const merchandise = [
+            { 
+                name: "images/merch/postcard.png", 
+                title: "Postcard Set", 
+                price: 14.99,
+                requiredArtworks: 6,
+                description: "Set of 6 postcards with different artworks. Select 6 unique artworks."
+            },
+            { 
+                name: "images/merch/cloth.png", 
+                title: "Microfibre Glasses Cloth", 
+                price: 9.99,
+                requiredArtworks: 1,
+                description: "Premium cleaning cloth with artwork. Select 1 artwork."
+            },
+            { 
+                name: "images/merch/magnet.png", 
+                title: "Magnet Set", 
+                price: 12.99,
+                requiredArtworks: 4,
+                description: "Set of 4 magnetic artworks. Select 4 unique artworks."
+            },
+            { 
+                name: "images/merch/calendar.png", 
+                title: "Art Calendar", 
+                price: 19.99,
+                requiredArtworks: 12,
+                description: "12-month calendar with different artworks. Select 12 unique artworks."
+            },
+            { 
+                name: "images/merch/coasters.png", 
+                title: "Art Coasters", 
+                price: 16.99,
+                requiredArtworks: 4,
+                description: "Set of 4 ceramic coasters with artworks. Select 4 unique artworks."
+            },
+            { 
+                name: "images/merch/puzzle.png", 
+                title: "Art Puzzle", 
+                price: 24.99,
+                requiredArtworks: 1,
+                description: "500-piece jigsaw puzzle of an artwork. Select 1 artwork."
+            },
+            { 
+                name: "images/merch/towel.png", 
+                title: "Art Tea Towel", 
+                price: 14.99,
+                requiredArtworks: 1,
+                description: "Linen tea towel with artwork print. Select 1 artwork."
+            },
+            { 
+                name: "images/merch/mousepad.png", 
+                title: "Art Mousepad", 
+                price: 11.99,
+                requiredArtworks: 1,
+                description: "Desk mousepad with artwork. Select 1 artwork."
+            }
+        ];
+
+        // Initialize cart
+        let cart = [];
+        
+        // Modal state
+        let currentProductIndex = null;
+        let selectedArtworks = [];
+        let currentProductForRemoval = null;
+        
+        // DOM Elements
+        const merchandiseGrid = document.getElementById('merchandiseGrid');
+        const cartItems = document.getElementById('cartItems');
+        const emptyCart = document.getElementById('emptyCart');
+        const cartTotal = document.getElementById('cartTotal');
+        const paymentTotal = document.getElementById('paymentTotal');
+        const paymentBtn = document.getElementById('paymentBtn');
+        const checkoutForm = document.getElementById('checkoutForm');
+        const successMessage = document.getElementById('successMessage');
+        const orderRef = document.getElementById('orderRef');
+        
+        // Modal elements
+        const artworkModal = document.getElementById('artworkModal');
+        const artworkModalTitle = document.getElementById('artworkModalTitle');
+        const artworkInstructions = document.getElementById('artworkInstructions');
+        const requiredCount = document.getElementById('requiredCount');
+        const selectedCount = document.getElementById('selectedCount');
+        const artworkGrid = document.getElementById('artworkGrid');
+        const cancelArtworkBtn = document.getElementById('cancelArtwork');
+        const addToCartBtn = document.getElementById('addToCart');
+        
+        // Remove modal elements
+        const removeModal = document.getElementById('removeModal');
+        const removeModalTitle = document.getElementById('removeModalTitle');
+        const removeModalSubtitle = document.getElementById('removeModalSubtitle');
+        const artworkRemoveOptions = document.getElementById('artworkRemoveOptions');
+        const cancelRemoveBtn = document.getElementById('cancelRemove');
+
+        // Initialize merchandise grid
+        function initializeMerchandiseGrid() {
+            merchandiseGrid.innerHTML = '';
+            merchandise.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'merch-item';
+                card.dataset.index = index;
+                
+                card.innerHTML = `
+                    <img src="${item.name}" alt="${item.title}" class="merch-image" loading="lazy">
+                    <div class="merch-info">
+                        <h3 class="merch-title">${item.title}</h3>
+                        <div class="merch-price">£${item.price.toFixed(2)}</div>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn minus" data-index="${index}" type="button" disabled>-</button>
+                            <span class="quantity-value" id="qty-${index}">0</span>
+                            <button class="quantity-btn plus" data-index="${index}" type="button">+</button>
+                        </div>
+                    </div>
+                `;
+                
+                merchandiseGrid.appendChild(card);
+            });
+            
+            // Add event listeners for plus buttons
+            document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    openArtworkModal(index);
+                });
+            });
+            
+            // Add event listeners for minus buttons
+            document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    handleMinusClick(index);
+                });
+            });
+            
+            updateCart();
+        }
+
+        // Handle minus button click
+        function handleMinusClick(index) {
+            const productItems = cart.filter(item => item.productIndex === index);
+            
+            if (productItems.length === 0) {
+                return; // Shouldn't happen since button is disabled
+            } else if (productItems.length === 1) {
+                // Only one item of this product, remove it directly
+                removeCartItem(productItems[0].id);
+            } else {
+                // Multiple items, open removal modal
+                openRemoveModal(index, productItems);
+            }
+        }
+
+        // Open remove item modal
+        function openRemoveModal(productIndex, items) {
+            currentProductForRemoval = productIndex;
+            
+            const merch = merchandise[productIndex];
+            removeModalTitle.textContent = `Remove ${merch.title}`;
+            removeModalSubtitle.textContent = `Select which item to remove (${items.length} items in cart):`;
+            
+            // Clear previous options
+            artworkRemoveOptions.innerHTML = '';
+            
+            // Create remove options
+            items.forEach(item => {
+                const artworkNames = item.selectedArtworks.map(title => title).join(', ');
+                const removeOption = document.createElement('div');
+                removeOption.className = 'artwork-remove-option';
+                removeOption.dataset.id = item.id;
+                
+                removeOption.innerHTML = `
+                    <div class="artwork-remove-name">${artworkNames}</div>
+                    <div class="artwork-remove-price">£${item.price.toFixed(2)}</div>
+                `;
+                
+                removeOption.addEventListener('click', () => removeCartItem(item.id));
+                artworkRemoveOptions.appendChild(removeOption);
+            });
+            
+            removeModal.classList.add('active');
+        }
+
+        // Remove item from cart by ID
+        function removeCartItem(itemId) {
+            // Find the item to get its product index
+            const itemToRemove = cart.find(item => item.id === itemId);
+            const productIndex = itemToRemove ? itemToRemove.productIndex : null;
+            
+            // Remove from cart
+            cart = cart.filter(item => item.id !== itemId);
+            
+            // Close modals
+            artworkModal.classList.remove('active');
+            removeModal.classList.remove('active');
+            
+            // Update displays
+            updateCart();
+            if (productIndex !== null) {
+                updateProductQuantityDisplay(productIndex);
+            }
+        }
+
+        // Open artwork selection modal
+        function openArtworkModal(index) {
+            currentProductIndex = index;
+            selectedArtworks = [];
+            
+            const merch = merchandise[index];
+            artworkModalTitle.textContent = `Select Artworks for ${merch.title}`;
+            requiredCount.textContent = merch.requiredArtworks;
+            selectedCount.textContent = '0';
+            artworkInstructions.textContent = merch.description;
+            
+            // Clear previous artwork options
+            artworkGrid.innerHTML = '';
+            
+            // Create artwork options
+            artworks.forEach(artwork => {
+                const artworkOption = document.createElement('div');
+                artworkOption.className = 'artwork-option';
+                artworkOption.dataset.title = artwork.title;
+                
+                artworkOption.innerHTML = `
+                    <img src="${artwork.name}" alt="${artwork.title}" class="artwork-thumbnail" loading="lazy">
+                    <div class="artwork-name">${artwork.title}</div>
+                `;
+                
+                artworkOption.addEventListener('click', () => toggleArtworkSelection(artwork.title));
+                artworkGrid.appendChild(artworkOption);
+            });
+            
+            // Reset modal state
+            addToCartBtn.disabled = true;
+            artworkModal.classList.add('active');
+        }
+
+        // Toggle artwork selection
+        function toggleArtworkSelection(artworkTitle) {
+            const merch = merchandise[currentProductIndex];
+            const artworkOption = document.querySelector(`.artwork-option[data-title="${artworkTitle}"]`);
+            
+            // Check if already selected
+            const isSelected = selectedArtworks.includes(artworkTitle);
+            
+            if (isSelected) {
+                // Deselect
+                selectedArtworks = selectedArtworks.filter(title => title !== artworkTitle);
+                artworkOption.classList.remove('selected');
+            } else {
+                // Check if we can select more
+                if (selectedArtworks.length >= merch.requiredArtworks) {
+                    return; // Cannot select more
+                }
+                // Select
+                selectedArtworks.push(artworkTitle);
+                artworkOption.classList.add('selected');
+            }
+            
+            // Update count display
+            selectedCount.textContent = selectedArtworks.length;
+            
+            // Update artwork options - disable unselected ones when limit reached
+            updateArtworkOptions();
+            
+            // Enable/disable add button
+            addToCartBtn.disabled = selectedArtworks.length !== merch.requiredArtworks;
+        }
+
+        // Update artwork options based on selection
+        function updateArtworkOptions() {
+            const merch = merchandise[currentProductIndex];
+            const allOptions = document.querySelectorAll('.artwork-option');
+            
+            allOptions.forEach(option => {
+                const artworkTitle = option.dataset.title;
+                const isSelected = selectedArtworks.includes(artworkTitle);
+                
+                if (isSelected) {
+                    option.classList.add('selected');
+                    option.classList.remove('disabled');
+                } else if (selectedArtworks.length >= merch.requiredArtworks) {
+                    // Limit reached, disable unselected options
+                    option.classList.add('disabled');
+                    option.classList.remove('selected');
+                } else {
+                    option.classList.remove('selected', 'disabled');
+                }
+            });
+        }
+
+        // Add item to cart from modal
+        function addItemToCart() {
+            if (currentProductIndex === null || selectedArtworks.length === 0) return;
+            
+            const merch = merchandise[currentProductIndex];
+            
+            // Add to cart with unique ID
+            const cartItem = {
+                id: `${currentProductIndex}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                productIndex: currentProductIndex,
+                title: merch.title,
+                selectedArtworks: [...selectedArtworks], // Copy the array
+                price: merch.price,
+                quantity: 1
+            };
+            
+            cart.push(cartItem);
+            
+            // Update the product quantity display
+            updateProductQuantityDisplay(currentProductIndex);
+            
+            // Close modal
+            artworkModal.classList.remove('active');
+            
+            // Update cart
+            updateCart();
+        }
+
+        // Update product quantity display
+        function updateProductQuantityDisplay(index) {
+            const totalQuantity = cart.filter(item => item.productIndex === index).length;
+            document.getElementById(`qty-${index}`).textContent = totalQuantity;
+            
+            // Update minus button
+            const minusBtn = document.querySelector(`.quantity-btn.minus[data-index="${index}"]`);
+            minusBtn.disabled = totalQuantity === 0;
+        }
+
+        // Update cart display
+        function updateCart() {
+            // Update empty cart message
+            if (cart.length === 0) {
+                emptyCart.style.display = 'block';
+                cartItems.innerHTML = '';
+                cartItems.appendChild(emptyCart);
+            } else {
+                emptyCart.style.display = 'none';
+                
+                // Build cart items HTML
+                let cartHTML = '';
+                let total = 0;
+                
+                cart.forEach((item) => {
+                    total += item.price;
+                    const merch = merchandise[item.productIndex];
+                    const artworkList = item.selectedArtworks.join(', ');
+                    
+                    cartHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-details">
+                                <div class="cart-item-name">${item.title}</div>
+                                <div class="cart-item-artworks">Artworks: ${artworkList}</div>
+                            </div>
+                            <div class="cart-item-price">£${item.price.toFixed(2)}</div>
+                            <button class="remove-item-btn" data-id="${item.id}" aria-label="Remove item">×</button>
+                        </div>
+                    `;
+                });
+                
+                cartItems.innerHTML = cartHTML;
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-item-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const itemId = this.getAttribute('data-id');
+                        removeCartItem(itemId);
+                    });
+                });
+            }
+            
+            // Update totals
+            const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+            
+            cartTotal.textContent = totalAmount.toFixed(2);
+            paymentTotal.textContent = totalAmount.toFixed(2);
+            
+            // Enable/disable payment button
+            paymentBtn.disabled = totalAmount === 0;
+        }
+
+        // Handle checkout form submission
+        checkoutForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Generate random order reference
+            const ref = Math.floor(1000 + Math.random() * 9000);
+            orderRef.textContent = ref;
+            
+            // Show success message
+            successMessage.classList.add('show');
+            
+            // Scroll to success message
+            successMessage.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'center'
+            });
+            
+            // Reset cart after 5 seconds
+            setTimeout(() => {
+                // Clear cart
+                cart = [];
+                
+                // Reset all quantities to 0
+                merchandise.forEach((_, index) => {
+                    document.getElementById(`qty-${index}`).textContent = '0';
+                    
+                    // Reset minus buttons
+                    const minusBtn = document.querySelector(`.quantity-btn.minus[data-index="${index}"]`);
+                    minusBtn.disabled = true;
+                });
+                
+                // Update cart display
+                updateCart();
+                
+                // Hide success message
+                successMessage.classList.remove('show');
+                
+                // Reset form
+                this.reset();
+                
+            }, 5000);
+        });
+
+        // Modal event listeners
+        cancelArtworkBtn.addEventListener('click', () => {
+            artworkModal.classList.remove('active');
+        });
+        
+        addToCartBtn.addEventListener('click', addItemToCart);
+        
+        cancelRemoveBtn.addEventListener('click', () => {
+            removeModal.classList.remove('active');
+        });
+        
+        // Close modals when clicking outside
+        artworkModal.addEventListener('click', (e) => {
+            if (e.target === artworkModal) {
+                artworkModal.classList.remove('active');
+            }
+        });
+        
+        removeModal.addEventListener('click', (e) => {
+            if (e.target === removeModal) {
+                removeModal.classList.remove('active');
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMerchandiseGrid();
+            
+            // Initialize all minus buttons as disabled
+            document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+                btn.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>
